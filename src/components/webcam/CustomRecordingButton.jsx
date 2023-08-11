@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import PlayButtonIcon from '../icons/Recorder/PlayButtonIcon';
 import ReplayArrowIcon from '../icons/recorder/ReplayArrowIcon';
 import StopRecordingIcon from '../icons/recorder/StopRecordingIcon';
 import useResponsiveStyles from '../../utils/MediaQuery';
 import CustomAllTypography from '../typography/CustomTypography';
 import { useDispatch, useSelector } from 'react-redux';
 import { setRecordState, togglePreview } from '../../store/slices/InterviewPageSlice';
+import PlayButtonIcon from '../icons/Recorder/PlayButtonIcon';
 
 const CustomRecordingButton = () => {
   const responsive = useResponsiveStyles();

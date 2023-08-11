@@ -1,6 +1,6 @@
 import React from "react";
 
-const PlayButtonIcon = ({ onClick }) => {
+const PlayButtonIcon = () => {
   return (
     <svg
       width="24"
