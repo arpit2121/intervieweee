@@ -22,7 +22,7 @@ const CustomizedTextField = (props) => {
     border:isFocused?'1px solid #605DEC':'none',
     backgroundColor:'#F7F7FD'}} >
       <div style={{width:'100%', display:'flex', justifyContent:'center', backgroundColor:'#F7F7FD', borderTopLeftRadius:'14px', borderTopRightRadius:'14px'}}>
-      <label style={{width:'90%', color:'#9D99AC'}}>name</label>
+      <label style={{width:'90%', color:'#9D99AC'}}>{props.name}</label>
       </div>
       <input
       onChange={handleChange}

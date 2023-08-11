@@ -1,29 +1,23 @@
-import React, { useState } from 'react'
-import Home from './components/structure/Home/Home'
-import OnBoardingPage from './pages/OnBoardingPage'
-import Password from './pages/Password'
-import Login from './pages/Login'
-import OtpVerification from './pages/OtpVerification'
-import { Routes,Route } from 'react-router-dom'
-import { TextField } from '@mui/material'
-import {styled} from '@mui/material'
-import CustomizedTextField from './components/textfield/CustomizedTextField'
+import { useState } from 'react'
+import './App.css'
+import { Route, Routes } from 'react-router-dom'
+import Home from './pages/Home'
+import OnBoardingPage from './pages/OnboardCandidatePage'
+import InterviewDetails from './pages/InterviewDetails';
+import InterviewPage from './pages/InterviewPage'
+import ThankYouPage from './pages/ThankYouPage'
 
-
-
-const App = () => {
-
+function App() {
   return (
-   <Routes>
-    <Route path='/' element={<Home/>}>
-      <Route path='login' element={<Login/>}/>
-      <Route path='otp' element={<OtpVerification/>}/>
-      <Route path='password' element={<Password/>}/>
-    </Route>
-    <Route path='on-boarding' element={<OnBoardingPage/>}></Route>
-   </Routes>
+    <Routes>
+      <Route path='/' element={<Home/>}/>
+      <Route path='/onboard-candidate' element={<OnBoardingPage/>}/>
+      <Route path='/interviewDetails' element={<InterviewDetails/>}/>
+      {/* <Route path='/practiceMode' element={<PracticeMode/>}/> */}
+      <Route path='/interviewPage' element={<InterviewPage/>}/>
+      <Route path='/thanks' element={<ThankYouPage/>}/>
+    </Routes>
   )
 }
 
-export default App;
-
+export default App

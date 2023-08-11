@@ -19,8 +19,8 @@ const useResponsiveStyles = () => {
         // isTablet: innerWidth >= breakpoints.values.sm && innerWidth < breakpoints.values.md,
         // isDesktop: innerWidth >= breakpoints.values.md,
         isMobile: innerWidth < 640,
-  isTablet: innerWidth >= 640 && innerWidth < 1280,
-  isDesktop: innerWidth >= 1280,
+        isTablet: innerWidth >= 640 && innerWidth < 1024,
+        isDesktop: innerWidth >= 1240,
       });
     };
 
