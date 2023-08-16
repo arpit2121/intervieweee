@@ -1,0 +1,231 @@
+Main Container .app {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  /* Video */
+  
+  .video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1rem;
+  }
+  .outerDiv {
+    width: 100%;
+    position: relative;
+    border-radius: 1rem;
+  }
+  
+  .controlsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+    background: linear-gradient(0deg, #000 0%, rgba(0, 0, 0, 0) 100%);
+    position: absolute;
+    bottom: 0;
+    border-radius: 1rem;
+    transition: opacity 2000ms;
+    box-sizing: border-box;
+  
+    padding: 1rem 1.37rem 0rem 1.37rem;
+  }
+  
+  .controls {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 4px;
+  }
+  .playIcons {
+    gap:0.4rem;
+      display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    cursor: pointer;
+    margin-right: -20px;
+  }
+  
+  .controlsIcon {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    margin-left: 10rem;
+    margin-right: 10rem;
+  }
+  
+  .controlsIcon--small {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    margin-left: 10rem;
+    margin-right: 10rem;
+  }
+  
+  /* The time controls section */
+  
+  .timecontrols {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    position: absolute;
+    bottom: 4rem;
+    margin-left: 10vw;
+  }
+  
+  .time_progressbarContainer {
+    background-color: #fff;
+    border-radius: 15px;
+    width: 80%;
+    height: 5px;
+    z-index: 30;
+    position: relative;
+    margin: 0 5px;
+    display: flex;
+  }
+  .progressbarDiv {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+  .time_progressBar {
+    border-radius: 15px;
+    background-color: #aa55ff;
+    height: 100%;
+  }
+  
+  .controlsTime {
+    color: #fff;
+    font-family: Roboto;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+  .volumeController {
+    border-radius: 1.25rem;
+    border: 1px solid #fff;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(5px);
+    height: 35%;
+    width: 3%;
+    position: absolute;
+    top: 50%;
+    right: 1.37rem;
+    transform: translate(0%, -50%);
+    display: flex;
+    flex-direction: column;
+    padding: 0.18rem;
+    align-items: center;
+    justify-content: space-around;
+    transition: opacity 2000ms;
+    z-index: 10;
+  }
+  .timeForwardBackwardDiv {
+    position: absolute;
+    top: 50%;
+    transform: translate(0%, -50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+  }
+  .arrow {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transform: rotate(90deg);
+    cursor: pointer;
+  }
+  .arrow2 {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transform: rotate(90deg);
+    cursor: pointer;
+  }
+  
+  .arrow span {
+    display: block;
+    width: 1.5vw;
+    height: 1.5vw;
+    border-bottom: 5px solid white;
+    border-right: 5px solid white;
+    transform: rotate(45deg);
+    margin: -10px;
+    animation: animate 2s infinite;
+  }
+  .arrow2 span {
+    display: block;
+    width: 1.5vw;
+    height: 1.5vw;
+    border-top: 5px solid white;
+    border-left: 5px solid white;
+    transform: rotate(45deg);
+    margin: -10px;
+    animation: animate2 2s infinite;
+  }
+  
+  .arrow span:nth-child(2) {
+    animation-delay: -0.2s;
+  }
+  .arrow2 span:nth-child(2) {
+    animation-delay: -0.2s;
+  }
+  
+  .arrow span:nth-child(3) {
+    animation-delay: -0.4s;
+  }
+  .arrow2 span:nth-child(3) {
+    animation-delay: -0.4s;
+  }
+  
+  @keyframes animate {
+    0% {
+      opacity: 0;
+      transform: rotate(45deg) translate(-20px, -20px);
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: rotate(45deg) translate(20px, 20px);
+    }
+  }
+  @keyframes animate2 {
+    0% {
+      opacity: 0;
+      transform: rotate(45deg) translate(20px, 20px);
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: rotate(45deg) translate(20px, 20px);
+    }
+  }
+  .arrowContainer {
+    display: flex;
+    flex-direction: column;
+    color: white;
+    justify-content: center;
+  }
+  .controllerIcon{
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .controllerIcon:active{
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 8px rgba(230, 129, 255, 0.5);
+  }
+  
+  

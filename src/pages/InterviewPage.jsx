@@ -12,6 +12,8 @@ import { useSelector } from "react-redux";
 import SaveAndNextButton from "../components/webcam/SaveAndNextButton";
 import RetakeButton from "../components/webcam/RetakeButton";
 import RecordNoticeTab360 from "../components/webcam/RecordNoticeTab360";
+import Countdown from "../components/webcam/Countdown";
+import ReactMicComp from "../components/mic/MicWaveForm";
 
 const InterviewContainer = styled("div")(({ theme }) => ({
   height: "100%",
@@ -39,13 +41,16 @@ const InterviewPage = () => {
       <RecordTimer minutes={allowedTime} />
       <RecordInfo />
       <Overlay />
+      {RecordState.recordState == "STARTED" && <Countdown />}
       <Recorder />
       <CustomExitButton />
       <SaveAndNextButton />
-      <RetakeButton/>
+      <RetakeButton />
+      {/* <ReactMicComp /> */}
       <QuestionContainer responsive={responsive}>
-        <RecordNoticeTab360/>
+        <RecordNoticeTab360 />
         {/* <QuestionTab /> */}
+
         <CustomRecordingButton />
       </QuestionContainer>
     </InterviewContainer>

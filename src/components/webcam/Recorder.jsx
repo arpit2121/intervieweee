@@ -3,11 +3,24 @@ import { useRecordWebcam } from "react-record-webcam";
 import { useSelector } from "react-redux";
 import { styled } from "@mui/system";
 import useResponsiveStyles from "../../utils/MediaQuery";
+import VideoPlayer from "../videoPlayer/VideoPlayer";
 
 const useDynamicDimension = () => {
   const res = useResponsiveStyles();
-  const width = res.isMobile ? "18rem" : res.isTablet ? "20rem" : res.isDesktop ? "50rem" : "30rem";
-  const height = res.isMobile ? "13rem" : res.isTablet ? "15rem" : res.isDesktop ? "30rem" : "20rem";
+  const width = res.isMobile
+    ? "18rem"
+    : res.isTablet
+    ? "20rem"
+    : res.isDesktop
+    ? "50rem"
+    : "30rem";
+  const height = res.isMobile
+    ? "13rem"
+    : res.isTablet
+    ? "15rem"
+    : res.isDesktop
+    ? "30rem"
+    : "20rem";
   return { width, height };
 };
 
@@ -29,7 +42,7 @@ const PreviewVideo = styled("video")(({ theme }) => ({
   height: useDynamicDimension().height,
   objectFit: "cover",
   zIndex: 1,
-  borderRadius: '1rem',
+  borderRadius: "1rem",
 }));
 
 const Recorder = (props) => {
@@ -55,11 +68,27 @@ const Recorder = (props) => {
     }
   }, [RecordState.recordState]);
 
+  console.log('recordWebcam.previewRef',recordWebcam)
   return (
     <RecorderContainer>
       {RecordState.preview ? (
-        <div style={{ width: "100%", height: "100%", ...responsive.isMobile ? { position: 'relative', textAlign: 'center', top: '8rem' } : { display: "flex", justifyContent: 'center', alignItems: 'center' } }}>
-          <PreviewVideo ref={recordWebcam.previewRef} autoPlay controls />
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            ...(responsive.isMobile
+              ? { position: "relative", textAlign: "center", top: "8rem" }
+              : {
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }),
+          }}
+        >
+          {/* <PreviewVideo ref={recordWebcam.previewRef} autoPlay controls /> */}
+           
+          {/* <VideoPlayer dynamicDimensions={ useDynamicDimension} ref={recordWebcam.previewRef} autoPlay /> */}
+          <VideoPlayer dynamicDimensions={ useDynamicDimension} ref={recordWebcam} autoPlay controls />
         </div>
       ) : (
         <RecorderVideo ref={recordWebcam.webcamRef} autoPlay muted />
