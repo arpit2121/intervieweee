@@ -1,0 +1,72 @@
+import React from 'react';
+import CustomAllTypography from '../typography/CustomTypography';
+import ProfileIcon from '../icons/QuestionTab/ProfileIcon';
+import useResponsiveStyles from '../../utils/MediaQuery';
+import { useSelector } from 'react-redux';
+import { styled } from '@mui/material';
+
+const QuestionTabContainer = styled('div')(({ responsive, isMobile }) => ({
+  maxWidth: isMobile ? '21rem' : '26rem',
+  width: 'max-content',
+  position: 'absolute',
+  bottom: '1.94rem',
+  left: isMobile ? '50%' : '2.5rem',
+  transform: isMobile ? 'translateX(-50%)' : '',
+}));
+
+const QuestionTag = styled('div')({
+  borderRadius: '4.15625rem',
+  background: '#B1FBE5',
+  display: 'flex',
+  alignItems: 'center',
+});
+
+const ProfileIconWrapper = styled('div')(({ responsive }) => ({
+  background: '#B1FBE5',
+  borderRadius: '4.15625rem',
+  padding: responsive.isMobile ? '0.6rem' : responsive.isTablet ? '0.8rem' : '1.4rem',
+}));
+
+const QuestionContent = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  paddingRight: '2.88rem',
+});
+
+const QuestionTab = () => {
+  const responsive = useResponsiveStyles();
+
+  const { is360RecordingCompleted, currentQuestionIndex, questions, isAllQuestionsAttempted } = useSelector(
+    (state) => state.rootReducer.interviewPage
+  );
+
+  if (!is360RecordingCompleted ) {
+    return null;
+  }else if(isAllQuestionsAttempted){
+    return null;
+  }
+
+  const Question = questions[currentQuestionIndex].question;
+  const TotalQuestions = questions.length;
+
+  return (
+    <QuestionTabContainer responsive={responsive} isMobile={responsive.isMobile}>
+      <CustomAllTypography
+        variant={'body2'}
+        name={`Question ${TotalQuestions}/${currentQuestionIndex + 1}`}
+        style={{ paddingLeft: '0.8rem' }}
+      />
+      <QuestionTag>
+        <ProfileIconWrapper responsive={responsive}>
+          <ProfileIcon />
+        </ProfileIconWrapper>
+        <QuestionContent>
+          <CustomAllTypography variant={'body2'} name={`Q${1}:`} />
+          <CustomAllTypography variant={'body2'} name={Question} />
+        </QuestionContent>
+      </QuestionTag>
+    </QuestionTabContainer>
+  );
+};
+
+export default QuestionTab;

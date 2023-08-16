@@ -1,0 +1,122 @@
+{
+  "hash": "e5dbc13e",
+  "browserHash": "3a067f77",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "93bbb801",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "214aa620",
+      "needsInterop": true
+    },
+    "react-redux": {
+      "src": "../../node_modules/react-redux/es/index.js",
+      "file": "react-redux.js",
+      "fileHash": "371e145d",
+      "needsInterop": false
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/react-router-dom/dist/index.js",
+      "file": "react-router-dom.js",
+      "fileHash": "3ff0a751",
+      "needsInterop": false
+    },
+    "@mui/styles": {
+      "src": "../../node_modules/@mui/styles/index.js",
+      "file": "@mui_styles.js",
+      "fileHash": "e3b53782",
+      "needsInterop": false
+    },
+    "@mui/material/styles": {
+      "src": "../../node_modules/@mui/material/styles/index.js",
+      "file": "@mui_material_styles.js",
+      "fileHash": "6db639ae",
+      "needsInterop": false
+    },
+    "@reduxjs/toolkit": {
+      "src": "../../node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js",
+      "file": "@reduxjs_toolkit.js",
+      "fileHash": "f2d9258f",
+      "needsInterop": false
+    },
+    "redux": {
+      "src": "../../node_modules/redux/es/redux.js",
+      "file": "redux.js",
+      "fileHash": "6eaa62ce",
+      "needsInterop": false
+    },
+    "@mui/material": {
+      "src": "../../node_modules/@mui/material/index.js",
+      "file": "@mui_material.js",
+      "fileHash": "df5b2f81",
+      "needsInterop": false
+    },
+    "react-dropzone": {
+      "src": "../../node_modules/react-dropzone/dist/es/index.js",
+      "file": "react-dropzone.js",
+      "fileHash": "c8011bcd",
+      "needsInterop": false
+    },
+    "react-record-webcam": {
+      "src": "../../node_modules/react-record-webcam/dist/index.js",
+      "file": "react-record-webcam.js",
+      "fileHash": "21154209",
+      "needsInterop": true
+    },
+    "@mui/system": {
+      "src": "../../node_modules/@mui/system/esm/index.js",
+      "file": "@mui_system.js",
+      "fileHash": "89b65b78",
+      "needsInterop": false
+    },
+    "lodash": {
+      "src": "../../node_modules/lodash/lodash.js",
+      "file": "lodash.js",
+      "fileHash": "bbc18ec7",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "chunk-MQPAI7KU": {
+      "file": "chunk-MQPAI7KU.js"
+    },
+    "chunk-MKG3NT3Y": {
+      "file": "chunk-MKG3NT3Y.js"
+    },
+    "chunk-YWWIHQXB": {
+      "file": "chunk-YWWIHQXB.js"
+    },
+    "chunk-ZRMMERCY": {
+      "file": "chunk-ZRMMERCY.js"
+    },
+    "chunk-GYNSIN46": {
+      "file": "chunk-GYNSIN46.js"
+    },
+    "chunk-4GQWNQSM": {
+      "file": "chunk-4GQWNQSM.js"
+    },
+    "chunk-RTV7K2KK": {
+      "file": "chunk-RTV7K2KK.js"
+    },
+    "chunk-HOFZDJTO": {
+      "file": "chunk-HOFZDJTO.js"
+    },
+    "chunk-67XTWVEJ": {
+      "file": "chunk-67XTWVEJ.js"
+    },
+    "chunk-UNG5T3FE": {
+      "file": "chunk-UNG5T3FE.js"
+    },
+    "chunk-53ZEICQU": {
+      "file": "chunk-53ZEICQU.js"
+    },
+    "chunk-5WWUZCGV": {
+      "file": "chunk-5WWUZCGV.js"
+    }
+  }
+}
