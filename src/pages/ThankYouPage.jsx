@@ -12,8 +12,8 @@ const ThankYouPage = () => {
             <div style={{position:'absolute',width:'100%',...responsive.isMobile?{display:'flex',justifyContent:'center',paddingTop:'1rem'}:{left:'2rem',top:'1rem'}}}>
                 <QuickConnectIcon />
             </div>
-            <div className="content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '10rem',...responsive.isMobile ? {padding:'4.81rem 1rem 1rem'} :{justifyContent:'center'} }}>
-                <img src={CheckMark} alt="" srcset="" style={{ width: '10.625rem', height: '10.625rem', marginBottom: '1.6rem' }} />
+            <div className="content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center',...responsive.isMobile ? {padding:'4.81rem 1rem 1rem'} :{justifyContent:'center',paddingTop: '10rem'} }}>
+                <img src={CheckMark} alt="" srcSet="" style={{ width: '10.625rem', height: '10.625rem', marginBottom: '1.6rem' }} />
                 <CustomAllTypography variant={'h3'} name={`Great job, you're all set!`} style={{ marginBottom: '1.6rem' }} />
                 <CustomAllTypography variant={'body1'} name={`Congratulations on successfully completing the video interview!`} style={{ marginBottom: '1.6rem', }} />
                 <CustomAllTypography variant={'body1'} name={`We will notify you of the final result shortly.`} style={{ marginBottom: '1.6rem' }} />

@@ -32,7 +32,7 @@ const initialState = {
     },
     {
       questionId: 1,
-      question: "what are your hobbies?",
+      question: "what are your hobbies? Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
       thinkTime: 1,
       timeToAnswer: 5,
       retake: "Unlimited",

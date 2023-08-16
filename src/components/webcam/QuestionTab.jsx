@@ -5,8 +5,8 @@ import useResponsiveStyles from '../../utils/MediaQuery';
 import { useSelector } from 'react-redux';
 import { styled } from '@mui/material';
 
-const QuestionTabContainer = styled('div')(({ responsive, isMobile }) => ({
-  maxWidth: isMobile ? '21rem' : '26rem',
+const QuestionTabContainer = styled('div')(({ isMobile }) => ({
+  maxWidth: isMobile ? '18rem' : '26rem',
   width: 'max-content',
   position: 'absolute',
   bottom: '1.94rem',
@@ -27,11 +27,11 @@ const ProfileIconWrapper = styled('div')(({ responsive }) => ({
   padding: responsive.isMobile ? '0.6rem' : responsive.isTablet ? '0.8rem' : '1.4rem',
 }));
 
-const QuestionContent = styled('div')({
+const QuestionContent = styled('div')(({ responsive }) => ({
   display: 'flex',
   alignItems: 'center',
-  paddingRight: '2.88rem',
-});
+  paddingRight: responsive.isMobile ? '1rem' : '2.88rem',
+}));
 
 const QuestionTab = () => {
   const responsive = useResponsiveStyles();
@@ -50,7 +50,7 @@ const QuestionTab = () => {
   const TotalQuestions = questions.length;
 
   return (
-    <QuestionTabContainer responsive={responsive} isMobile={responsive.isMobile}>
+    <QuestionTabContainer isMobile={responsive.isMobile}>
       <CustomAllTypography
         variant={'body2'}
         name={`Question ${TotalQuestions}/${currentQuestionIndex + 1}`}
@@ -60,7 +60,7 @@ const QuestionTab = () => {
         <ProfileIconWrapper responsive={responsive}>
           <ProfileIcon />
         </ProfileIconWrapper>
-        <QuestionContent>
+        <QuestionContent responsive={responsive}>
           <CustomAllTypography variant={'body2'} name={`Q${1}:`} />
           <CustomAllTypography variant={'body2'} name={Question} />
         </QuestionContent>

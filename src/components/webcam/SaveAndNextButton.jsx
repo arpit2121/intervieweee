@@ -44,7 +44,8 @@ const SaveAndNextButton = () => {
     };
 
     return (
-      preview ? 
+      !preview && responsive.isMobile? 
+      "":
       <CustomInputButton
         size="extra-small"
         style={{...ButtonStyle,background: preview ? 'black' : '#9B9B9D',color:'#FFF'}}
@@ -52,7 +53,7 @@ const SaveAndNextButton = () => {
         onClick={preview ? handleClick: null}
       >
         Save & Next
-      </CustomInputButton> :""
+      </CustomInputButton>
     );
 };
 
