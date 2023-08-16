@@ -170,7 +170,10 @@ const CommonCustomTextField = ({
   };
   const getStatusColor = (status) => {
     return statusMap?.[status]?.color || "#AAAAAA";
+  const getStatusColor = (status) => {
+    return statusMap?.[status]?.color || "#AAAAAA";
   };
+
 
   const handleFocus = (event) => {
     setIsFocused(true);

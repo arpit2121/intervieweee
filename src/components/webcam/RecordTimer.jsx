@@ -1,15 +1,35 @@
-import { styled } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import CustomAllTypography from '../typography/CustomTypography';
-import useResponsiveStyles from '../../utils/MediaQuery';
-import RecordingDotIcon from '../icons/Recorder/RecordingDotIcon';
+import { styled } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import CustomAllTypography from "../typography/CustomTypography";
+import useResponsiveStyles from "../../utils/MediaQuery";
+import RecordingDotIcon from "../icons/Recorder/RecordingDotIcon";
+import { useDispatch, useSelector } from "react-redux";
+import { setRecordState, togglePreview } from "../../store/slices/InterviewPageSlice";
 
-const RecordTimer = ({ minutes }) => {
-
+const RecordTimer = () => {
+  const dispatch = useDispatch();
+  const {
+    recordState,
+    is360RecordingCompleted,
+    practiceMode,
+    check360,
+    questions,
+    currentQuestionIndex,
+    isAllQuestionsAttempted
+  } = useSelector((state) => state.rootReducer.interviewPage);
+  if(isAllQuestionsAttempted){
+    return null;
+  }
+  const allowedTime = practiceMode
+    ? 1
+    : is360RecordingCompleted !== true
+      ? check360.timeToAnswer + check360.thinkTime
+      : questions[currentQuestionIndex].timeToAnswer +
+      questions[currentQuestionIndex].thinkTime;
   const responsive = useResponsiveStyles();
 
-  const initialTimeInSeconds = minutes * 60;
-  const [startTimer, setStartTimer] = useState(true);
+  const initialTimeInSeconds = allowedTime * 60;
+  const [startTimer, setStartTimer] = useState(false);
   const [time, setTime] = useState(initialTimeInSeconds);
 
   useEffect(() => {
@@ -25,47 +45,60 @@ const RecordTimer = ({ minutes }) => {
   }, [initialTimeInSeconds]);
 
   const formatTime = (time) => {
-    const minutes = Math.floor(time / 60).toString().padStart(2, '0');
-    const seconds = (time % 60).toString().padStart(2, '0');
+    const minutes = Math.floor(time / 60)
+      .toString()
+      .padStart(2, "0");
+    const seconds = (time % 60).toString().padStart(2, "0");
     return `${minutes}:${seconds}`;
   };
 
   useEffect(() => {
     if (time === 0) {
-      // Your logic here
+      dispatch(togglePreview(true));
+      dispatch(setRecordState('RETAKE'));
     }
   }, [time]);
 
+  useEffect(() => {
+    if (recordState === "RECORDING") {
+        setStartTimer(true);
+    }
+  }, [recordState]);
+
   const TypoStyle = {
-    fontFamily: 'Inter',
-    color: '#FFFF'
-  }
+    color: "#FFFF",
+    fontSize: responsive.isMobile
+      ? "0.8rem"
+      : responsive.isTablet
+        ? "1rem"
+        : "1.4rem",
+  };
+
   const container = {
     zIndex: 3,
-    background:'rgba(10, 10, 10, 0.35)',
-    width: 'max-content',
-    borderRadius:'1.25rem',
-    position: 'absolute',
-    padding:'0.35rem 0.75rem 0.35rem 0.45rem',
+    background: "rgba(10, 10, 10, 0.35)",
+    width: "max-content",
+    borderRadius: "1.25rem",
+    position: "absolute",
+    padding: "0.25rem 1rem 0.25rem 1rem",
     top: "1.8rem",
-    right:'1.5rem',
-    display:'flex',
-    alignItems:'center',
-    columnGap:'0.5rem',
-  }
-  const fontStyle = {
-    fontSize : responsive.isMobile ? '0.8rem' : (responsive.isTablet ? '1rem' : '1.4rem' )
-  }
-  return (
+    right: "1.5rem",
+    display: "flex",
+    alignItems: "center",
+    columnGap: "0.5rem",
+  };
+
+  return recordState !== "RETAKE" ? (
     <div style={container}>
-      <RecordingDotIcon/>
-      {
-        startTimer ?
-          <CustomAllTypography  variant={'body2'} name={`Rec : ${formatTime(time)}s`}  style={TypoStyle}/>
-          :
-          <CustomAllTypography name={"Record "} style={TypoStyle} />
-      }
+      <RecordingDotIcon />
+      {startTimer ? (
+        <CustomAllTypography variant={"body1"} fontFamily={"Inter"} name={`Rec : ${formatTime(time)}s`} style={TypoStyle}/>
+      ) : (
+        <CustomAllTypography variant={"body1"} fontFamily={"Inter"}  name={"Record "}  style={TypoStyle}/>
+      )}
     </div>
+  ) : (
+    ""
   );
 };
 

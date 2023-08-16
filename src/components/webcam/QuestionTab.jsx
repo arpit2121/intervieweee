@@ -1,55 +1,72 @@
-import { styled } from '@mui/material';
-import React from 'react'
+import React from 'react';
 import CustomAllTypography from '../typography/CustomTypography';
 import ProfileIcon from '../icons/QuestionTab/ProfileIcon';
 import useResponsiveStyles from '../../utils/MediaQuery';
+import { useSelector } from 'react-redux';
+import { styled } from '@mui/material';
 
-const TotalQuestions = 1
-const SelectedQuestion = 1;
+const QuestionTabContainer = styled('div')(({ isMobile }) => ({
+  maxWidth: isMobile ? '18rem' : '26rem',
+  width: 'max-content',
+  position: 'absolute',
+  bottom: '1.94rem',
+  left: isMobile ? '50%' : '2.5rem',
+  transform: isMobile ? 'translateX(-50%)' : '',
+}));
 
+const QuestionTag = styled('div')({
+  borderRadius: '4.15625rem',
+  background: '#B1FBE5',
+  display: 'flex',
+  alignItems: 'center',
+});
+
+const ProfileIconWrapper = styled('div')(({ responsive }) => ({
+  background: '#B1FBE5',
+  borderRadius: '4.15625rem',
+  padding: responsive.isMobile ? '0.6rem' : responsive.isTablet ? '0.8rem' : '1.4rem',
+}));
+
+const QuestionContent = styled('div')(({ responsive }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  paddingRight: responsive.isMobile ? '1rem' : '2.88rem',
+}));
 
 const QuestionTab = () => {
-    const responsive = useResponsiveStyles();
+  const responsive = useResponsiveStyles();
 
-    const ProfileStyle = {
-        background: '#B1FBE5',
-        borderRadius: '4.15625rem',
-        padding:responsive.isMobile ? '0.6rem' : responsive.isTablet? '0.8rem': responsive.isDesktop ? '1.4rem':'1rem',
-    }
-    const TagStyle = {
-        borderRadius: '4.15625rem',
-        background: '#B1FBE5',
-        display: 'flex',
-        alignItems: 'center'
-    }
-    const QuestionStyle = {
-        display: 'flex',
-        alignItems: 'center',
-        paddingRight: '2.88rem'
-    }
-    const parent = {
-        maxWidth: responsive.isMobile?'21rem':'26rem',
-        width:'max-content',
-        position:'absolute',
-        bottom:'1.94rem',
-        left:responsive.isMobile ? '50%': '2.5rem',
-        transform:responsive.isMobile ? 'translateX(-50%)':''
-    }
+  const { is360RecordingCompleted, currentQuestionIndex, questions, isAllQuestionsAttempted } = useSelector(
+    (state) => state.rootReducer.interviewPage
+  );
 
-    return (
-        <div style={parent}>
-            <CustomAllTypography variant={'body2'} name={`Question ${TotalQuestions}/${SelectedQuestion}`} style={{ paddingLeft: '0.8rem'}} />
-            <div style={TagStyle}>
-                <div style={ProfileStyle}>
-                    <ProfileIcon />
-                </div>
-                <div style={QuestionStyle}>
-                    <CustomAllTypography variant={'body2'} name={`Q${1}:`} />
-                    <CustomAllTypography variant={'body2'} name={'Talk something about you'} />
-                </div>
-            </div>
-        </div>
-    )
-}
+  if (!is360RecordingCompleted ) {
+    return null;
+  }else if(isAllQuestionsAttempted){
+    return null;
+  }
 
-export default QuestionTab
+  const Question = questions[currentQuestionIndex].question;
+  const TotalQuestions = questions.length;
+
+  return (
+    <QuestionTabContainer isMobile={responsive.isMobile}>
+      <CustomAllTypography
+        variant={'body2'}
+        name={`Question ${TotalQuestions}/${currentQuestionIndex + 1}`}
+        style={{ paddingLeft: '0.8rem' }}
+      />
+      <QuestionTag>
+        <ProfileIconWrapper responsive={responsive}>
+          <ProfileIcon />
+        </ProfileIconWrapper>
+        <QuestionContent responsive={responsive}>
+          <CustomAllTypography variant={'body2'} name={`Q${1}:`} />
+          <CustomAllTypography variant={'body2'} name={Question} />
+        </QuestionContent>
+      </QuestionTag>
+    </QuestionTabContainer>
+  );
+};
+
+export default QuestionTab;

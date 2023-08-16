@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { useRecordWebcam } from "react-record-webcam";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { styled } from "@mui/system";
 import useResponsiveStyles from "../../utils/MediaQuery";
 import VideoPlayer from "../videoPlayer/VideoPlayer";
 
 const useDynamicDimension = () => {
+  const dispatch = useDispatch(); 
   const res = useResponsiveStyles();
   const width = res.isMobile
     ? "18rem"
@@ -45,33 +46,56 @@ const PreviewVideo = styled("video")(({ theme }) => ({
   borderRadius: "1rem",
 }));
 
+// maintain recording states
+const useRecordingEffect = (recordWebcam, recordState) => {
+  useEffect(() => {
+    if(recordState === "STARTED"){
+      recordWebcam.open();
+    }else if (recordState === "RECORDING") {
+      recordWebcam.start();
+    } else if (recordState === "RETAKE") {
+      recordWebcam.stop();
+    } else if (recordState === "STOPPED") {
+      recordWebcam.retake();
+    }
+  }, [recordState]);
+};
+
+const useBlobStore = (saveFile, is360RecordingCompleted, preview, recordWebcam) => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (preview === false && is360RecordingCompleted === null) {
+      console.log("360 file save called !!!!!");
+      recordWebcam.open();
+      saveFile().then(console.log("savingBlob")).then(blob => {
+        dispatch(save360Check(blob));
+      });
+    }
+  },[preview]);
+};
+
 const Recorder = (props) => {
   const responsive = useResponsiveStyles();
   const recordWebcam = useRecordWebcam({ frameRate: 60 });
-  const RecordState = useSelector((state) => state.rootReducer.interviewPage);
-  console.log(RecordState.preview, RecordState.recordState);
+  const { preview, recordState, is360RecordingCompleted} = useSelector((state) => state.rootReducer.interviewPage);
   useEffect(() => {
-    recordWebcam.open();
-  }, []);
+    if(preview === null){
+      recordWebcam.open();
+    }
+  }, [preview]);
 
   const saveFile = async () => {
     const blob = await recordWebcam.getRecording();
+    return blob;
   };
 
-  useEffect(() => {
-    if (RecordState.recordState === "RECORDING") {
-      recordWebcam.start();
-    } else if (RecordState.recordState === "RETAKE") {
-      recordWebcam.stop();
-    } else if (RecordState.recordState === "STOPPED") {
-      recordWebcam.retake();
-    }
-  }, [RecordState.recordState]);
+  useRecordingEffect(recordWebcam,recordState);
+  useBlobStore(saveFile, is360RecordingCompleted, preview, recordWebcam);
 
   console.log('recordWebcam.previewRef',recordWebcam)
   return (
     <RecorderContainer>
-      {RecordState.preview ? (
+      {preview ? (
         <div
           style={{
             width: "100%",

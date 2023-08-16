@@ -1,19 +1,18 @@
-import React from "react";
-import Overlay from "../components/webcam/Overlay";
-import Recorder from "../components/webcam/Recorder";
 import { styled } from "@mui/material";
-import RecordTimer from "../components/webcam/RecordTimer";
-import CustomRecordingButton from "../components/webcam/CustomRecordingButton";
-import RecordInfo from "../components/webcam/RecordInfo";
-import CustomLogo from "../components/webcam/CustomLogo";
-import useResponsiveStyles from "../utils/MediaQuery";
-import CustomExitButton from "../components/webcam/CustomExitButton";
-import { useSelector } from "react-redux";
-import SaveAndNextButton from "../components/webcam/SaveAndNextButton";
-import RetakeButton from "../components/webcam/RetakeButton";
-import RecordNoticeTab360 from "../components/webcam/RecordNoticeTab360";
+import React from "react";
 import Countdown from "../components/webcam/Countdown";
-import ReactMicComp from "../components/mic/MicWaveForm";
+import CustomLogo from "../components/webcam/CustomLogo";
+import CustomRecordingButton from "../components/webcam/CustomRecordingButton";
+import ExitPracticeButton from "../components/webcam/ExitPracticeButton";
+import Overlay from "../components/webcam/Overlay";
+import QuestionTab from "../components/webcam/QuestionTab";
+import Record360NoticeTab from "../components/webcam/Record360NoticeTab";
+import RecordInfo from "../components/webcam/RecordInfo";
+import RecordTimer from "../components/webcam/RecordTimer";
+import Recorder from "../components/webcam/Recorder";
+import RetakeButton from "../components/webcam/RetakeButton";
+import SaveAndNextButton from "../components/webcam/SaveAndNextButton";
+import useResponsiveStyles from "../utils/MediaQuery";
 
 const InterviewContainer = styled("div")(({ theme }) => ({
   height: "100%",
@@ -30,27 +29,22 @@ const QuestionContainer = styled("div")(({ theme, responsive }) => ({
 }));
 
 const InterviewPage = () => {
-  const RecordState = useSelector((state) => state.rootReducer.interviewPage);
-
   const responsive = useResponsiveStyles();
-  const allowedTime = RecordState.recordTime;
-
   return (
     <InterviewContainer>
       <CustomLogo />
-      <RecordTimer minutes={allowedTime} />
+      <RecordTimer/>
       <RecordInfo />
       <Overlay />
       {RecordState.recordState == "STARTED" && <Countdown />}
       <Recorder />
-      <CustomExitButton />
+      <ExitPracticeButton />
       <SaveAndNextButton />
       <RetakeButton />
       {/* <ReactMicComp /> */}
       <QuestionContainer responsive={responsive}>
-        <RecordNoticeTab360 />
-        {/* <QuestionTab /> */}
-
+        <Record360NoticeTab/>
+        <QuestionTab />
         <CustomRecordingButton />
       </QuestionContainer>
     </InterviewContainer>
