@@ -1,94 +1,105 @@
-import React from 'react';
-import {styled} from '@mui/material';
-import useResponsiveStyles from '../../utils/MediaQuery';
-import { Typography } from '@mui/material';
+import React from "react";
+import { styled } from "@mui/material";
+import useResponsiveStyles from "../../utils/MediaQuery";
+import { Typography } from "@mui/material";
+import { fontFamily } from "@mui/system";
 
-export const CustomTypography = styled(Typography)(({ responsive , fontWeight, color,lineHeight,cursor}) => ({
-  '&.MuiTypography-h1': {
-    fontWeight: fontWeight || 'bold',
-    fontSize: responsive.isMobile
-    ? '24px'
-    : responsive.isTablet
-    ? '48px'
-    : '56px',
-    lineHeight:lineHeight
-  },
-  '&.MuiTypography-h2': {
-    fontWeight: fontWeight || 'bold',
-    fontSize: responsive.isMobile
-      ? '20px'
-      : responsive.isTablet
-      ? '32px'
-      : '48px',
-      lineHeight:lineHeight
-  },
-  '&.MuiTypography-h3': {
-    // fontFamily:'Nunito Sans',
-    fontWeight: fontWeight || 'bold',
-    fontSize: responsive.isMobile
-      ? '18px'
-      : responsive.isTablet
-      ? '24px'
-      : '32px',
-      lineHeight:lineHeight
-  },
-  '&.MuiTypography-h4': {
-    fontWeight: fontWeight || 'bold',
-    fontSize: responsive.isMobile
-      ? '16px'
-      : responsive.isTablet
-      ? '18px'
-      : '24px',
-      lineHeight:lineHeight
-  },
-  '&.MuiTypography-h5': {
-    fontWeight: fontWeight || 'bold',
-    fontSize: responsive.isMobile
-      ? '14px'
-      : responsive.isTablet
-      ? '16px'
-      : '18px',
-      lineHeight:lineHeight
-  },
-  '&.MuiTypography-h6': {
-    color:color,
-    fontWeight: fontWeight || 'bold',
-    fontSize: responsive.isMobile
-      ? '12px'
-      : responsive.isTablet
-      ? '14px'
-      : '16px',
-      lineHeight:lineHeight
-  },
-  '&.MuiTypography-body1': {
-    fontWeight: fontWeight || 'regular',
-    fontSize: responsive.isMobile
-      ? '16px'
-      : responsive.isTablet
-      ? '16px'
-      : '18px',
-      lineHeight:lineHeight
-  },
-  '&.MuiTypography-body2': {
-    fontWeight: fontWeight || 'regular',
-    fontSize: responsive.isMobile
-      ? '14px'
-      : responsive.isTablet
-      ? '14px'
-      : '16px',
-      lineHeight:lineHeight
-  },
-  '&:hover': {
-    cursor: cursor || '',
-  },
-}));
+export const CustomTypography = styled(Typography)(
+  ({ theme, responsive, fontStyle }) => ({
+    "&.MuiTypography-h1": {
+      fontFamily: "Nunito Sans",
+      fontWeight: 700,
+      fontSize: responsive.isMobile
+        ? "1.5rem"
+        : responsive.isTablet
+          ? "3rem"
+          : "3.5rem",
+      lineHeight: responsive.isMobile ? "120%" : "110%",
+    },
+    "&.MuiTypography-h2": {
+      fontFamily: "Nunito Sans",
+      fontWeight: 700,
+      fontSize: responsive.isMobile
+        ? "1.25rem"
+        : responsive.isTablet
+          ? "2rem"
+          : "3rem",
+      lineHeight: "120%",
+    },
+    "&.MuiTypography-h3": {
+      fontFamily: "Nunito Sans",
+      fontWeight: 700,
+      fontSize: responsive.isMobile
+        ? "1.125rem"
+        : responsive.isTablet
+          ? "1.5rem"
+          : "2rem",
+      lineHeight: "120%",
+    },
+    "&.MuiTypography-h4": {
+      fontFamily: "Nunito Sans",
+      fontWeight: 700,
+      fontSize: responsive.isMobile
+        ? "1rem"
+        : responsive.isTablet
+          ? "1.125rem"
+          : "1.5rem",
+      lineHeight: "120%",
+    },
+    "&.MuiTypography-h5": {
+      fontFamily: "Nunito Sans",
+      fontWeight: 700,
+      fontSize: responsive.isMobile
+        ? "0.875rem"
+        : responsive.isTablet
+          ? "1rem"
+          : "1.125rem",
+      lineHeight: "120%",
+    },
+    "&.MuiTypography-body1": {
+      fontFamily: "Nunito Sans",
+      fontWeight: 400,
+      fontSize: responsive.isMobile
+        ? "1rem"
+        : responsive.isTablet
+          ? "1rem"
+          : "1.125rem",
+      lineHeight: responsive.isMobile
+        ? "130%"
+        : responsive.isTablet
+          ? "130%"
+          : "140%",
+    },
+    "&.MuiTypography-body2": {
+      fontFamily: "Nunito Sans",
+      fontWeight: 400,
+      fontSize: responsive.isMobile
+        ? "0.875rem"
+        : responsive.isTablet
+          ? "0.875rem"
+          : "1rem",
+      lineHeight: responsive.isMobile
+        ? "130%"
+        : responsive.isTablet
+          ? "130%"
+          : "140%",
+    },
 
-const CustomAllTypography = (props) => {
+  })
+);
+
+const CustomAllTypography = ({ name, variant, style = {},  fontStyle, textColor, onClick }) => {
   const responsive = useResponsiveStyles();
   return (
-      <CustomTypography variant={props.variant} responsive={responsive} fontWeight={props.fontWeight} color={props.color} style={props.style}>
-        {props.name}
-      </CustomTypography>
+    <CustomTypography
+      variant={variant}
+      responsive={responsive}
+      fontStyle={fontStyle}
+      onClick={onClick}
+      style={{ ...style, color: textColor, cursor: 'pointer' }}
+    >
+      {name}
+    </CustomTypography>
   );
 };
 

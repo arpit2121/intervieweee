@@ -1,20 +1,32 @@
-import React from 'react'
+import React from "react";
 
-const SuccessIcon = () => {
+const SuccessIcon = ({ style = {} ,onClick=()=>{}}) => {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g clip-path="url(#clip0_659_769)">
-    <path d="M14.6668 7.38668V8.00001C14.666 9.43763 14.2005 10.8365 13.3397 11.9879C12.4789 13.1393 11.269 13.9817 9.8904 14.3893C8.51178 14.7969 7.03834 14.7479 5.68981 14.2497C4.34128 13.7515 3.18993 12.8307 2.40747 11.6247C1.62501 10.4187 1.25336 8.99205 1.34795 7.55755C1.44254 6.12305 1.9983 4.75756 2.93235 3.66473C3.8664 2.57189 5.12869 1.81027 6.53096 1.49344C7.93323 1.17662 9.40034 1.32157 10.7135 1.90668" stroke="#439F6E" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M14.6667 2.66669L8 9.34002L6 7.34002" stroke="#439F6E" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-    </g>
-    <defs>
-    <clipPath id="clip0_659_769">
-    <rect width="16" height="16" fill="white"/>
-    </clipPath>
-    </defs>
+    <svg
+    onClick={onClick}
+      style={style}
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.709 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M22 4L12 14.01L9 11.01"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
     </svg>
+  );
+};
 
-  )
-}
-
-export default SuccessIcon
+export default SuccessIcon;

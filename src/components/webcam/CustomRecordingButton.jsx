@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PlayButtonIcon from '../icons/Recorder/PlayButtonIcon';
 import ReplayArrowIcon from '../icons/recorder/ReplayArrowIcon';
 import StopRecordingIcon from '../icons/recorder/StopRecordingIcon';
 import useResponsiveStyles from '../../utils/MediaQuery';
 import CustomAllTypography from '../typography/CustomTypography';
-import { useDispatch, useSelector } from 'react-redux';
 import { setRecordState, togglePreview } from '../../store/slices/InterviewPageSlice';
 
 const CustomRecordingButton = () => {
   const responsive = useResponsiveStyles();
   const iconComponents = [PlayButtonIcon, PlayButtonIcon, StopRecordingIcon, ReplayArrowIcon];
   const dispatch = useDispatch();
-  const RecordState = useSelector((state) => state.rootReducer.interviewPage);
-  const RECORDING_DELAY_MS = 5000;
+  const recordState = useSelector(state => state.rootReducer.interviewPage.recordState);
+  const RECORDING_DELAY_MS = 11000;
   const labels = ['Start Recording', 'Starting Recording...', 'Stop Recording', 'Retake'];
 
   const containerStyles = {
@@ -22,8 +22,8 @@ const CustomRecordingButton = () => {
     flexDirection: 'column',
     alignItems: 'center',
     bottom: responsive.isMobile ? '9.5rem' : responsive.isTablet ? '2rem' : '2rem',
-    right: responsive.isMobile ? '0' :'50%',
-    transform : responsive.isMobile ? '' : 'translate(50%)',
+    right: responsive.isMobile ? '0.5rem' : '50%',
+    transform: responsive.isMobile ? '' : 'translate(50%)',
   };
 
   const redCircleStyles = {
@@ -36,13 +36,12 @@ const CustomRecordingButton = () => {
     alignItems: 'center',
   };
 
-  const labelStyle={
+  const labelStyle = {
     paddingTop: '0.5rem',
     color: '#FFF',
     textAlign: 'center',
-    fontSize:responsive.isDesktop ? '1rem' :'0.625rem',
-    width:responsive.isDesktop ? '10rem' : '6rem',
-  }
+    width: responsive.isMobile ? '6rem' : '10rem',
+  };
 
   const startingRecordingStyle = {
     transform: 'rotate(90deg)',
@@ -51,43 +50,52 @@ const CustomRecordingButton = () => {
   const [iconIndex, setIconIndex] = useState(0);
 
   const handleClick = () => {
-    if(iconIndex === 0){
-      setIconIndex(1);
-      dispatch(setRecordState("STARTED"));
-    }else if(iconIndex===2){
-      dispatch(togglePreview(true));
-      setIconIndex(3);
-      dispatch(setRecordState("RETAKE"));
-    }else if(iconIndex===3){
-      dispatch(togglePreview(false));
-      setIconIndex(1);
-      dispatch(setRecordState("STOPPED"));
+    switch (iconIndex) {
+      case 0:
+        setIconIndex(1);
+        dispatch(setRecordState('STARTED'));
+        break;
+      case 2:
+        setIconIndex(3);
+        dispatch(togglePreview(true));
+        dispatch(setRecordState('RETAKE'));
+        break;
+      case 3:
+        setIconIndex(1);
+        dispatch(togglePreview(false));
+        dispatch(setRecordState('STOPPED'));
+        break;
+      default:
+        break;
     }
   };
-  
+
   useEffect(() => {
+    if (recordState === 'STARTED') {
+      setIconIndex(1);
+    }
     if (iconIndex === 1) {
       const recordingTimeout = setTimeout(() => {
-        dispatch(setRecordState("RECORDING"));
+        dispatch(setRecordState('RECORDING'));
         setIconIndex(2);
       }, RECORDING_DELAY_MS);
       return () => {
         clearTimeout(recordingTimeout);
       };
     }
-  }, [iconIndex]);
-  
+  }, [iconIndex, recordState]);
+
   const IconComponent = iconComponents[iconIndex];
 
   return (
-    <div style={containerStyles} onClick={handleClick}>
-      <div style={{ background: '#FFF', opacity: '0.6', width: '3rem', height: '3rem', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <div style={{ ...redCircleStyles, ...(iconIndex === 1 ? startingRecordingStyle : {}) }}>
-          <IconComponent onClick={handleClick} style={{}}/>
+    <div style={containerStyles}>
+      <div onClick={handleClick} style={{ background: '#FFF', opacity: '1', width: '3rem', height: '3rem', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center',cursor: 'pointer'  }}>
+        <div style={{ ...redCircleStyles, ...(iconIndex === 1 ? startingRecordingStyle : {})}}>
+          <IconComponent />
         </div>
       </div>
       <div style={labelStyle}>
-        <CustomAllTypography name={labels[iconIndex]} style={labelStyle}/>
+        <CustomAllTypography variant={'body2'} name={labels[iconIndex]} style={labelStyle} />
       </div>
     </div>
   );
