@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { styled } from "@mui/system";
 import useResponsiveStyles from "../../utils/MediaQuery";
 import { save360Check } from "../../store/slices/InterviewPageSlice";
+import VideoPlayer from "./VideoPlayer";
 
 const useDynamicDimension = () => {
   const dispatch = useDispatch(); 
@@ -66,7 +67,6 @@ const Recorder = (props) => {
   const responsive = useResponsiveStyles();
   const recordWebcam = useRecordWebcam({ frameRate: 60 });
   const { preview, recordState, is360RecordingCompleted} = useSelector((state) => state.rootReducer.interviewPage);
-  console.log(preview, recordState);
   useEffect(() => {
     if(preview === null){
       recordWebcam.open();
@@ -86,6 +86,7 @@ const Recorder = (props) => {
       {preview ? (
         <div style={{ width: "100%", height: "100%", ...responsive.isMobile ? { position: 'relative', textAlign: 'center', top: '8rem' } : { display: "flex", justifyContent: 'center', alignItems: 'center' } }}>
           <PreviewVideo ref={recordWebcam.previewRef} autoPlay controls />
+          {/* <VideoPlayer ref={recordWebcam.previewRef}/> */}
         </div>
       ) : (
         <RecorderVideo ref={recordWebcam.webcamRef} autoPlay muted />
