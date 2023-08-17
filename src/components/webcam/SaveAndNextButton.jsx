@@ -54,7 +54,6 @@ const SaveAndNextButton = () => {
 
   const handleClick = () => {
     if (is360Completeted == null) {
-      console.log("33");
       is360Completeted();
     }
     console.log(
@@ -73,7 +72,6 @@ const SaveAndNextButton = () => {
       dispatch(setGetReadyFlag(true));
     } else {
       console.log("save and next clicked !!! 22");
-
       dispatch(moveToNextQuestion());
     }
   };
@@ -85,6 +83,7 @@ const SaveAndNextButton = () => {
       size="extra-small"
       style={{
         ...ButtonStyle,
+        padding:'0.8rem',
         background: preview ? "black" : "#9B9B9D",
         color: "#FFF",
       }}

@@ -47,7 +47,7 @@ const InterviewPage = () => {
           <RecordInfo />
           <Overlay />
           {/* is360RecordingCompleted !== true && is360RecordingCompleted !== false && */}
-          {recordState == "STARTED" &&  <Countdown showCenter />}
+          {recordState == "STARTED" && is360RecordingCompleted !== true && is360RecordingCompleted !== false &&   <Countdown showCenter />}
           <Recorder />
           <ExitPracticeButton />
           <SaveAndNextButton />

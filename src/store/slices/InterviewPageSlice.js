@@ -72,6 +72,9 @@ const interviewPageSlice = createSlice({
     },
     setGetReadyFlag: (state,action) =>{
       state.getReadyFlag = action.payload;
+    },
+    setPracticeMode: (state,action) =>{
+      state.practiceMode = action.payload;
     }
   },
 });
@@ -84,7 +87,8 @@ export const {
   moveToNextQuestion,
   save360Check,
   setGetReadyFlag,
-  examDone
+  examDone,
+  setPracticeMode
 } = interviewPageSlice.actions;
 
 export default interviewPageSlice.reducer;
