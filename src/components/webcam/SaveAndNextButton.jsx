@@ -35,17 +35,17 @@ const SaveAndNextButton = () => {
     bottom: responsive.isDesktop
       ? "2.75rem"
       : responsive.isTablet
-      ? "2.5rem"
-      : responsive.isMobile
-      ? "18rem"
-      : "2.5rem",
+        ? "2.5rem"
+        : responsive.isMobile
+          ? "18rem"
+          : "2.5rem",
     right: responsive.isDesktop
       ? "2.75rem"
       : responsive.isTablet
-      ? "2.5rem"
-      : responsive.isMobile
-      ? "1rem"
-      : "2.75rem",
+        ? "2.5rem"
+        : responsive.isMobile
+          ? "1rem"
+          : "2.75rem",
   };
 
   const is360Completeted = () => {
@@ -83,7 +83,7 @@ const SaveAndNextButton = () => {
       size="extra-small"
       style={{
         ...ButtonStyle,
-        padding:'0.8rem',
+        padding: "0.8rem",
         background: preview ? "black" : "#9B9B9D",
         color: "#FFF",
       }}
