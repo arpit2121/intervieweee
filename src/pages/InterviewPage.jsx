@@ -13,6 +13,8 @@ import Recorder from "../components/webcam/Recorder";
 import RetakeButton from "../components/webcam/RetakeButton";
 import SaveAndNextButton from "../components/webcam/SaveAndNextButton";
 import useResponsiveStyles from "../utils/MediaQuery";
+import { useSelector } from "react-redux";
+import GetReadyForExam from "./GetReadyForExam";
 
 const InterviewContainer = styled("div")(({ theme }) => ({
   height: "100%",
@@ -29,25 +31,36 @@ const QuestionContainer = styled("div")(({ theme, responsive }) => ({
 }));
 
 const InterviewPage = () => {
+  const { recordState, getReadyFlag,is360RecordingCompleted } = useSelector(
+    (state) => state.rootReducer.interviewPage
+  );
+  console.log(getReadyFlag);
   const responsive = useResponsiveStyles();
   return (
-    <InterviewContainer>
-      <CustomLogo />
-      <RecordTimer/>
-      <RecordInfo />
-      <Overlay />
-      {RecordState.recordState == "STARTED" && <Countdown />}
-      <Recorder />
-      <ExitPracticeButton />
-      <SaveAndNextButton />
-      <RetakeButton />
-      {/* <ReactMicComp /> */}
-      <QuestionContainer responsive={responsive}>
-        <Record360NoticeTab/>
-        <QuestionTab />
-        <CustomRecordingButton />
-      </QuestionContainer>
-    </InterviewContainer>
+    <>
+      {getReadyFlag ? (
+        <GetReadyForExam />
+      ) : (
+        <InterviewContainer>
+          <CustomLogo />
+          <RecordTimer />
+          <RecordInfo />
+          <Overlay />
+          {/* is360RecordingCompleted !== true && is360RecordingCompleted !== false && */}
+          {recordState == "STARTED" &&  <Countdown showCenter />}
+          <Recorder />
+          <ExitPracticeButton />
+          <SaveAndNextButton />
+          <RetakeButton />
+          {/* <ReactMicComp /> */}
+          <QuestionContainer responsive={responsive}>
+            <Record360NoticeTab />
+            <QuestionTab />
+            <CustomRecordingButton />
+          </QuestionContainer>
+        </InterviewContainer>
+      )}
+    </>
   );
 };
 

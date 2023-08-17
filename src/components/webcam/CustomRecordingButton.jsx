@@ -12,7 +12,7 @@ const CustomRecordingButton = () => {
   const iconComponents = [PlayButtonIcon, PlayButtonIcon, StopRecordingIcon, ReplayArrowIcon];
   const dispatch = useDispatch();
   const recordState = useSelector(state => state.rootReducer.interviewPage.recordState);
-  const RECORDING_DELAY_MS = 5000;
+  const RECORDING_DELAY_MS = 11000;
   const labels = ['Start Recording', 'Starting Recording...', 'Stop Recording', 'Retake'];
 
   const containerStyles = {

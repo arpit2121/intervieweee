@@ -167,19 +167,16 @@ const CommonCustomTextField = ({
     warning: { color: "#FFEAC1", icon: <WarningIcon style={statusIconStyle} /> },
     // loading: { color: "#AAAAAA", icon: <LoadingIcon/> },
     success: { color: "#AAAAAA", icon: <SuccessIcon style={statusIconStyle} /> },
-  };
+  }
   const getStatusColor = (status) => {
     return statusMap?.[status]?.color || "#AAAAAA";
-  const getStatusColor = (status) => {
-    return statusMap?.[status]?.color || "#AAAAAA";
-  };
+  }
 
-
-  const handleFocus = (event) => {
+  const handleFocus = () => {
     setIsFocused(true);
   };
 
-  const handleBlur = (event) => {
+  const handleBlur = () => {
     setIsFocused(false);
   };
 

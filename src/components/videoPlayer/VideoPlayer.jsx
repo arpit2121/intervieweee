@@ -1,16 +1,14 @@
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import { Slider } from "@mui/material";
+import React, { forwardRef, useEffect, useState } from "react";
+import styled from "styled-components";
+import useResponsiveStyles from "../../utils/MediaQuery";
 import VideoBackIcon from "../icons/videoPlayer/VideoBackIcon";
 import VideoForwardIcon from "../icons/videoPlayer/VideoForwardIcon";
 import VideoPlayIcon from "../icons/videoPlayer/VideoPlayIcon";
-import "./videoPlayer.style.css";
-import useResponsiveStyles from "../../utils/MediaQuery";
-import { Slider } from "@mui/material";
 import VolumeIcon from "../icons/videoPlayer/VolumeIcon";
-import styled from "styled-components";
-// import thumbnail from "../../../assets/videoThumbnail.png";
+import "./videoPlayer.style.css";
 import { Forward5Rounded, Replay5Rounded } from "@mui/icons-material";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
-import { useSelector } from "react-redux";
 import VideoPauseIcon from "../icons/videoPlayer/VideoPauseIcon";
 
 const CustomSoundBar = styled(Slider)(({ theme }) => ({
@@ -67,7 +65,9 @@ const VideoPlayer = forwardRef(({ dynamicDimensions }, ref) => {
   const [volumeIconType, setVolumeIconType] = useState("default");
   const responsive = useResponsiveStyles();
   const vid = document.getElementById("video1");
+
   const videoRef = ref.previewRef;
+
   let enterTimeOut;
   let exitTimeOut;
   const fastForward = () => {
@@ -78,7 +78,7 @@ const VideoPlayer = forwardRef(({ dynamicDimensions }, ref) => {
       setShowFwdArrow(false);
     }, 1000);
   };
-  console.log("reddd", ref);
+
   const revert = () => {
     if (exitTimeOut) clearTimeout(exitTimeOut);
     setShowBackArrow(true);
@@ -98,11 +98,12 @@ const VideoPlayer = forwardRef(({ dynamicDimensions }, ref) => {
     }
   };
   const interval = "";
+  useEffect(() => {
     setInterval(function () {
-      console.log('running')
-      if (videoRef.current?.currentTime == videoTime) clearInterval(interval);
+      if (videoRef.current?.currentTime == videoTime) clearInterval();
       setCurrentTime(videoRef.current?.currentTime);
     }, 1000);
+  }, []);
 
   useEffect(() => {
     !drag && setProgress((videoRef.current?.currentTime / videoTime) * 100);
@@ -153,34 +154,23 @@ const VideoPlayer = forwardRef(({ dynamicDimensions }, ref) => {
     videoRef.current.requestFullscreen();
   };
 
-  function myFunction1() {
-    // const vid = document.getElementById("video1");
-    //  videoRef.current.play()
-    //  setVideoTime(vid?.duration);
-  }
-  //   useEffect(() => {
-  //     if (vid) myFunction1();
-  //   }, [,vid]);
   return (
     <div
       onMouseEnter={onVideoMouseEnter}
       onMouseLeave={onVideoMouseLeave}
       className="outerDiv"
-      //   style={{ height: responsive.isMobile ? "11.06rem" : "21.28rem" }}
+      // style={{ height: responsive.isMobile ? "11.06rem" : "21.28rem" }}
       style={{
         width: dynamicDimensions().width,
+        margin: "auto",
         height: dynamicDimensions().height,
       }}
     >
       <video
         id="video1"
-        // style={{ objectFit: responsive.isMobile ? "contain" : "cover" }}
         ref={ref.previewRef}
         autoPlay
-        // controls
-        // poster={thumbnail}
         className="video"
-        // src={videoLink}
       ></video>
 
       <div

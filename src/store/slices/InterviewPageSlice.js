@@ -15,6 +15,7 @@ const initialState = {
   currentQuestionIndex: 0,
   questionRecords: [],
   retakeCount: 0,
+  getReadyFlag:false,
   questions: [
     {
       questionId: 1,
@@ -68,6 +69,9 @@ const interviewPageSlice = createSlice({
     },
     examDone: (state) =>{
       state.isAllQuestionsAttempted = true;
+    },
+    setGetReadyFlag: (state,action) =>{
+      state.getReadyFlag = action.payload;
     }
   },
 });
@@ -79,6 +83,7 @@ export const {
   recordQuestion,
   moveToNextQuestion,
   save360Check,
+  setGetReadyFlag,
   examDone
 } = interviewPageSlice.actions;
 

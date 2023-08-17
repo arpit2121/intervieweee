@@ -9,7 +9,7 @@ const useDynamicDimension = () => {
   const dispatch = useDispatch(); 
   const res = useResponsiveStyles();
   const width = res.isMobile
-    ? "18rem"
+    ? "90%"
     : res.isTablet
     ? "20rem"
     : res.isDesktop
@@ -37,14 +37,6 @@ const RecorderVideo = styled("video")({
   objectFit: "cover",
   zIndex: -1,
 });
-
-const PreviewVideo = styled("video")(({ theme }) => ({
-  width: useDynamicDimension().width,
-  height: useDynamicDimension().height,
-  objectFit: "cover",
-  zIndex: 1,
-  borderRadius: "1rem",
-}));
 
 // maintain recording states
 const useRecordingEffect = (recordWebcam, recordState) => {
