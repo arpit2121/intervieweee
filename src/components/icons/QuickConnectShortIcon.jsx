@@ -1,8 +1,9 @@
 import React from "react";
 
-const QuickConnectShortIcon = () => {
+const QuickConnectShortIcon = ({style={}}) => {
   return (
     <svg
+    style={style}
       width="2.3rem"
       height="1.71rem"
       viewBox="0 0 56 41"

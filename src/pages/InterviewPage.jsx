@@ -1,20 +1,20 @@
-import React from "react";
-import Overlay from "../components/webcam/Overlay";
-import Recorder from "../components/webcam/Recorder";
 import { styled } from "@mui/material";
-import RecordTimer from "../components/webcam/RecordTimer";
-import CustomRecordingButton from "../components/webcam/CustomRecordingButton";
-import QuestionTab from "../components/webcam/QuestionTab";
-import CustomButton from "../components/button/CustomButton";
-import ArrowLeftDirection from "../components/icons/Recorder/ArrowLeftDirection";
-import RecordInfo from "../components/webcam/RecordInfo";
+import React from "react";
+import Countdown from "../components/webcam/Countdown";
 import CustomLogo from "../components/webcam/CustomLogo";
+import CustomRecordingButton from "../components/webcam/CustomRecordingButton";
+import ExitPracticeButton from "../components/webcam/ExitPracticeButton";
+import Overlay from "../components/webcam/Overlay";
+import QuestionTab from "../components/webcam/QuestionTab";
+import Record360NoticeTab from "../components/webcam/Record360NoticeTab";
+import RecordInfo from "../components/webcam/RecordInfo";
+import RecordTimer from "../components/webcam/RecordTimer";
+import Recorder from "../components/webcam/Recorder";
+import RetakeButton from "../components/webcam/RetakeButton";
+import SaveAndNextButton from "../components/webcam/SaveAndNextButton";
 import useResponsiveStyles from "../utils/MediaQuery";
 import { useSelector } from "react-redux";
-import SaveAndNextButton from "../components/webcam/SaveAndNextButton";
-import RetakeButton from "../components/webcam/RetakeButton";
-import ExitPracticeButton from "../components/webcam/ExitPracticeButton";
-import Record360NoticeTab from "../components/webcam/Record360NoticeTab";
+import GetReadyForExam from "./GetReadyForExam";
 
 const InterviewContainer = styled("div")(({ theme }) => ({
   height: "100%",
@@ -31,23 +31,36 @@ const QuestionContainer = styled("div")(({ theme, responsive }) => ({
 }));
 
 const InterviewPage = () => {
+  const { recordState, getReadyFlag,is360RecordingCompleted } = useSelector(
+    (state) => state.rootReducer.interviewPage
+  );
+  console.log(getReadyFlag);
   const responsive = useResponsiveStyles();
   return (
-    <InterviewContainer>
-      <CustomLogo />
-      <RecordTimer/>
-      <RecordInfo />
-      {/* <Overlay /> */}
-      <Recorder />
-      <ExitPracticeButton />
-      <SaveAndNextButton />
-      <RetakeButton/>
-      <QuestionContainer responsive={responsive}>
-        <Record360NoticeTab/>
-        <QuestionTab />
-        <CustomRecordingButton />
-      </QuestionContainer>
-    </InterviewContainer>
+    <>
+      {getReadyFlag ? (
+        <GetReadyForExam />
+      ) : (
+        <InterviewContainer>
+          <CustomLogo />
+          <RecordTimer />
+          <RecordInfo />
+          <Overlay />
+          {/* is360RecordingCompleted !== true && is360RecordingCompleted !== false && */}
+          {recordState == "STARTED" && is360RecordingCompleted !== true && is360RecordingCompleted !== false &&   <Countdown showCenter />}
+          <Recorder />
+          <ExitPracticeButton />
+          <SaveAndNextButton />
+          <RetakeButton />
+          {/* <ReactMicComp /> */}
+          <QuestionContainer responsive={responsive}>
+            <Record360NoticeTab />
+            <QuestionTab />
+            <CustomRecordingButton />
+          </QuestionContainer>
+        </InterviewContainer>
+      )}
+    </>
   );
 };
 

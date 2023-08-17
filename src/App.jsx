@@ -11,10 +11,11 @@ import GetReadyForExam from './pages/GetReadyForExam'
 function App() {
   return (
     <Routes>
-      <Route path='/' element={<Home/>}/>
+      <Route path='/' element={<OnBoardingPage/>}/>
       <Route path='/onboard-candidate' element={<OnBoardingPage/>}/>
       <Route path='/interviewDetails' element={<InterviewDetails/>}/>
       {/* <Route path='/practiceMode' element={<PracticeMode/>}/> */}
+      
       <Route path='/interviewPage' element={<InterviewPage/>}/>
       <Route path='/thanks' element={<ThankYouPage/>}/>
       <Route path='/getReady' element={<GetReadyForExam/>}/>

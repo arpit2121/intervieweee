@@ -3,14 +3,25 @@ import { useRecordWebcam } from "react-record-webcam";
 import { useDispatch, useSelector } from "react-redux";
 import { styled } from "@mui/system";
 import useResponsiveStyles from "../../utils/MediaQuery";
-import { save360Check } from "../../store/slices/InterviewPageSlice";
-import VideoPlayer from "./VideoPlayer";
+import VideoPlayer from "../videoPlayer/VideoPlayer";
 
 const useDynamicDimension = () => {
   const dispatch = useDispatch(); 
   const res = useResponsiveStyles();
-  const width = res.isMobile ? "18rem" : res.isTablet ? "20rem" : res.isDesktop ? "50rem" : "30rem";
-  const height = res.isMobile ? "13rem" : res.isTablet ? "15rem" : res.isDesktop ? "30rem" : "20rem";
+  const width = res.isMobile
+    ? "90%"
+    : res.isTablet
+    ? "20rem"
+    : res.isDesktop
+    ? "50rem"
+    : "30rem";
+  const height = res.isMobile
+    ? "13rem"
+    : res.isTablet
+    ? "15rem"
+    : res.isDesktop
+    ? "30rem"
+    : "20rem";
   return { width, height };
 };
 
@@ -26,14 +37,6 @@ const RecorderVideo = styled("video")({
   objectFit: "cover",
   zIndex: -1,
 });
-
-const PreviewVideo = styled("video")(({ theme }) => ({
-  width: useDynamicDimension().width,
-  height: useDynamicDimension().height,
-  objectFit: "cover",
-  zIndex: 1,
-  borderRadius: '1rem',
-}));
 
 // maintain recording states
 const useRecordingEffect = (recordWebcam, recordState) => {
@@ -81,12 +84,27 @@ const Recorder = (props) => {
   useRecordingEffect(recordWebcam,recordState);
   useBlobStore(saveFile, is360RecordingCompleted, preview, recordWebcam);
 
+  console.log('recordWebcam.previewRef',recordWebcam)
   return (
     <RecorderContainer>
       {preview ? (
-        <div style={{ width: "100%", height: "100%", ...responsive.isMobile ? { position: 'relative', textAlign: 'center', top: '8rem' } : { display: "flex", justifyContent: 'center', alignItems: 'center' } }}>
-          <PreviewVideo ref={recordWebcam.previewRef} autoPlay controls />
-          {/* <VideoPlayer ref={recordWebcam.previewRef}/> */}
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            ...(responsive.isMobile
+              ? { position: "relative", textAlign: "center", top: "8rem" }
+              : {
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }),
+          }}
+        >
+          {/* <PreviewVideo ref={recordWebcam.previewRef} autoPlay controls /> */}
+           
+          {/* <VideoPlayer dynamicDimensions={ useDynamicDimension} ref={recordWebcam.previewRef} autoPlay /> */}
+          <VideoPlayer dynamicDimensions={ useDynamicDimension} ref={recordWebcam} autoPlay controls />
         </div>
       ) : (
         <RecorderVideo ref={recordWebcam.webcamRef} autoPlay muted />

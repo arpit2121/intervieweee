@@ -2,6 +2,7 @@ import React from 'react';
 import {styled} from '@mui/material';
 import { Button } from '@mui/material';
 import useResponsiveStyles from '../../utils/MediaQuery';
+import { useNavigate, useNavigation } from 'react-router-dom';
 
 export  const CustomInputButton = styled(Button)(({ theme, responsive, variant, size,width,bgcolor }) => {
   let padding;
@@ -19,8 +20,6 @@ export  const CustomInputButton = styled(Button)(({ theme, responsive, variant, 
       padding = '0.75rem 1.5rem';
       break;
     case 'extra-small':
-      padding = '0.5rem 1.5rem';
-      break;
     default:
       padding = '0rem 1.5rem';
       break;
@@ -60,12 +59,11 @@ export  const CustomInputButton = styled(Button)(({ theme, responsive, variant, 
 
 const CustomButton = (props) => {
   const responsive = useResponsiveStyles();
-  const handleButtonClick = () => {
-    console.log("hii")
-  };
+  const navigation = useNavigate();
+
   return (
     <div>
-      <CustomInputButton width={props?.width} variant={props.variant?props.variant:"contained"} color="primary" responsive={responsive} onClick={handleButtonClick} sx={{backgroundColor:props.bgcolor}}>
+      <CustomInputButton size={props?.size} width={props?.width} variant={props.variant?props.variant:"contained"} color="primary" responsive={responsive} onClick={props?.onClick} sx={{backgroundColor:props.bgcolor,...props?.sx}}>
         {props.name}
       </CustomInputButton>
     </div>
@@ -73,3 +71,4 @@ const CustomButton = (props) => {
 };
 
 export default CustomButton;
+
