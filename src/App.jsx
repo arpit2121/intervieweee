@@ -13,12 +13,11 @@ function App() {
     <Routes>
       <Route path='/' element={<OnBoardingPage/>}/>
       <Route path='/onboard-candidate' element={<OnBoardingPage/>}/>
-      <Route path='/interviewDetails' element={<InterviewDetails/>}/>
+      <Route path='/interview-details' element={<InterviewDetails/>}/>
       {/* <Route path='/practiceMode' element={<PracticeMode/>}/> */}
-      
-      <Route path='/interviewPage' element={<InterviewPage/>}/>
+      <Route path='/interview-page' element={<InterviewPage/>}/>
       <Route path='/thanks' element={<ThankYouPage/>}/>
-      <Route path='/getReady' element={<GetReadyForExam/>}/>
+      <Route path='/get-ready' element={<GetReadyForExam/>}/>
     </Routes>
   )
 }

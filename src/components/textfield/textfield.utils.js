@@ -22,7 +22,7 @@ export const professionList = [
   "Other",
 ];
 export const workExperienceList = [
-    "Five",
+"Five",
 "Ten",
 "Twenty",
 "Thirty",

@@ -12,6 +12,8 @@ import { getDroppedOrSelectedFiles } from "html5-file-selector";
 import { CloseOutlined } from "@mui/icons-material";
 import CloseIcon from "../icons/CloseIcon";
 import PdfImage from "../../assets/pdfImage.jpg";
+import { useDispatch } from "react-redux";
+import { setResume } from "../../store/slices/interviewee/intervieweeSlice";
 
 const CustomSoundBar = styled(Slider)(({ theme }) => ({
   "& .MuiSlider-thumb": {
@@ -42,6 +44,17 @@ const Layout = ({
   files,
   extra: { maxFiles },
 }) => {
+
+  const dispatch=useDispatch()
+
+  // useEffect(()=>{
+  //   console.log("FILE UPLOAD", files[0]?.meta?.status)
+  //   if(files[0]?.meta?.status==='done'){
+  //     console.log("DONE UPLOAD------------>>>>>", files[0])
+  //     dispatch(setResume(files[0]))
+  //   }
+  // },[files])
+  
   return (
     <div>
       {files.length == 0 && (
@@ -74,7 +87,7 @@ const Preview = ({ meta, files }, ...props) => {
 
   useEffect(() => {
     setLoaded(meta?.percent);
-    if (meta?.percent == 100) {
+    if (meta.percent===100) {
       setTimeout(() => {
         console.log("loaed");
         setDoneLoading(true);
@@ -150,6 +163,7 @@ const Preview = ({ meta, files }, ...props) => {
           <CloseIcon
             onClick={() =>
               files.forEach((f) => {
+                console.log(f,meta)
                 if (f?.meta?.id == meta?.id) f.remove();
               })
             }
@@ -179,6 +193,7 @@ const Input = ({ accept, onFiles, files, getFilesFromEvent }) => {
   const text = files.length > 0 ? "Add more files" : "Choose files";
   const responsive = useResponsiveStyles();
 
+
   return (
     <label
       style={{
@@ -205,7 +220,6 @@ const Input = ({ accept, onFiles, files, getFilesFromEvent }) => {
           textcolor={"#8A8894"}
         />
       </div>
-
       <input
         style={{ display: "none" }}
         type="file"
@@ -220,6 +234,7 @@ const Input = ({ accept, onFiles, files, getFilesFromEvent }) => {
   );
 };
 const CustomLayout = () => {
+  const dispatch= useDispatch()
   const getUploadParams = () => ({ url: "https://httpbin.org/post" });
   const getFilesFromEvent = (e) => {
     return new Promise((resolve) => {
@@ -229,8 +244,35 @@ const CustomLayout = () => {
     });
   };
   const handleSubmit = (files, allFiles) => {
-    console.log(files.map((f) => f.meta));
+    console.log("AFTER SUBMIT",files.map((f) => f));
     allFiles.forEach((f) => f.remove());
+  };
+
+
+  const  fileToBase64=(file)=> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onload = () => {
+        const base64Data = reader.result.split(',')[1]; // Extract base64 data portion
+        resolve(base64Data);
+      };
+  
+      reader.onerror = (error) => {
+        reject(error);
+      };
+  
+      reader.readAsDataURL(file);
+    });
+  }
+
+  const handleChangeStatus = async (files, status) => {
+    if (status === 'done') {
+      console.log("FILE AFTER DONE",files)
+      dispatch(setResume(files))
+      // const base64Data = await fileToBase64(files.file);
+      //dispatch(setResume({ id: files.file.id, name: files.file.name, data: base64Data }));
+    }
   };
 
   return (
@@ -259,6 +301,8 @@ const CustomLayout = () => {
       }}
       InputComponent={Input}
       getFilesFromEvent={getFilesFromEvent}
+      onChangeStatus={handleChangeStatus}
+      
     />
   );
 };

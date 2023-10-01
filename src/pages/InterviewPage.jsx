@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import Countdown from "../components/webcam/Countdown";
 import CustomLogo from "../components/webcam/CustomLogo";
 import CustomRecordingButton from "../components/webcam/CustomRecordingButton";
@@ -13,8 +13,9 @@ import Recorder from "../components/webcam/Recorder";
 import RetakeButton from "../components/webcam/RetakeButton";
 import SaveAndNextButton from "../components/webcam/SaveAndNextButton";
 import useResponsiveStyles from "../utils/MediaQuery";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import GetReadyForExam from "./GetReadyForExam";
+import { fetchQuestionAction } from "../store/slices/interviewee/actions";
 
 const InterviewContainer = styled("div")(({ theme }) => ({
   height: "100%",
@@ -31,11 +32,21 @@ const QuestionContainer = styled("div")(({ theme, responsive }) => ({
 }));
 
 const InterviewPage = () => {
+  const dispatch= useDispatch()
   const { recordState, getReadyFlag,is360RecordingCompleted } = useSelector(
     (state) => state.rootReducer.interviewPage
   );
   console.log(getReadyFlag);
   const responsive = useResponsiveStyles();
+
+  useEffect(()=>{
+    const fetchQueFun= ()=>{
+      console.log("INSIDE EFFECT OF PAGE")
+      dispatch(fetchQuestionAction({}))
+    }
+    fetchQueFun()
+  },[])
+
   return (
     <>
       {getReadyFlag ? (
@@ -56,7 +67,7 @@ const InterviewPage = () => {
           <QuestionContainer responsive={responsive}>
             <Record360NoticeTab />
             <QuestionTab />
-            <CustomRecordingButton />
+            <CustomRecordingButton /> 
           </QuestionContainer>
         </InterviewContainer>
       )}

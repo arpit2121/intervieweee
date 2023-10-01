@@ -4,6 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { styled } from "@mui/system";
 import useResponsiveStyles from "../../utils/MediaQuery";
 import VideoPlayer from "../videoPlayer/VideoPlayer";
+import { save360Check } from "../../store/slices/InterviewPageSlice";
+import { answerQuestion, save360Action } from "../../store/slices/interviewee/actions";
+import axios from "axios";
+import config from "../../common/config";
 
 const useDynamicDimension = () => {
   const dispatch = useDispatch(); 
@@ -53,14 +57,43 @@ const useRecordingEffect = (recordWebcam, recordState) => {
   }, [recordState]);
 };
 
-const useBlobStore = (saveFile, is360RecordingCompleted, preview, recordWebcam) => {
+const useBlobStore = (saveFile, is360RecordingCompleted, preview, recordWebcam,intervieweeData) => {
   const dispatch = useDispatch();
+
   useEffect(() => {
-    if (preview === false && is360RecordingCompleted === null) {
+    if (preview === false && is360RecordingCompleted===true){
       console.log("360 file save called !!!!!");
       recordWebcam.open();
-      saveFile().then(console.log("savingBlob")).then(blob => {
-        dispatch(save360Check(blob));
+      saveFile().then(console.log("savingBlob")).then(async blob => {
+        console.log("USER DATA", intervieweeData)
+      const formdata= new FormData()
+        formdata.append('json_data',JSON.stringify({ 
+          "adminId":intervieweeData?.adminId,
+          "jobPostId":intervieweeData?.jobPostId,
+          "email":intervieweeData?.email,
+          "questionId":"6506ef6f2406b5641aca4af4"
+          }))
+        formdata.append('file', blob)
+        if(blob != null){
+        try {
+          const response = await axios.post(`${config.interviewService}/v1/interviewee/upload-answer`, formdata, {
+          headers: {
+         'Content-Type': 'multipart/form-data',
+          },
+          });
+          console.log('File uploaded successfully', response);
+          if(response.status===201){
+           console.log("SUCCESSFULLY ANSWERS-------")
+           
+          }
+         } catch (error) {
+          console.error('Error uploading file', error);
+         }
+        //dispatch(answerQuestion({data:formdata}))
+        // dispatch(save360Check(blob));
+        console.log("VIDEO BLOB----->", blob)
+        }
+        
       });
     }
   },[preview]);
@@ -69,12 +102,14 @@ const useBlobStore = (saveFile, is360RecordingCompleted, preview, recordWebcam) 
 const Recorder = (props) => {
   const responsive = useResponsiveStyles();
   const recordWebcam = useRecordWebcam({ frameRate: 60 });
-  const { preview, recordState, is360RecordingCompleted} = useSelector((state) => state.rootReducer.interviewPage);
+  const { preview, recordState, is360RecordingCompleted, currentQuestionIndex,question} = useSelector((state) => state.rootReducer.interviewPage);
+  const intervieweeData = useSelector((state) => state.rootReducer.interviewee.data);
   useEffect(() => {
     if(preview === null){
       recordWebcam.open();
     }
   }, [preview]);
+
 
   const saveFile = async () => {
     const blob = await recordWebcam.getRecording();
@@ -82,7 +117,7 @@ const Recorder = (props) => {
   };
 
   useRecordingEffect(recordWebcam,recordState);
-  useBlobStore(saveFile, is360RecordingCompleted, preview, recordWebcam);
+  useBlobStore(saveFile, is360RecordingCompleted, preview, recordWebcam,intervieweeData);
 
   console.log('recordWebcam.previewRef',recordWebcam)
   return (
@@ -102,7 +137,6 @@ const Recorder = (props) => {
           }}
         >
           {/* <PreviewVideo ref={recordWebcam.previewRef} autoPlay controls /> */}
-           
           {/* <VideoPlayer dynamicDimensions={ useDynamicDimension} ref={recordWebcam.previewRef} autoPlay /> */}
           <VideoPlayer dynamicDimensions={ useDynamicDimension} ref={recordWebcam} autoPlay controls />
         </div>

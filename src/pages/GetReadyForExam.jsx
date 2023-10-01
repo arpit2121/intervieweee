@@ -13,6 +13,7 @@ import {
   setRecordState,
   togglePreview,
 } from "../store/slices/InterviewPageSlice";
+import { fetchQuestionAction } from "../store/slices/interviewee/actions";
 
 const LogoContainer = styled("div")(({ responsive }) => ({
   display: "flex",
@@ -46,6 +47,15 @@ const GetReadyForExam = () => {
       dispatch(setGetReadyFlag(false))
     }, 11000);
   }, []);
+
+  useEffect(()=>{
+    const fetchQueFun= ()=>{
+      dispatch(fetchQuestionAction({}))
+    }
+
+    fetchQueFun()
+  },[])
+  
   return (
     <div style={{ overflow: "hidden" }}>
       <LogoContainer responsive={responsive}></LogoContainer>

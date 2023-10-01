@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { fetchQuestionAction } from "./interviewee/actions";
 
 const initialState = {
   recordState: "",
@@ -16,29 +17,17 @@ const initialState = {
   questionRecords: [],
   retakeCount: 0,
   getReadyFlag:false,
-  questions: [
-    {
-      questionId: 1,
-      question: "what is your name ?",
-      thinkTime: 1,
-      timeToAnswer: 10,
-      retake: "Unlimited",
-    },
-    {
-      questionId: 2,
-      question: "what is your favorite color?",
-      thinkTime: 1,
-      timeToAnswer: 15,
-      retake: "Unlimited",
-    },
-    {
-      questionId: 1,
-      question: "what are your hobbies? Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-      thinkTime: 1,
-      timeToAnswer: 5,
-      retake: "Unlimited",
-    },
-  ],
+  totalQuestions:5,
+  question: {
+
+  }
+    // {
+    //   questionId: 1,
+    //   question: "what is your name ?",
+    //   thinkTime: 1,
+    //   timeToAnswer: 1,
+    //   retake: "Unlimited",
+    // }
 };
 
 const interviewPageSlice = createSlice({
@@ -59,7 +48,7 @@ const interviewPageSlice = createSlice({
       state.questionRecords[questionId] = record;
     },
     moveToNextQuestion: (state) => {
-      state.currentQuestionIndex++;
+      // state.currentQuestionIndex++;
       state.recordState = "STARTED";
       state.preview = false;
     },
@@ -76,6 +65,12 @@ const interviewPageSlice = createSlice({
     setPracticeMode: (state,action) =>{
       state.practiceMode = action.payload;
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchQuestionAction.fulfilled, (state, action) => {
+      console.log("INSIDE SLICE--->", action.payload.data)
+      state.question=action.payload.data
+    })
   },
 });
 

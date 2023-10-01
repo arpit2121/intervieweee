@@ -12,6 +12,7 @@ import {
   togglePreview,
 } from "../../store/slices/InterviewPageSlice";
 import { useNavigate } from "react-router";
+import { fetchQuestionAction } from "../../store/slices/interviewee/actions";
 
 const SaveAndNextButton = () => {
   const dispatch = useDispatch();
@@ -21,7 +22,8 @@ const SaveAndNextButton = () => {
     practiceMode,
     is360RecordingCompleted,
     preview,
-    questions,
+    totalQuestions,
+    question,
     currentQuestionIndex,
   } = useSelector((state) => state.rootReducer.interviewPage);
 
@@ -53,26 +55,29 @@ const SaveAndNextButton = () => {
   };
 
   const handleClick = () => {
-    if (is360Completeted == null) {
-      is360Completeted();
-    }
-    console.log(
-      "question attempted ===> ",
-      questions.length,
-      currentQuestionIndex
-    );
-    if (questions.length === currentQuestionIndex + 1) {
+    // if (is360Completeted == null) {
+    //   is360Completeted();
+    // }
+    // console.log(
+    //   "question attempted ===> ",
+    //   questions.length,
+    //   currentQuestionIndex
+    // );
+    if (question.questionId === totalQuestions) {
       console.log("hello");
       dispatch(examDone());
       navigate("/thanks");
     }
 
+
     if (is360RecordingCompleted !== true && is360RecordingCompleted !== false) {
       console.log("save is360RecordingCompleted clicked !!! 45");
+      dispatch(complete360Recording())
       dispatch(setGetReadyFlag(true));
     } else {
+      dispatch(fetchQuestionAction({}))
       console.log("save and next clicked !!! 22");
-      dispatch(moveToNextQuestion());
+       dispatch(moveToNextQuestion());
     }
   };
 

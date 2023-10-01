@@ -29,10 +29,10 @@ const Container = styled('div')(({ isClicked, responsive }) => ({
 const RecordInfo = (props) => {
   const responsive = useResponsiveStyles();
   const [isClicked, setIsClicked] = useState(false);
-  const {practiceMode,is360RecordingCompleted,check360,questions,currentQuestionIndex} = useSelector((state) => state.rootReducer.interviewPage);
+  const {practiceMode,is360RecordingCompleted,check360,question,currentQuestionIndex} = useSelector((state) => state.rootReducer.interviewPage);
 
-  const timeToAns = practiceMode ? 1.5: is360RecordingCompleted !== true? check360.timeToAnswer: questions[currentQuestionIndex].timeToAnswer;
-  const timeToThink = practiceMode ? 0 : is360RecordingCompleted !== true? check360.thinkTime: questions[currentQuestionIndex].thinkTime;
+  const timeToAns = practiceMode ? 1.5: is360RecordingCompleted !== true? check360.timeToAnswer: question.timeToAnswer;
+  const timeToThink = practiceMode ? 0 : is360RecordingCompleted !== true? check360.thinkTime: question.thinkTime;
 
   const handleClick = () => {
     if (responsive.isMobile) {

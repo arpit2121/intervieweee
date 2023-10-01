@@ -13,7 +13,7 @@ const RecordTimer = () => {
     is360RecordingCompleted,
     practiceMode,
     check360,
-    questions,
+    question,
     currentQuestionIndex,
     isAllQuestionsAttempted
   } = useSelector((state) => state.rootReducer.interviewPage);
@@ -24,8 +24,9 @@ const RecordTimer = () => {
     ? 1
     : is360RecordingCompleted !== true
       ? check360.timeToAnswer + check360.thinkTime
-      : questions[currentQuestionIndex].timeToAnswer +
-      questions[currentQuestionIndex].thinkTime;
+      : question.timeToAnswer+
+      question.thinkTime;
+
   const responsive = useResponsiveStyles();
 
   const initialTimeInSeconds = allowedTime * 60;

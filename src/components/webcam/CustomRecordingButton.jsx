@@ -92,7 +92,7 @@ const CustomRecordingButton = () => {
       <div onClick={handleClick} style={{ background: '#FFF', opacity: '1', width: '3rem', height: '3rem', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center',cursor: 'pointer'  }}>
         <div style={{ ...redCircleStyles, ...(iconIndex === 1 ? startingRecordingStyle : {})}}>
           <IconComponent />
-        </div>
+        </div>    
       </div>
       <div style={labelStyle}>
         <CustomAllTypography variant={'body2'} name={labels[iconIndex]} style={labelStyle} />

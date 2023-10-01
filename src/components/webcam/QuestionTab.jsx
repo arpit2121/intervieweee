@@ -36,7 +36,7 @@ const QuestionContent = styled('div')(({ responsive }) => ({
 const QuestionTab = () => {
   const responsive = useResponsiveStyles();
 
-  const { is360RecordingCompleted, currentQuestionIndex, questions, isAllQuestionsAttempted } = useSelector(
+  const { is360RecordingCompleted,  question, isAllQuestionsAttempted,totalQuestions } = useSelector(
     (state) => state.rootReducer.interviewPage
   );
 
@@ -46,14 +46,14 @@ const QuestionTab = () => {
     return null;
   }
 
-  const Question = questions[currentQuestionIndex].question;
-  const TotalQuestions = questions.length;
+  const Question = question.questionTitle;
+  const TotalQuestions = totalQuestions;
 
   return (
     <QuestionTabContainer isMobile={responsive.isMobile}>
       <CustomAllTypography
         variant={'body2'}
-        name={`Question ${TotalQuestions}/${currentQuestionIndex + 1}`}
+        name={`Question ${question.questionId}/${TotalQuestions}`}
         style={{ paddingLeft: '0.8rem' }}
       />
       <QuestionTag>

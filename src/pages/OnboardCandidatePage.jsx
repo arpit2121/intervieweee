@@ -1,5 +1,5 @@
 import { makeStyles } from "@mui/styles";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   CustomInputButton,
 } from "../components/button/CustomButton";
@@ -19,6 +19,13 @@ import CustomAllTypography from "../components/typography/CustomTypography";
 import useResponsiveStyles from "../utils/MediaQuery";
 import { useNavigate } from "react-router-dom";
 import Timer from "../components/Timer/Timer";
+import { useDispatch, useSelector } from "react-redux";
+import { getJobDetails, onboardAction } from "../store/slices/interviewee/actions";
+import { fetchProfessions } from "../store/slices/global/actions";
+import axios from "axios";
+import config from "../common/config";
+import { setIntervieweeData } from "../store/slices/interviewee/intervieweeSlice";
+
 
 const useStyle = makeStyles((theme) => ({
   parent: {
@@ -72,7 +79,10 @@ const useStyle = makeStyles((theme) => ({
 }));
 
 const OnBoardingPage = () => {
-  const navigate=useNavigate()
+  const dispatch= useDispatch()
+  const intervieweeName = useSelector((state) => state.rootReducer.interviewee.name);
+  const intervieweeData = useSelector((state) => state.rootReducer.interviewee.data);
+  const navigate = useNavigate()
   const responsive = useResponsiveStyles();
   const classes = useStyle();
   const menu = [
@@ -80,10 +90,90 @@ const OnBoardingPage = () => {
     { label: "twenty", value: 20 },
     { label: "thirty", value: 30 },
   ];
+  //getting params from url 
+  //const queryParameters = new URLSearchParams(window.location.search)
+  // const adminId = queryParameters.get("adminId")
+  // const jobPostId = queryParameters.get("jobPostId")
 
-  const onGetStarted=()=>{
-navigate('/interviewDetails')
+  const onGetStarted = () => {
+    console.log("DATA=---===>", data)
+    // navigate('/interviewDetails')
   }
+
+  const [professions, setProfessions]=useState()
+
+  const [data, setData] = useState({
+    fullName: "",
+    email: "",
+    phoneNumber: "",
+    experience: "",
+    currentCompany: "",
+    profession: "",
+    adminId: "651137f89cbfd5858dc871a5",
+    jobPostId: "651154effdc5ba161f0b15b0"
+  })
+  const resume = useSelector((state) => state.rootReducer.interviewee.resume);
+
+  const [newResume, setNewResume]=useState(resume)
+  
+  const handleDataChange = (name, val) => {
+    const dataObj = JSON.parse(JSON.stringify(data));
+    dataObj[name] = val
+    setData(dataObj)
+  }
+
+  const handleSubmit= async()=>{
+    dispatch(setIntervieweeData(data))
+    //  console.log("DATATA", intervieweeData)
+     const myFile= resume?.file
+    let formData = new FormData();
+    formData.append('json_data', JSON.stringify(data));
+    formData.append('resume',newResume);
+    for (const a of formData.values()) {
+      console.log(a);
+    }
+    for (const a of formData.keys()) {
+      console.log(a);
+    }
+    try {
+     const response = await axios.post(`${config.interviewService}/v1/interviewee`, formData, {
+     headers: {
+    'Content-Type': 'multipart/form-data',
+     },
+     });
+     console.log('File uploaded successfully', response);
+     if(response.status===200){
+      console.log("SUCCESSFULLY USER ONBOARD-------")
+      const getJobDetailsRes= await dispatch(getJobDetails({jobPostId:data.jobPostId}))
+      console.log("RESPONSE FROM GET JOB DETAILS",getJobDetailsRes.payload.data)
+      navigate('/interview-details',{
+        state:getJobDetailsRes.payload.data
+      })
+     }
+    } catch (error) {
+     console.error('Error uploading file', error);
+    }
+    // const res = await dispatch(
+    //   onboardAction({data: formData}) ,
+    // );
+  }
+
+useEffect(()=>{
+  const fetchAllProfessions= async()=>{
+    const res= await dispatch(fetchProfessions({}))
+    console.log("RESPONSE FECTH==-======", res.payload.data)
+    const allProfessions = res.payload.data
+    .map((categoryData) => categoryData.professions)
+    .reduce((acc, professions) => acc.concat(professions), []);
+    console.log("ALL",allProfessions)
+    setProfessions(allProfessions)
+  }
+  fetchAllProfessions()
+},[])
+
+useEffect(()=>{
+  setNewResume(resume?.file)
+},[resume])
 
   return (
     <CustomContainer>
@@ -122,9 +212,10 @@ navigate('/interviewDetails')
             }}
           >
             <CustomAllTypography
-              name={"Tell us about yourself."}
+              name={`Tell us about yourself.`}
               variant={"h3"}
             />
+            
             <CustomAllTypography
               name={
                 "Request you to provide us with some necessary information before starting the interview."
@@ -133,36 +224,50 @@ navigate('/interviewDetails')
             />
             <div style={{ width: "100%", height: "2.69rem" }}></div>
             <div className={classes.textfieldContainer}>
-              <CommonCustomizedTextField title="Full Name" />
+              <CommonCustomizedTextField title="Full Name" name='fullName' handleDataChange={handleDataChange} value={data.fullName} />
             </div>
             <div className={classes.textfieldContainer}>
               <CommonCustomizedTextField
+                value={data.phoneNumber}
                 startIcon={<PhoneIcon />}
                 extraText={"+91"}
                 placeholder="Mobile no."
+                name="phoneNumber"
+                handleDataChange={handleDataChange}
               />
             </div>
             <div className={classes.textfieldContainer}>
               <CommonCustomizedTextField
+                name="email"
+                handleDataChange={handleDataChange}
                 placeholder={"Email ID"}
                 startIcon={<MailIcon />}
+                value={data.email}
               />
             </div>
             <div className={classes.textfieldContainer}>
-              <CommonCustomizedTextField title={"Current Company name"} />
+              <CommonCustomizedTextField title={"Current Company name"} name="currentCompany" handleDataChange={handleDataChange} value={data.currentCompany} />
             </div>
             <div className={classes.textfieldContainer}>
               <CommonCustomizedTextField
                 placeholder={"Your Profession"}
-                options={professionList}
+                options={professions}
                 type="dropdown"
+                value={data.profession}
+                name="profession"
+                handleDataChange={handleDataChange}
+                setValue={setData.profession}
               />
             </div>
             <div className={classes.textfieldContainer}>
               <CommonCustomizedTextField
+                selectedOption={data.workExperience}
+                name="experience"
                 placeholder={"Work Experience"}
                 options={workExperienceList}
                 type="dropdown"
+                handleDataChange={handleDataChange}
+                value={data.workExperience}
               />
             </div>
             <ResumeDropzone />
@@ -171,7 +276,7 @@ navigate('/interviewDetails')
               responsive={responsive}
               width={"100%"}
               size="small"
-              onClick={onGetStarted}
+              onClick={handleSubmit}
             >
               Get Started
             </CustomInputButton>

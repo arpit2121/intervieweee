@@ -1,6 +1,6 @@
 import { makeStyles } from "@mui/styles";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import CustomButton from "../components/button/CustomButton";
 import QuickConnectShortIcon from "../components/icons/QuickConnectShortIcon";
 import CustomAllTypography from "../components/typography/CustomTypography";
@@ -43,6 +43,8 @@ const useStyle = makeStyles((theme) => ({
 }));
 
 const InterviewDetails = () => {
+  const location = useLocation();
+  const data = location.state;
   const responsive = useResponsiveStyles();
   const navigate = useNavigate();
   const classes = useStyle({ responsive });
@@ -50,15 +52,16 @@ const InterviewDetails = () => {
 
   const onLetsStart = () => {
     console.log("ritik");
-    navigate("/interviewPage");
+    navigate("/interview-page");
   };
   const onPracticeMode = () => {
     // dispatch(moveToNextQuestion());
-    
     dispatch(setRecordState(""))
     dispatch(setPracticeMode(true));
-    navigate("/interviewPage");
+    navigate("/interview-page");
   };
+
+
   return (
     <div>
       <div className={classes.navbar}>
@@ -77,18 +80,20 @@ const InterviewDetails = () => {
       >
         <div className={classes.headerBox}>
           <CustomAllTypography
-            name={"UI/UX Developer / Lead"}
+            name={`${data?.jobTitle}`}
             variant={"h3"}
             fontWeight={"700"}
           />
-          <CustomAllTypography name={"Office: Remote"} variant={"body2"} />
-          <CustomAllTypography name={"Exp.: 12 to 16 year"} variant={"body2"} />
+          <CustomAllTypography name={`Office: ${data?.hiringLocation}`} variant={"body2"} />
+          <CustomAllTypography name={`Exp.:${data?.requiredExperience}` } variant={"body2"} />
         </div>
         <div className={classes.descriptionBox}>
           <CustomAllTypography name={"Job Description"} variant={"h6"} />
           <CustomAllTypography
+
+// var convertedJobDesc = (jobInfo?.jobDescription)?.replace(/<[^>]+>/g, '');
             name={
-              "Allegis Group, Inc. is an international talent management firm headquartered in Hanover, Maryland, United States. As of 2018, it had US$13.4 billion in revenue, and 19,000 employees. It ranks fourth in the world. More"
+              `${data?.jobDescription?.replace(/<[^>]+>/g, '')}`
             }
             variant={"body2"}
           />
