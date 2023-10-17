@@ -4,7 +4,7 @@ import CustomAllTypography from "../typography/CustomTypography";
 import useResponsiveStyles from "../../utils/MediaQuery";
 import RecordingDotIcon from "../icons/Recorder/RecordingDotIcon";
 import { useDispatch, useSelector } from "react-redux";
-import { setRecordState, togglePreview } from "../../store/slices/InterviewPageSlice";
+import { setCounterVisible, setRecordState, togglePreview } from "../../store/slices/InterviewPageSlice";
 
 const RecordTimer = () => {
   const dispatch = useDispatch();
@@ -14,7 +14,6 @@ const RecordTimer = () => {
     practiceMode,
     check360,
     question,
-    currentQuestionIndex,
     isAllQuestionsAttempted
   } = useSelector((state) => state.rootReducer.interviewPage);
   if(isAllQuestionsAttempted){
@@ -23,9 +22,13 @@ const RecordTimer = () => {
   const allowedTime = practiceMode
     ? 1
     : is360RecordingCompleted !== true
-      ? check360.timeToAnswer + check360.thinkTime
-      : question.timeToAnswer+
-      question.thinkTime;
+      ? check360.timeToAnswer
+      : parseFloat(question?.nextQuestion?.timeToAnswer)
+  console.log("ALOOWED TIME HERE----", allowedTime)
+
+    const thinkTime= is360RecordingCompleted? parseFloat(question?.nextQuestion?.thinkingTime): parseFloat(check360.thinkTime)
+      // + parseFloat(question.thinkingTime);
+      // console.log("ALLOWED Time",parseFloat(question.timeToAnswer))
 
   const responsive = useResponsiveStyles();
 
@@ -37,16 +40,17 @@ const RecordTimer = () => {
     const currentTime = new Date().getTime();
     const endTime = currentTime + initialTimeInSeconds * 1000;
     const timer = setInterval(() => {
-      const currentTime = new Date().getTime();
-      const remainingTime = Math.max(0, endTime - currentTime);
-      setTime(Math.floor(remainingTime / 1000));
+      if(startTimer){
+        const currentTime = new Date().getTime();
+        const remainingTime = Math.max(0, endTime - currentTime);
+        setTime(Math.floor(remainingTime / 1000));
+      }
     }, 1000);
-
     return () => clearInterval(timer);
-  }, [initialTimeInSeconds]);
+  }, [startTimer]);
 
   const formatTime = (time) => {
-    const minutes = Math.floor(time / 60)
+    const minutes = Math.floor(time / 60 )
       .toString()
       .padStart(2, "0");
     const seconds = (time % 60).toString().padStart(2, "0");
@@ -55,15 +59,28 @@ const RecordTimer = () => {
 
   useEffect(() => {
     if (time === 0) {
+      setTime(initialTimeInSeconds)
       dispatch(togglePreview(true));
-      dispatch(setRecordState('RETAKE'));
+      dispatch(setRecordState('STOPPED'));
     }
   }, [time]);
 
   useEffect(() => {
-    if (recordState === "RECORDING") {
+    if (recordState === "STARTED") {
         setStartTimer(true);
     }
+    if(recordState === "RETAKE"){
+      console.log("TIMER---->", startTimer)
+      // setStartTimer(true);
+      dispatch(togglePreview(false));
+      dispatch(setRecordState("OPEN"))
+      dispatch(setCounterVisible(true))
+    }
+    if(recordState==="STOPPED"){
+      setTime(initialTimeInSeconds)
+      setStartTimer(false)
+    }
+    console.log("record state", recordState)
   }, [recordState]);
 
   const TypoStyle = {
@@ -89,7 +106,7 @@ const RecordTimer = () => {
     columnGap: "0.5rem",
   };
 
-  return recordState !== "RETAKE" ? (
+  return recordState !== "STOPPED" ? (
     <div style={container}>
       <RecordingDotIcon />
       {startTimer ? (

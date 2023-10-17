@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { CustomInputButton } from "../button/CustomButton";
 import ReplayArrowIcon from "../icons/recorder/ReplayArrowIcon";
 import useResponsiveStyles from "../../utils/MediaQuery";
-import { setRecordState, togglePreview } from "../../store/slices/InterviewPageSlice";
+import { setRecordState, setRetakeCount, togglePreview } from "../../store/slices/InterviewPageSlice";
 
 const RetakeButton = () => {
   const responsive = useResponsiveStyles();
-  const {recordState} = useSelector((state) => state.rootReducer.interviewPage);
+  const {recordState, retakeCount, question, is360RecordingCompleted} = useSelector((state) => state.rootReducer.interviewPage);
   const dispatch = useDispatch();
 
   const buttonStyle = {
@@ -20,17 +20,22 @@ const RetakeButton = () => {
   };
 
   const handleClick =()=>{
-    dispatch(setRecordState("STARTED"));
-    const recordingTimeout = setTimeout(() => {
-      dispatch(togglePreview(false));
-      dispatch(setRecordState("STOPPED"));
-    });
-    return () => {
-      clearTimeout(recordingTimeout);
-    };
+    if(is360RecordingCompleted){
+      dispatch(setRetakeCount())
+    }
+    dispatch(setRecordState("RETAKE"));
+    //dispatch(setRecordState("OPEN"));
+    // const recordingTimeout = setTimeout(() => {
+    //   dispatch(togglePreview(false));
+    //   dispatch(setRecordState("STOPPED"));
+    // });
+    // return () => {
+    //   clearTimeout(recordingTimeout);
+    // };
   }
+
   return (
-    recordState === 'RETAKE' ?
+    recordState === 'STOPPED' && (question && retakeCount != question?.nextQuestion?.retakes)?
     <CustomInputButton
       size="extra-small"
       style={buttonStyle}

@@ -53,7 +53,7 @@ const QuestionTab = () => {
     <QuestionTabContainer isMobile={responsive.isMobile}>
       <CustomAllTypography
         variant={'body2'}
-        name={`Question ${question.questionId}/${TotalQuestions}`}
+        name={`Question ${question.currentIndex+1}/${question.totalQuestions}`}
         style={{ paddingLeft: '0.8rem' }}
       />
       <QuestionTag>
@@ -61,8 +61,8 @@ const QuestionTab = () => {
           <ProfileIcon />
         </ProfileIconWrapper>
         <QuestionContent responsive={responsive}>
-          <CustomAllTypography variant={'body2'} name={`Q${1}:`} />
-          <CustomAllTypography variant={'body2'} name={Question} />
+          <CustomAllTypography variant={'body2'} name={`Q${question.currentIndex+1}:`} />
+          <CustomAllTypography variant={'body2'} name={question?.nextQuestion?.questionTitle} />
         </QuestionContent>
       </QuestionTag>
     </QuestionTabContainer>

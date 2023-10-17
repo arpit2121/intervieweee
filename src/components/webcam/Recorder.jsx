@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { styled } from "@mui/system";
 import useResponsiveStyles from "../../utils/MediaQuery";
 import VideoPlayer from "../videoPlayer/VideoPlayer";
-import { save360Check } from "../../store/slices/InterviewPageSlice";
-import { answerQuestion, save360Action } from "../../store/slices/interviewee/actions";
+import { complete360Recording, moveToNextQuestion, save360Check, setCounterVisible, setGetReadyFlag, setRecordState, togglePreview } from "../../store/slices/InterviewPageSlice";
+import { answerQuestion, fetchQuestionAction, save360Action } from "../../store/slices/interviewee/actions";
 import axios from "axios";
 import config from "../../common/config";
+import CounterComponent from "../CounterComponent";
+import { useLocation } from "react-router-dom";
 
 const useDynamicDimension = () => {
   const dispatch = useDispatch(); 
@@ -45,38 +47,50 @@ const RecorderVideo = styled("video")({
 // maintain recording states
 const useRecordingEffect = (recordWebcam, recordState) => {
   useEffect(() => {
-    if(recordState === "STARTED"){
+    if(recordState === "OPEN"){ // open
       recordWebcam.open();
-    }else if (recordState === "RECORDING") {
+    }else if (recordState === "STARTED") { // start
       recordWebcam.start();
-    } else if (recordState === "RETAKE") {
+    } else if (recordState === "STOPPED") {  // stop
       recordWebcam.stop();
-    } else if (recordState === "STOPPED") {
+    } else if (recordState === "RETAKE") { //retake 
       recordWebcam.retake();
     }
   }, [recordState]);
 };
 
-const useBlobStore = (saveFile, is360RecordingCompleted, preview, recordWebcam,intervieweeData) => {
-  const dispatch = useDispatch();
+const useBlobStore = (saveFile, recordWebcam,intervieweeData) => {
 
+  const { preview, is360RecordingCompleted, recordState, question} = useSelector((state) => state.rootReducer.interviewPage);
+  const location = useLocation();
+  const dispatch = useDispatch();
   useEffect(() => {
-    if (preview === false && is360RecordingCompleted===true){
-      console.log("360 file save called !!!!!");
-      recordWebcam.open();
+    if (preview === false && is360RecordingCompleted ===false && recordState==="STOPPED"){
+      console.log("360 file Will be saved Now=====>>>>>",recordState);
+
+      //recordWebcam.open();
       saveFile().then(console.log("savingBlob")).then(async blob => {
         console.log("USER DATA", intervieweeData)
+        console.log("VIDEO BLOB", blob)
       const formdata= new FormData()
-        formdata.append('json_data',JSON.stringify({ 
-          "adminId":intervieweeData?.adminId,
-          "jobPostId":intervieweeData?.jobPostId,
-          "email":intervieweeData?.email,
-          "questionId":"6506ef6f2406b5641aca4af4"
-          }))
+        // formdata.append('json_data',JSON.stringify({ 
+        //   "adminId":intervieweeData?.adminId,
+        //   "jobPostId":intervieweeData?.jobPostId,
+        //   "email":intervieweeData?.email,
+        //   "questionId":"6506ef6f2406b5641aca4af4"
+        //   }))
         formdata.append('file', blob)
         if(blob != null){
         try {
-          const response = await axios.post(`${config.interviewService}/v1/interviewee/upload-answer`, formdata, {
+          const paramsData={
+            adminId: location.pathname.split('/')[1],
+            jobPostId: location.pathname.split('/')[2],
+            intervieweeId:location.pathname.split('/')[4]
+          }
+
+          console.log("PARAMS", paramsData)
+          const response = await axios.post(`${config.interviewService}/v1/interviewee/upload-360`, formdata, {
+            params: paramsData,
           headers: {
          'Content-Type': 'multipart/form-data',
           },
@@ -84,16 +98,55 @@ const useBlobStore = (saveFile, is360RecordingCompleted, preview, recordWebcam,i
           console.log('File uploaded successfully', response);
           if(response.status===201){
            console.log("SUCCESSFULLY ANSWERS-------")
-           
+           dispatch(complete360Recording())
+           dispatch(setGetReadyFlag(true));
+          //  dispatch(setRecordState("OPEN"))
           }
          } catch (error) {
           console.error('Error uploading file', error);
          }
-        //dispatch(answerQuestion({data:formdata}))
-        // dispatch(save360Check(blob));
-        console.log("VIDEO BLOB----->", blob)
         }
-        
+      });
+    }
+
+    if(preview===false && is360RecordingCompleted===true && recordState==="STOPPED"){
+
+
+      console.log("Now it is answer video")
+
+      saveFile().then(console.log("savingBlob")).then(async blob => {
+        console.log("USER DATA", intervieweeData)
+        console.log("VIDEO BLOB", blob)
+      const formdata= new FormData()
+        formdata.append('json_data',JSON.stringify({ 
+          "adminId":location.pathname.split('/')[1],
+          "jobPostId":location.pathname.split('/')[2],
+          "email":intervieweeData?.email,
+          "questionId": question.nextQuestion._id,
+          "intervieweeId":location.pathname.split('/')[4]
+          }))
+        formdata.append('file', blob)
+        if(blob != null){
+        try {
+          console.log("DATA----->", location.pathname.split('/')[1], location.pathname.split('/')[2], intervieweeData?.email, question.nextQuestion._id)
+          const response = await axios.post(`${config.interviewService}/v1/interviewee/upload-answer`, formdata, {
+          headers: {
+         'Content-Type': 'multipart/form-data',
+          },
+          });
+          console.log('File uploaded successfully', response);
+          if(response.status===201){
+          console.log("SUCCESSFULLY ANSWERS  ;;;;  NEXT QUESTION  ____ RECORD STATE",recordState)
+          dispatch(fetchQuestionAction({intervieweeId:location.pathname.split('/')[4]}))
+          dispatch(setRecordState("OPEN"))
+          dispatch(setCounterVisible(true))
+          //  dispatch(complete360Recording())
+          //  dispatch(setGetReadyFlag(true));
+          }
+         } catch (error) {
+          console.error('Error uploading file', error);
+         }
+        }
       });
     }
   },[preview]);
@@ -102,9 +155,12 @@ const useBlobStore = (saveFile, is360RecordingCompleted, preview, recordWebcam,i
 const Recorder = (props) => {
   const responsive = useResponsiveStyles();
   const recordWebcam = useRecordWebcam({ frameRate: 60 });
-  const { preview, recordState, is360RecordingCompleted, currentQuestionIndex,question} = useSelector((state) => state.rootReducer.interviewPage);
+  const { preview, recordState, is360RecordingCompleted,counterVisible} = useSelector((state) => state.rootReducer.interviewPage);
   const intervieweeData = useSelector((state) => state.rootReducer.interviewee.data);
+
   useEffect(() => {
+    console.log("PREVIEW IN RECORDER", preview)
+
     if(preview === null){
       recordWebcam.open();
     }
@@ -117,7 +173,7 @@ const Recorder = (props) => {
   };
 
   useRecordingEffect(recordWebcam,recordState);
-  useBlobStore(saveFile, is360RecordingCompleted, preview, recordWebcam,intervieweeData);
+  useBlobStore(saveFile,recordWebcam,intervieweeData);
 
   console.log('recordWebcam.previewRef',recordWebcam)
   return (

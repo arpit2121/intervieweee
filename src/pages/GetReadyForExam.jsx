@@ -14,6 +14,7 @@ import {
   togglePreview,
 } from "../store/slices/InterviewPageSlice";
 import { fetchQuestionAction } from "../store/slices/interviewee/actions";
+import { useLocation } from "react-router-dom";
 
 const LogoContainer = styled("div")(({ responsive }) => ({
   display: "flex",
@@ -38,11 +39,12 @@ const ContentContainer = styled("div")(({ responsive }) => ({
 const GetReadyForExam = () => {
   const responsive = useResponsiveStyles();
   const dispatch = useDispatch();
+  const location= useLocation()
 
   useEffect(() => {
-    dispatch(complete360Recording(true));
-    dispatch(togglePreview(false));
-    dispatch(setRecordState("STARTED"));
+    // dispatch(complete360Recording(true));
+    // dispatch(togglePreview(false));
+    // dispatch(setRecordState("OPEN"));
     setTimeout(() => {
       dispatch(setGetReadyFlag(false))
     }, 11000);
@@ -50,9 +52,8 @@ const GetReadyForExam = () => {
 
   useEffect(()=>{
     const fetchQueFun= ()=>{
-      dispatch(fetchQuestionAction({}))
+      dispatch(fetchQuestionAction({intervieweeId:location.pathname.split('/')[4]}))
     }
-
     fetchQueFun()
   },[])
   

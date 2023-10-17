@@ -1,5 +1,5 @@
 import { makeStyles } from "@mui/styles";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import CustomButton from "../components/button/CustomButton";
 import QuickConnectShortIcon from "../components/icons/QuickConnectShortIcon";
@@ -11,6 +11,7 @@ import {
   setPracticeMode,
   setRecordState,
 } from "../store/slices/InterviewPageSlice";
+import { getJobDetails, is360Complete } from "../store/slices/interviewee/actions";
 const useStyle = makeStyles((theme) => ({
   navbar: {
     width: "100%",
@@ -44,15 +45,16 @@ const useStyle = makeStyles((theme) => ({
 
 const InterviewDetails = () => {
   const location = useLocation();
-  const data = location.state;
+  const [data, setData] = useState(location.state);
   const responsive = useResponsiveStyles();
   const navigate = useNavigate();
   const classes = useStyle({ responsive });
   const dispatch = useDispatch();
 
   const onLetsStart = () => {
-    console.log("ritik");
-    navigate("/interview-page");
+    // console.log("ritik", location.pathname.split('/')[4]);
+    //console.log("03003003030",`${location.pathname.split('/')[1]}/${location.pathname.split('/')[2]}/${location.pathname.split('/')[3]}/${location.pathname.split('/')[4]}/interview-page`)
+    navigate(`/${location.pathname.split('/')[1]}/${location.pathname.split('/')[2]}/${location.pathname.split('/')[3]}/${location.pathname.split('/')[4]}/interview-page`);
   };
   const onPracticeMode = () => {
     // dispatch(moveToNextQuestion());
@@ -61,6 +63,16 @@ const InterviewDetails = () => {
     navigate("/interview-page");
   };
 
+  useEffect(()=>{
+    const getJobDetailsFun= async()=>{
+      const res= await dispatch(getJobDetails({jobPostId:location.pathname.split('/')[2]}))
+      setData(res.payload.data)
+
+      const is360= await dispatch(is360Complete({intervieweeId: location.pathname.split('/')[4]}))
+    }
+    getJobDetailsFun()
+
+  },[])
 
   return (
     <div>

@@ -13,8 +13,10 @@ import {
 } from "../../store/slices/InterviewPageSlice";
 import { useNavigate } from "react-router";
 import { fetchQuestionAction } from "../../store/slices/interviewee/actions";
+import { useLocation } from "react-router-dom";
 
 const SaveAndNextButton = () => {
+  const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const responsive = useResponsiveStyles();
@@ -54,7 +56,7 @@ const SaveAndNextButton = () => {
     dispatch(setGetReadyFlag(true));
   };
 
-  const handleClick = () => {
+  const handleClick = async() => {
     // if (is360Completeted == null) {
     //   is360Completeted();
     // }
@@ -70,14 +72,17 @@ const SaveAndNextButton = () => {
     }
 
 
-    if (is360RecordingCompleted !== true && is360RecordingCompleted !== false) {
+    if (is360RecordingCompleted !== true) {
       console.log("save is360RecordingCompleted clicked !!! 45");
-      dispatch(complete360Recording())
-      dispatch(setGetReadyFlag(true));
+      dispatch(togglePreview(false));
+      // dispatch(complete360Recording())
+      // dispatch(setGetReadyFlag(true));
     } else {
-      dispatch(fetchQuestionAction({}))
       console.log("save and next clicked !!! 22");
-       dispatch(moveToNextQuestion());
+      dispatch(togglePreview(false));
+      // await dispatch(moveToNextQuestion())
+      // dispatch(fetchQuestionAction({intervieweeId:location.pathname.split('/')[4]}))
+      //  dispatch(moveToNextQuestion());
     }
   };
 

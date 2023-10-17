@@ -29,10 +29,9 @@ const Container = styled('div')(({ isClicked, responsive }) => ({
 const RecordInfo = (props) => {
   const responsive = useResponsiveStyles();
   const [isClicked, setIsClicked] = useState(false);
-  const {practiceMode,is360RecordingCompleted,check360,question,currentQuestionIndex} = useSelector((state) => state.rootReducer.interviewPage);
-
-  const timeToAns = practiceMode ? 1.5: is360RecordingCompleted !== true? check360.timeToAnswer: question.timeToAnswer;
-  const timeToThink = practiceMode ? 0 : is360RecordingCompleted !== true? check360.thinkTime: question.thinkTime;
+  const {practiceMode,is360RecordingCompleted,check360,question} = useSelector((state) => state.rootReducer.interviewPage);
+  const timeToAns = practiceMode ? 1.5: is360RecordingCompleted !== true? check360.timeToAnswer: question?.timeToAnswer;
+  const timeToThink = practiceMode ? 0 : is360RecordingCompleted !== true? check360.thinkTime: question?.thinkTime;
 
   const handleClick = () => {
     if (responsive.isMobile) {
@@ -42,9 +41,10 @@ const RecordInfo = (props) => {
 
   return (
     <Container isClicked={isClicked} responsive={responsive} onClick={handleClick}>
-      <DetailBlock name={'Time to Ans:'} value={timeToAns} marginBottom={responsive.isMobile ? '0.5rem' : '1rem'} />
-      <DetailBlock name={'Thinking Time:'} value={timeToThink} marginBottom={responsive.isMobile ? '0.5rem' : '1rem'} />
-      <DetailBlock name={'Retake:'} value={responsive.isMobile ? 'Ultd' : 'Unlimited'} />
+      <DetailBlock name={'Time to Ans:'} value={is360RecordingCompleted? (question?.nextQuestion?.timeToAnswer):`${check360.timeToAnswer/60} m`} marginBottom={responsive.isMobile ? '0.5rem' : '1rem'} />
+      <DetailBlock name={'Thinking Time:'} value={is360RecordingCompleted?(question?.nextQuestion?.thinkingTime):`${check360.thinkTime} s`} marginBottom={responsive.isMobile ? '0.5rem' : '1rem'} />
+      {/* <DetailBlock name={'Retake:'} value={responsive.isMobile ? 'Ultd' : 'Unlimited'} /> */}
+      <DetailBlock name={'Retake:'} value={question?.nextQuestion?.retakes?question.nextQuestion?.retakes:'Unlimited'} />
     </Container>
   );
 };

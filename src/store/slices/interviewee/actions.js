@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { get, post, postWithHeader } from "../../../common/common";
+import { get, getwithHeader, post, postWithHeader } from "../../../common/common";
 import config from "../../../common/config";
 import axios from "axios";
 
@@ -27,8 +27,12 @@ export const getJobDetails = createAsyncThunk('job/getJobDetails', async (params
   console.log( `------->${config.interviewService}/v1/job-post/get-job-detail/${params.jobPostId}`)
   try {
       const data =
-      await get(
-        `${config.interviewService}/v1/job-post/get-job-detail/${params.jobPostId}`
+      await axios.get(
+        `${config.interviewService}/v1/job-post/get-job-detail`,{
+          params:{
+            jobPostId: params.jobPostId
+          }
+        }
       )
       console.log("RESPONSE FROM GET JOB DETAILS")
   return data
@@ -54,12 +58,13 @@ export const save360Action = createAsyncThunk('/360recording', async (params, { 
 
 export const fetchQuestionAction = createAsyncThunk('/question', async (params, { rejectWithValue }) => {
   try {
+    console.log("HELLO",params)
       const data =
       axios.get(`${config.interviewService}/v1/interviewee/question/interview`,
-        { params: { intervieweeId:"6518733927d3da47e2b5887c" } }
+        { params: { intervieweeId:params.intervieweeId } }
         // { params: { answer: 42 } }
       )
-      // await get(
+      // await get(/interviewee/view360/status
       //   `${config.interviewService}/interviewee/question/interview?intervieweeId=65194673a03a74b4ef3d45be`,
       //   { params: { answer: 42 } }
       // )
@@ -78,6 +83,21 @@ export const answerQuestion = createAsyncThunk('/answer', async (params, { rejec
         `${config.interviewService}/v1/interviewee/upload-answer`,params.data
       )
       console.log("RESPONSE FROM ANSWER QUESTION")
+  return data
+} catch (error) {
+  return rejectWithValue(error.response.data)
+}
+})
+
+
+export const is360Complete = createAsyncThunk('/is360', async (params, { rejectWithValue }) => {
+  try {
+      const data =
+      await axios.get(
+        `${config.interviewService}/v1/interviewee/view360/status`,
+        { params: { intervieweeId:params.intervieweeId } }
+      )
+      console.log("GOT RESPONSE FROM 360 Complete ",data)
   return data
 } catch (error) {
   return rejectWithValue(error.response.data)

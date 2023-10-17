@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { is360Complete } from "./actions";
 
 const initialState = {
-  name:'Hrushi',
   resume:null,
   data:null
 };
@@ -21,6 +21,7 @@ const intervieweeSlice = createSlice({
         state.data = action.payload;
       }
   },
+  
 });
 
 export const {

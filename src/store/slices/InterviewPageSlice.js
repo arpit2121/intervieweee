@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchQuestionAction } from "./interviewee/actions";
+import { fetchQuestionAction, is360Complete } from "./interviewee/actions";
 
 const initialState = {
   recordState: "",
@@ -10,7 +10,7 @@ const initialState = {
   isAllQuestionsAttempted: false,
   check360: {
     record360Blob: null,
-    thinkTime: 0.5,
+    thinkTime: 5,
     timeToAnswer: 1,
   },
   currentQuestionIndex: 0,
@@ -20,7 +20,9 @@ const initialState = {
   totalQuestions:5,
   question: {
 
-  }
+  },
+  counterVisible:false,
+  intervieweeId:null
     // {
     //   questionId: 1,
     //   question: "what is your name ?",
@@ -49,8 +51,9 @@ const interviewPageSlice = createSlice({
     },
     moveToNextQuestion: (state) => {
       // state.currentQuestionIndex++;
-      state.recordState = "STARTED";
       state.preview = false;
+      state.recordState = "STARTED";
+      
     },
     save360Check: (state, action) => {
       state.check360.record360Blob = action.payload;
@@ -60,17 +63,27 @@ const interviewPageSlice = createSlice({
       state.isAllQuestionsAttempted = true;
     },
     setGetReadyFlag: (state,action) =>{
+      console.log("INSIDE FLAG")
       state.getReadyFlag = action.payload;
     },
     setPracticeMode: (state,action) =>{
       state.practiceMode = action.payload;
-    }
+    },
+    setCounterVisible:(state, action)=>{
+      state.counterVisible= action.payload
+    },
+    setRetakeCount:(state)=>{
+      state.retakeCount= state.retakeCount+1
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchQuestionAction.fulfilled, (state, action) => {
       console.log("INSIDE SLICE--->", action.payload.data)
       state.question=action.payload.data
-    })
+    }),
+      builder.addCase(is360Complete.fulfilled, (state, action) => {
+        state.is360RecordingCompleted=action.payload.data
+      })
   },
 });
 
@@ -83,7 +96,9 @@ export const {
   save360Check,
   setGetReadyFlag,
   examDone,
-  setPracticeMode
+  setPracticeMode,
+  setCounterVisible,
+  setRetakeCount
 } = interviewPageSlice.actions;
 
 export default interviewPageSlice.reducer;

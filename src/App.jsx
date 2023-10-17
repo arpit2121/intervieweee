@@ -7,17 +7,20 @@ import InterviewDetails from './pages/InterviewDetails';
 import InterviewPage from './pages/InterviewPage'
 import ThankYouPage from './pages/ThankYouPage'
 import GetReadyForExam from './pages/GetReadyForExam'
+import CounterComponent from './components/CounterComponent'
+import AudioFrequency from './components/webcam/AudioFrequency'
 
 function App() {
   return (
     <Routes>
-      <Route path='/' element={<OnBoardingPage/>}/>
-      <Route path='/onboard-candidate' element={<OnBoardingPage/>}/>
-      <Route path='/interview-details' element={<InterviewDetails/>}/>
+      <Route path='/' element={<AudioFrequency/>}/>
+      <Route path='/:adminId/:jobpostId/:expiration' element={<OnBoardingPage/>}/>
+      {/* <Route path='/onboard-candidate' element={<OnBoardingPage/>}/> */}
+      <Route path='/:adminId/:jobpostId/:expiration/:intervieweeId/interview-details' element={<InterviewDetails/>}/>
       {/* <Route path='/practiceMode' element={<PracticeMode/>}/> */}
-      <Route path='/interview-page' element={<InterviewPage/>}/>
+      <Route path='/:adminId/:jobpostId/:expiration/:intervieweeId/interview-page' element={<InterviewPage/>}/>
       <Route path='/thanks' element={<ThankYouPage/>}/>
-      <Route path='/get-ready' element={<GetReadyForExam/>}/>
+      <Route path='/:adminId/:jobpostId/:expiration/:intervieweeId/get-ready' element={<GetReadyForExam/>}/>
     </Routes>
   )
 }

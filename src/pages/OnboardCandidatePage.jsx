@@ -25,6 +25,7 @@ import { fetchProfessions } from "../store/slices/global/actions";
 import axios from "axios";
 import config from "../common/config";
 import { setIntervieweeData } from "../store/slices/interviewee/intervieweeSlice";
+import {useLocation,useParams } from 'react-router-dom';
 
 
 const useStyle = makeStyles((theme) => ({
@@ -80,6 +81,8 @@ const useStyle = makeStyles((theme) => ({
 
 const OnBoardingPage = () => {
   const dispatch= useDispatch()
+  const location = useLocation()
+  const { param1, param2, param3 } = useParams();
   const intervieweeName = useSelector((state) => state.rootReducer.interviewee.name);
   const intervieweeData = useSelector((state) => state.rootReducer.interviewee.data);
   const navigate = useNavigate()
@@ -109,8 +112,8 @@ const OnBoardingPage = () => {
     experience: "",
     currentCompany: "",
     profession: "",
-    adminId: "651137f89cbfd5858dc871a5",
-    jobPostId: "651154effdc5ba161f0b15b0"
+    adminId: location.pathname.split('/')[1],
+    jobPostId: location.pathname.split('/')[2]
   })
   const resume = useSelector((state) => state.rootReducer.interviewee.resume);
 
@@ -124,8 +127,8 @@ const OnBoardingPage = () => {
 
   const handleSubmit= async()=>{
     dispatch(setIntervieweeData(data))
-    //  console.log("DATATA", intervieweeData)
-     const myFile= resume?.file
+    console.log("FINAL DATA", data)
+    const myFile= resume?.file
     let formData = new FormData();
     formData.append('json_data', JSON.stringify(data));
     formData.append('resume',newResume);
@@ -143,19 +146,17 @@ const OnBoardingPage = () => {
      });
      console.log('File uploaded successfully', response);
      if(response.status===200){
-      console.log("SUCCESSFULLY USER ONBOARD-------")
+      console.log("SUCCESSFULLY USER ONBOARD-------", response.data)
       const getJobDetailsRes= await dispatch(getJobDetails({jobPostId:data.jobPostId}))
       console.log("RESPONSE FROM GET JOB DETAILS",getJobDetailsRes.payload.data)
-      navigate('/interview-details',{
+      navigate(`/${location.pathname.split('/')[1]}/${location.pathname.split('/')[2]}/${location.pathname.split('/')[3]}/${response.data}/interview-details`,{
         state:getJobDetailsRes.payload.data
       })
      }
     } catch (error) {
-     console.error('Error uploading file', error);
+     console.error('Error uploading Form', error);
     }
-    // const res = await dispatch(
-    //   onboardAction({data: formData}) ,
-    // );
+   
   }
 
 useEffect(()=>{
@@ -267,7 +268,7 @@ useEffect(()=>{
                 options={workExperienceList}
                 type="dropdown"
                 handleDataChange={handleDataChange}
-                value={data.workExperience}
+                value={data.experience}
               />
             </div>
             <ResumeDropzone />

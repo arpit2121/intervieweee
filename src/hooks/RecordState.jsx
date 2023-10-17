@@ -7,13 +7,13 @@ const useRecordState = () => {
   const [recordState, setRecordState] = useState(interviewPage.recordState);
 
   const startRecording = () => {
-    dispatch(setRecordState('STARTED')); // Dispatch the action to update the state
-    setRecordState('STARTED'); // Update local state if needed
+    dispatch(setRecordState('OPEN')); // Dispatch the action to update the state
+    setRecordState('OPEN'); // Update local state if needed
   };
 
   const recording = () => {
-    dispatch(setRecordState('RECORDING')); // Dispatch the action to update the state
-    setRecordState('RECORDING'); // Update local state if needed
+    dispatch(setRecordState('STARTED')); // Dispatch the action to update the state
+    setRecordState('STARTED'); // Update local state if needed
   };
 
   const stopRecording = () => {

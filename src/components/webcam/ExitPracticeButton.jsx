@@ -27,7 +27,7 @@ const ExitPracticeButton = (props) => {
     borderRadius: "0.25rem",
   };
 
-  return RecordState.practiceMode && RecordState.recordState !== "RETAKE" ? (
+  return RecordState.practiceMode && RecordState.recordState !== "STOPPED" ? (
     <CustomInputButton
       size="extra-small"
       startIcon={<ArrowLeftDirection />}

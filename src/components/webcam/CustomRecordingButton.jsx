@@ -5,14 +5,17 @@ import ReplayArrowIcon from '../icons/recorder/ReplayArrowIcon';
 import StopRecordingIcon from '../icons/recorder/StopRecordingIcon';
 import useResponsiveStyles from '../../utils/MediaQuery';
 import CustomAllTypography from '../typography/CustomTypography';
-import { setRecordState, togglePreview } from '../../store/slices/InterviewPageSlice';
+import { setCounterVisible, setRecordState, togglePreview } from '../../store/slices/InterviewPageSlice';
 
 const CustomRecordingButton = () => {
   const responsive = useResponsiveStyles();
   const iconComponents = [PlayButtonIcon, PlayButtonIcon, StopRecordingIcon, ReplayArrowIcon];
   const dispatch = useDispatch();
   const recordState = useSelector(state => state.rootReducer.interviewPage.recordState);
-  const RECORDING_DELAY_MS = 11000;
+  const { is360RecordingCompleted,question, check360} = useSelector(
+    (state) => state.rootReducer.interviewPage)
+    const thinkTime= is360RecordingCompleted? parseFloat(question?.nextQuestion?.thinkingTime): parseFloat(check360.thinkTime)
+  // const RECORDING_DELAY_MS = 11000;
   const labels = ['Start Recording', 'Starting Recording...', 'Stop Recording', 'Retake'];
 
   const containerStyles = {
@@ -50,20 +53,23 @@ const CustomRecordingButton = () => {
   const [iconIndex, setIconIndex] = useState(0);
 
   const handleClick = () => {
+    console.log("INDEX", iconIndex)
     switch (iconIndex) {
       case 0:
         setIconIndex(1);
-        dispatch(setRecordState('STARTED'));
+        dispatch(setCounterVisible(true))
+        dispatch(setRecordState('OPEN'))
+        // dispatch(setRecordState('STARTED'));
         break;
       case 2:
         setIconIndex(3);
         dispatch(togglePreview(true));
-        dispatch(setRecordState('RETAKE'));
+        dispatch(setRecordState('STOPPED'));
         break;
       case 3:
         setIconIndex(1);
         dispatch(togglePreview(false));
-        dispatch(setRecordState('STOPPED'));
+        dispatch(setRecordState('RETAKE'));
         break;
       default:
         break;
@@ -71,19 +77,21 @@ const CustomRecordingButton = () => {
   };
 
   useEffect(() => {
-    if (recordState === 'STARTED') {
+    if (recordState === 'OPEN' || recordState==="RETAKE") {
       setIconIndex(1);
     }
     if (iconIndex === 1) {
       const recordingTimeout = setTimeout(() => {
-        dispatch(setRecordState('RECORDING'));
+        dispatch(setRecordState('STARTED'));
         setIconIndex(2);
-      }, RECORDING_DELAY_MS);
+      }, thinkTime*1000);
       return () => {
         clearTimeout(recordingTimeout);
       };
     }
   }, [iconIndex, recordState]);
+
+
 
   const IconComponent = iconComponents[iconIndex];
 
