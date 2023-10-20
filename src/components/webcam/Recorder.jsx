@@ -61,11 +61,11 @@ const useRecordingEffect = (recordWebcam, recordState) => {
 
 const useBlobStore = (saveFile, recordWebcam,intervieweeData) => {
 
-  const { preview, is360RecordingCompleted, recordState, question} = useSelector((state) => state.rootReducer.interviewPage);
+  const { preview, is360RecordingCompleted, recordState, question, practiceMode} = useSelector((state) => state.rootReducer.interviewPage);
   const location = useLocation();
   const dispatch = useDispatch();
   useEffect(() => {
-    if (preview === false && is360RecordingCompleted ===false && recordState==="STOPPED"){
+    if (preview === false && is360RecordingCompleted ===false && recordState==="STOPPED" && practiceMode===false){
       console.log("360 file Will be saved Now=====>>>>>",recordState);
 
       //recordWebcam.open();

@@ -40,13 +40,13 @@ const InterviewPage = () => {
   const navigate = useNavigate();
   const dispatch= useDispatch()
   const location= useLocation()
-  const { recordState, getReadyFlag,is360RecordingCompleted, counterVisible, question, check360, isAllQuestionsAttempted} = useSelector(
+  const { recordState, getReadyFlag,is360RecordingCompleted, counterVisible, question, check360, isAllQuestionsAttempted,practiceMode} = useSelector(
     (state) => state.rootReducer.interviewPage
   );
 
   console.log("QUES",  parseFloat(question?.nextQuestion?.thinkingTime))
 
-  const thinkTime= is360RecordingCompleted? parseFloat(question?.nextQuestion?.thinkingTime): parseFloat(check360.thinkTime)
+  const thinkTime= practiceMode?10:is360RecordingCompleted? parseFloat(question?.nextQuestion?.thinkingTime): parseFloat(check360?.thinkTime)
   
   // console.log(getReadyFlag);
   const responsive = useResponsiveStyles();
@@ -58,7 +58,6 @@ const InterviewPage = () => {
       if(is360RecordingCompleted){
         const resFetchQuestion= await dispatch(fetchQuestionAction({intervieweeId:location.pathname.split('/')[4]}))
         console.log("RESS------11", resFetchQuestion)
-
       }
     }
     if(is360RecordingCompleted===true){

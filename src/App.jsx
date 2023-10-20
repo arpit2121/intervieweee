@@ -17,7 +17,7 @@ function App() {
       <Route path='/:adminId/:jobpostId/:expiration' element={<OnBoardingPage/>}/>
       {/* <Route path='/onboard-candidate' element={<OnBoardingPage/>}/> */}
       <Route path='/:adminId/:jobpostId/:expiration/:intervieweeId/interview-details' element={<InterviewDetails/>}/>
-      {/* <Route path='/practiceMode' element={<PracticeMode/>}/> */}
+      {/* <Route path='/:adminId/:jobpostId/:expiration/:intervieweeId/practiceMode' element={<PracticeMode/>}/> */}
       <Route path='/:adminId/:jobpostId/:expiration/:intervieweeId/interview-page' element={<InterviewPage/>}/>
       <Route path='/thanks' element={<ThankYouPage/>}/>
       <Route path='/:adminId/:jobpostId/:expiration/:intervieweeId/get-ready' element={<GetReadyForExam/>}/>

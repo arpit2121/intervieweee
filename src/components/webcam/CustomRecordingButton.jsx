@@ -12,9 +12,9 @@ const CustomRecordingButton = () => {
   const iconComponents = [PlayButtonIcon, PlayButtonIcon, StopRecordingIcon, ReplayArrowIcon];
   const dispatch = useDispatch();
   const recordState = useSelector(state => state.rootReducer.interviewPage.recordState);
-  const { is360RecordingCompleted,question, check360, retakeCount} = useSelector(
+  const { is360RecordingCompleted,question, check360, retakeCount, practiceMode} = useSelector(
     (state) => state.rootReducer.interviewPage)
-    const thinkTime= is360RecordingCompleted? parseFloat(question?.nextQuestion?.thinkingTime): parseFloat(check360.thinkTime)
+    const thinkTime= practiceMode?10:is360RecordingCompleted? parseFloat(question?.nextQuestion?.thinkingTime): parseFloat(check360.thinkTime)
   // const RECORDING_DELAY_MS = 11000;
   const labels = ['Start Recording', 'Starting Recording...', 'Stop Recording', 'Retake'];
 

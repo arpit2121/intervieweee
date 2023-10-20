@@ -60,7 +60,7 @@ const InterviewDetails = () => {
     // dispatch(moveToNextQuestion());
     dispatch(setRecordState(""))
     dispatch(setPracticeMode(true));
-    navigate("/interview-page");
+    navigate(`/${location.pathname.split('/')[1]}/${location.pathname.split('/')[2]}/${location.pathname.split('/')[3]}/${location.pathname.split('/')[4]}/interview-page`);
   };
 
   useEffect(()=>{

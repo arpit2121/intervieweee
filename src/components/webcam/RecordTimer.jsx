@@ -20,7 +20,7 @@ const RecordTimer = () => {
   //   return null;
   // }
   const allowedTime = practiceMode
-    ? 1
+    ? 10
     : is360RecordingCompleted !== true
       ? check360.timeToAnswer
       : parseFloat(question?.nextQuestion?.timeToAnswer)

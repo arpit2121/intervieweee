@@ -3,10 +3,11 @@ import useResponsiveStyles from "../../utils/MediaQuery";
 import { CustomInputButton } from "../button/CustomButton";
 import ArrowLeftDirection from "../icons/Recorder/ArrowLeftDirection";
 import { useDispatch, useSelector } from "react-redux";
-import { setPracticeMode } from "../../store/slices/InterviewPageSlice";
-import { useNavigate } from "react-router-dom";
+import { setPracticeMode, togglePreview } from "../../store/slices/InterviewPageSlice";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ExitPracticeButton = (props) => {
+  const location = useLocation();
   const RecordState = useSelector((state) => state.rootReducer.interviewPage);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,14 +28,15 @@ const ExitPracticeButton = (props) => {
     borderRadius: "0.25rem",
   };
 
-  return RecordState.practiceMode && RecordState.recordState !== "STOPPED" ? (
+  return RecordState.practiceMode  ? (
     <CustomInputButton
       size="extra-small"
       startIcon={<ArrowLeftDirection />}
       style={ButtonStyle}
       onClick={() => {
+        dispatch(togglePreview())
         dispatch(setPracticeMode(false));
-        navigate("/interviewDetails");
+        navigate(`/${location.pathname.split('/')[1]}/${location.pathname.split('/')[2]}/${location.pathname.split('/')[3]}/${location.pathname.split('/')[4]}/interview-details`);
       }}
     >
       Exit Practice mode

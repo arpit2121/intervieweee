@@ -6,7 +6,7 @@ import useResponsiveStyles from '../../utils/MediaQuery';
 
 const useDynamicDimension = () => {
   const res = useResponsiveStyles();
-  const width = res.isMobile ? '10rem' : res.isTablet ? '10rem' : res.isDesktop ? '11rem' : '12rem';
+  const width = res.isMobile ? '10rem' : res.isTablet ? '10rem' : res.isDesktop ? '12rem' : '12rem';
   return { width };
 };
 
@@ -41,10 +41,10 @@ const RecordInfo = (props) => {
 
   return (
     <Container isClicked={isClicked} responsive={responsive} onClick={handleClick}>
-      <DetailBlock name={'Time to Ans:'} value={is360RecordingCompleted? (question?.nextQuestion?.timeToAnswer):`${check360.timeToAnswer} m`} marginBottom={responsive.isMobile ? '0.5rem' : '1rem'} />
-      <DetailBlock name={'Thinking Time:'} value={is360RecordingCompleted?(question?.nextQuestion?.thinkingTime):`${check360.thinkTime} s`} marginBottom={responsive.isMobile ? '0.5rem' : '1rem'} />
+      <DetailBlock name={'Time to Ans:'} value={practiceMode?"10 m":is360RecordingCompleted? (question?.nextQuestion?.timeToAnswer):`${check360.timeToAnswer} m`} marginBottom={responsive.isMobile ? '0.5rem' : '1rem'} />
+      <DetailBlock name={'Thinking Time:'} value={practiceMode ? "10 s" :is360RecordingCompleted?(question?.nextQuestion?.thinkingTime):`${check360.thinkTime} s`} marginBottom={responsive.isMobile ? '0.5rem' : '1rem'} />
       {/* <DetailBlock name={'Retake:'} value={responsive.isMobile ? 'Ultd' : 'Unlimited'} /> */}
-      <DetailBlock name={'Retake:'} value={question?.nextQuestion?.retakes?question.nextQuestion?.retakes:'Unlimited'} />
+      <DetailBlock name={'Retake:'} value={practiceMode?"Unlimited":(question?.nextQuestion?.retakes)?question.nextQuestion?.retakes:'Unlimited'} />
     </Container>
   );
 };

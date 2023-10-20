@@ -36,7 +36,7 @@ const QuestionContent = styled('div')(({ responsive }) => ({
 const QuestionTab = () => {
   const responsive = useResponsiveStyles();
 
-  const { is360RecordingCompleted,  question, isAllQuestionsAttempted,totalQuestions } = useSelector(
+  const {question, practiceMode, is360RecordingCompleted} = useSelector(
     (state) => state.rootReducer.interviewPage
   );
 
@@ -49,6 +49,26 @@ const QuestionTab = () => {
 
 
   return (
+<>
+{practiceMode?
+    <QuestionTabContainer isMobile={responsive.isMobile}>
+    <CustomAllTypography
+      variant={'body2'}
+      name={`Question 1/1`}
+      style={{ paddingLeft: '0.8rem' }}
+    />
+    <QuestionTag>
+      <ProfileIconWrapper responsive={responsive}>
+        <ProfileIcon />
+      </ProfileIconWrapper>
+      <QuestionContent responsive={responsive}>
+        <CustomAllTypography variant={'body2'} name={`Q1:`} />
+        <CustomAllTypography variant={'body2'} name={"Talk something about you"} />
+      </QuestionContent>
+    </QuestionTag>
+  </QuestionTabContainer>
+    :
+    is360RecordingCompleted?
     <QuestionTabContainer isMobile={responsive.isMobile}>
       <CustomAllTypography
         variant={'body2'}
@@ -64,7 +84,10 @@ const QuestionTab = () => {
           <CustomAllTypography variant={'body2'} name={question?.nextQuestion?.questionTitle} />
         </QuestionContent>
       </QuestionTag>
-    </QuestionTabContainer>
+    </QuestionTabContainer>:
+    ""
+}
+    </>
   );
 };
 

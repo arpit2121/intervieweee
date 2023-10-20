@@ -16,7 +16,9 @@ function CounterComponent(props) {
         transform: zoomedIn ? 'scale(1.5)' : 'scale(1)',
       };
       useEffect(()=>{
+        console.log("COUNTE", count)
         if(count===1){
+          console.log("COUNTER INVOSIBLE NOW.....")
           dispatch(setCounterVisible(false))
         }
       },[count])

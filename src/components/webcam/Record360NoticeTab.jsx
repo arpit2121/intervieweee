@@ -8,6 +8,8 @@ const Record360NoticeTab = () => {
   const responsive = useResponsiveStyles();
   const RecordState = useSelector((state) => state.rootReducer.interviewPage);
 
+  
+
   if(RecordState.is360RecordingCompleted === true ){
     return null;
   }
@@ -43,6 +45,7 @@ const Record360NoticeTab = () => {
   };
   const variant = 'body2'
   return (
+    !RecordState.practiceMode?
     <div style={parent}>
       <div style={TagStyle}>
         <div style={ProfileStyle}>
@@ -52,7 +55,8 @@ const Record360NoticeTab = () => {
           <CustomAllTypography variant={variant} name={'Capture a comprehensive 360° view of your room to prevent any potential malpractices.'} />
         </div>
       </div>
-    </div>
+    </div>:
+    ""
   );
 };
 
