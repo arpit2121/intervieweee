@@ -16,9 +16,9 @@ const RecordTimer = () => {
     question,
     isAllQuestionsAttempted
   } = useSelector((state) => state.rootReducer.interviewPage);
-  if(isAllQuestionsAttempted){
-    return null;
-  }
+  // if(isAllQuestionsAttempted){
+  //   return null;
+  // }
   const allowedTime = practiceMode
     ? 1
     : is360RecordingCompleted !== true

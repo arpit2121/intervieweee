@@ -137,7 +137,8 @@ const useBlobStore = (saveFile, recordWebcam,intervieweeData) => {
           console.log('File uploaded successfully', response);
           if(response.status===201){
           console.log("SUCCESSFULLY ANSWERS  ;;;;  NEXT QUESTION  ____ RECORD STATE",recordState)
-          dispatch(fetchQuestionAction({intervieweeId:location.pathname.split('/')[4]}))
+          const resFetchQuestion= await dispatch(fetchQuestionAction({intervieweeId:location.pathname.split('/')[4]}))
+          // console.log("FETCH RES", resFetchQuestion)
           dispatch(setRecordState("OPEN"))
           dispatch(setCounterVisible(true))
           //  dispatch(complete360Recording())

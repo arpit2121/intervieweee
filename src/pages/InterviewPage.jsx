@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import GetReadyForExam from "./GetReadyForExam";
 import { fetchQuestionAction, is360Complete } from "../store/slices/interviewee/actions";
 import CounterComponent from "../components/CounterComponent";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { setRecordState } from "../store/slices/InterviewPageSlice";
 
 const InterviewContainer = styled("div")(({ theme, counterVisible }) => ({
@@ -37,9 +37,10 @@ const QuestionContainer = styled("div")(({ theme, responsive }) => ({
 }));
 
 const InterviewPage = () => {
+  const navigate = useNavigate();
   const dispatch= useDispatch()
   const location= useLocation()
-  const { recordState, getReadyFlag,is360RecordingCompleted, counterVisible, question, check360 } = useSelector(
+  const { recordState, getReadyFlag,is360RecordingCompleted, counterVisible, question, check360, isAllQuestionsAttempted} = useSelector(
     (state) => state.rootReducer.interviewPage
   );
 
@@ -52,10 +53,12 @@ const InterviewPage = () => {
 
   useEffect(()=>{
     console.log("360 is?", is360RecordingCompleted)
-    const fetchQueFun= ()=>{
+    const fetchQueFun= async()=>{
       console.log("INSIDE EFFECT OF PAGE",)
       if(is360RecordingCompleted){
-        dispatch(fetchQuestionAction({intervieweeId:location.pathname.split('/')[4]}))
+        const resFetchQuestion= await dispatch(fetchQuestionAction({intervieweeId:location.pathname.split('/')[4]}))
+        console.log("RESS------11", resFetchQuestion)
+
       }
     }
     if(is360RecordingCompleted===true){
@@ -76,7 +79,12 @@ const InterviewPage = () => {
     console.log("RECORD STATE------>>>>>", recordState)
   },[recordState])
 
-  
+  useEffect(()=>{
+    if(isAllQuestionsAttempted===true){
+      console.log("ALL ATTENPTED", isAllQuestionsAttempted)
+      navigate("/thanks");
+    }
+  },[isAllQuestionsAttempted])
 
   return (
     <>

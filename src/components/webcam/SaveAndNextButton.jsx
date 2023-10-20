@@ -7,8 +7,10 @@ import {
   complete360Recording,
   examDone,
   moveToNextQuestion,
+  setDefaultRetakeCount,
   setGetReadyFlag,
   setRecordState,
+  setRetakeCount,
   togglePreview,
 } from "../../store/slices/InterviewPageSlice";
 import { useNavigate } from "react-router";
@@ -74,11 +76,13 @@ const SaveAndNextButton = () => {
 
     if (is360RecordingCompleted !== true) {
       console.log("save is360RecordingCompleted clicked !!! 45");
+      dispatch(setDefaultRetakeCount())
       dispatch(togglePreview(false));
       // dispatch(complete360Recording())
       // dispatch(setGetReadyFlag(true));
     } else {
       console.log("save and next clicked !!! 22");
+      dispatch(setDefaultRetakeCount())
       dispatch(togglePreview(false));
       // await dispatch(moveToNextQuestion())
       // dispatch(fetchQuestionAction({intervieweeId:location.pathname.split('/')[4]}))

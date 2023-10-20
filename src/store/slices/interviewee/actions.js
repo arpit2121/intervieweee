@@ -68,7 +68,7 @@ export const fetchQuestionAction = createAsyncThunk('/question', async (params, 
       //   `${config.interviewService}/interviewee/question/interview?intervieweeId=65194673a03a74b4ef3d45be`,
       //   { params: { answer: 42 } }
       // )
-      // console.log("RESPONSE FROM FETCH QUESTION",data)
+      console.log("RESPONSE FROM FETCH QUESTION",data.fulfilled)
   return data
 } catch (error) {
   return rejectWithValue(error.response.data)

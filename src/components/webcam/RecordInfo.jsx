@@ -41,7 +41,7 @@ const RecordInfo = (props) => {
 
   return (
     <Container isClicked={isClicked} responsive={responsive} onClick={handleClick}>
-      <DetailBlock name={'Time to Ans:'} value={is360RecordingCompleted? (question?.nextQuestion?.timeToAnswer):`${check360.timeToAnswer/60} m`} marginBottom={responsive.isMobile ? '0.5rem' : '1rem'} />
+      <DetailBlock name={'Time to Ans:'} value={is360RecordingCompleted? (question?.nextQuestion?.timeToAnswer):`${check360.timeToAnswer} m`} marginBottom={responsive.isMobile ? '0.5rem' : '1rem'} />
       <DetailBlock name={'Thinking Time:'} value={is360RecordingCompleted?(question?.nextQuestion?.thinkingTime):`${check360.thinkTime} s`} marginBottom={responsive.isMobile ? '0.5rem' : '1rem'} />
       {/* <DetailBlock name={'Retake:'} value={responsive.isMobile ? 'Ultd' : 'Unlimited'} /> */}
       <DetailBlock name={'Retake:'} value={question?.nextQuestion?.retakes?question.nextQuestion?.retakes:'Unlimited'} />

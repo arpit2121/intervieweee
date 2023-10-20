@@ -51,8 +51,9 @@ const GetReadyForExam = () => {
   }, []);
 
   useEffect(()=>{
-    const fetchQueFun= ()=>{
-      dispatch(fetchQuestionAction({intervieweeId:location.pathname.split('/')[4]}))
+    const fetchQueFun=async ()=>{
+      const resFetchQuestion= await dispatch(fetchQuestionAction({intervieweeId:location.pathname.split('/')[4]}))
+        // console.log("FETCH RES", resFetchQuestion)
     }
     fetchQueFun()
   },[])

@@ -75,11 +75,26 @@ const interviewPageSlice = createSlice({
     setRetakeCount:(state)=>{
       state.retakeCount= state.retakeCount+1
     },
+    setDefaultRetakeCount:(state)=>{
+      state.retakeCount= 0
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchQuestionAction.fulfilled, (state, action) => {
+      console.log("INSIDE FETCH SLICE--->", action?.payload?.data)
+      if(action?.payload?.data===null){
+        state.isAllQuestionsAttempted=true
+      }
+      else{
+        state.question=action?.payload?.data
+      }
+      
+    }),
+    builder.addCase(fetchQuestionAction.rejected, (state, action) => {
       console.log("INSIDE SLICE--->", action.payload.data)
-      state.question=action.payload.data
+      if(action.payload.data===null){
+        state.isAllQuestionsAttempted= true
+      }
     }),
       builder.addCase(is360Complete.fulfilled, (state, action) => {
         state.is360RecordingCompleted=action.payload.data
@@ -98,7 +113,8 @@ export const {
   examDone,
   setPracticeMode,
   setCounterVisible,
-  setRetakeCount
+  setRetakeCount,
+  setDefaultRetakeCount
 } = interviewPageSlice.actions;
 
 export default interviewPageSlice.reducer;

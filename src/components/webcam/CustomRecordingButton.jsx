@@ -12,7 +12,7 @@ const CustomRecordingButton = () => {
   const iconComponents = [PlayButtonIcon, PlayButtonIcon, StopRecordingIcon, ReplayArrowIcon];
   const dispatch = useDispatch();
   const recordState = useSelector(state => state.rootReducer.interviewPage.recordState);
-  const { is360RecordingCompleted,question, check360} = useSelector(
+  const { is360RecordingCompleted,question, check360, retakeCount} = useSelector(
     (state) => state.rootReducer.interviewPage)
     const thinkTime= is360RecordingCompleted? parseFloat(question?.nextQuestion?.thinkingTime): parseFloat(check360.thinkTime)
   // const RECORDING_DELAY_MS = 11000;
@@ -96,6 +96,8 @@ const CustomRecordingButton = () => {
   const IconComponent = iconComponents[iconIndex];
 
   return (
+    recordState==='STOPPED' &&  (retakeCount === question?.nextQuestion?.retakes)?
+    "":
     <div style={containerStyles}>
       <div onClick={handleClick} style={{ background: '#FFF', opacity: '1', width: '3rem', height: '3rem', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center',cursor: 'pointer'  }}>
         <div style={{ ...redCircleStyles, ...(iconIndex === 1 ? startingRecordingStyle : {})}}>

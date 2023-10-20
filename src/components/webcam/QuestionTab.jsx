@@ -40,20 +40,19 @@ const QuestionTab = () => {
     (state) => state.rootReducer.interviewPage
   );
 
-  if (!is360RecordingCompleted ) {
-    return null;
-  }else if(isAllQuestionsAttempted){
-    return null;
-  }
+  // if (!is360RecordingCompleted ) {
+  //   return null;
+  // }else 
+  // if(isAllQuestionsAttempted){
+  //   return null;
+  // }
 
-  const Question = question.questionTitle;
-  const TotalQuestions = totalQuestions;
 
   return (
     <QuestionTabContainer isMobile={responsive.isMobile}>
       <CustomAllTypography
         variant={'body2'}
-        name={`Question ${question.currentIndex+1}/${question.totalQuestions}`}
+        name={`Question ${question?.currentIndex+1}/${question?.totalQuestions}`}
         style={{ paddingLeft: '0.8rem' }}
       />
       <QuestionTag>
@@ -61,7 +60,7 @@ const QuestionTab = () => {
           <ProfileIcon />
         </ProfileIconWrapper>
         <QuestionContent responsive={responsive}>
-          <CustomAllTypography variant={'body2'} name={`Q${question.currentIndex+1}:`} />
+          <CustomAllTypography variant={'body2'} name={`Q${question?.currentIndex+1}:`} />
           <CustomAllTypography variant={'body2'} name={question?.nextQuestion?.questionTitle} />
         </QuestionContent>
       </QuestionTag>
