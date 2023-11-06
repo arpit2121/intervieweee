@@ -3,7 +3,8 @@ import { is360Complete } from "./actions";
 
 const initialState = {
   resume:null,
-  data:null
+  data:null,
+  loading:false
 };
 
 const intervieweeSlice = createSlice({
@@ -19,6 +20,9 @@ const intervieweeSlice = createSlice({
       },
       setIntervieweeData:(state, action) =>{
         state.data = action.payload;
+      },
+      setLoading:(state, action)=>{
+        state.loading= action.payload
       }
   },
   
@@ -27,7 +31,8 @@ const intervieweeSlice = createSlice({
 export const {
   setName,
   setResume,
-  setIntervieweeData
+  setIntervieweeData,
+  setLoading
 } = intervieweeSlice.actions;
 
 export default intervieweeSlice.reducer;

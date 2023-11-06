@@ -24,8 +24,8 @@ import { getJobDetails, onboardAction } from "../store/slices/interviewee/action
 import { fetchProfessions } from "../store/slices/global/actions";
 import axios from "axios";
 import config from "../common/config";
-import { setIntervieweeData } from "../store/slices/interviewee/intervieweeSlice";
-import {useLocation,useParams } from 'react-router-dom';
+import { setIntervieweeData, setLoading } from "../store/slices/interviewee/intervieweeSlice";
+import { useLocation, useParams } from 'react-router-dom';
 import { useFormik } from "formik";
 import { onBoardingSchema } from "../common/schema";
 
@@ -82,7 +82,7 @@ const useStyle = makeStyles((theme) => ({
 }));
 
 const OnBoardingPage = () => {
-  const dispatch= useDispatch()
+  const dispatch = useDispatch()
   const location = useLocation()
   const { param1, param2, param3 } = useParams();
   const intervieweeName = useSelector((state) => state.rootReducer.interviewee.name);
@@ -91,14 +91,14 @@ const OnBoardingPage = () => {
   const responsive = useResponsiveStyles();
   const classes = useStyle();
 
-  const onSubmit= async(data)=>{
+  const onSubmit = async (data) => {
     console.log("Final Submit Clicked", data)
     dispatch(setIntervieweeData(data))
     console.log("FINAL DATA", data)
-    const myFile= resume?.file
+    const myFile = resume?.file
     let formData = new FormData();
     formData.append('json_data', JSON.stringify(data));
-    formData.append('resume',newResume);
+    formData.append('resume', newResume);
     for (const a of formData.values()) {
       console.log(a);
     }
@@ -106,46 +106,46 @@ const OnBoardingPage = () => {
       console.log(a);
     }
     try {
-     const response = await axios.post(`${config.interviewService}/v1/interviewee`, formData, {
-     headers: {
-    'Content-Type': 'multipart/form-data',
-     },
-     });
-     console.log('File uploaded successfully', response);
-     if(response.status===200){
-      console.log("SUCCESSFULLY USER ONBOARD-------", response.data)
-      sessionStorage.setItem("tokenCode", response.data?.code);
-      const getJobDetailsRes= await dispatch(getJobDetails({jobPostId:data.jobPostId}))
-      console.log("RESPONSE FROM GET JOB DETAILS",getJobDetailsRes.payload.data)
-      navigate(`/${location.pathname.split('/')[1]}/${location.pathname.split('/')[2]}/${location.pathname.split('/')[3]}/${response.data.id}/interview-details`,{
-        state:getJobDetailsRes.payload.data
-      })
-     }
+      dispatch(setLoading(true))
+      const response = await axios.post(`${config.interviewService}/v1/interviewee`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('File uploaded successfully', response);
+      if (response.status === 200) {
+        dispatch(setLoading(false))
+        console.log("SUCCESSFULLY USER ONBOARD-------", response.data)
+        sessionStorage.setItem("tokenCode", response.data?.code);
+        const getJobDetailsRes = await dispatch(getJobDetails({ jobPostId: data.jobPostId }))
+        console.log("RESPONSE FROM GET JOB DETAILS", getJobDetailsRes.payload.data)
+        console.log("Now naviagte to ",`/${location.pathname.split('/')[1]}/${location.pathname.split('/')[2]}/${location.pathname.split('/')[3]}/${response.data.id}/interview-details` )
+        navigate(`/${location.pathname.split('/')[1]}/${location.pathname.split('/')[2]}/${location.pathname.split('/')[3]}/${response.data.id}/interview-details`, {
+          state: getJobDetailsRes.payload.data
+        })
+      }
     } catch (error) {
-     console.error('Error uploading Form', error);
+      setLoading(false)
+      console.error('Error uploading Form', error);
     }
   }
 
-  const { values, handleChange, handleSubmit, errors, touched, handleBlur} =
+  const { values, handleChange, handleSubmit, errors, touched, handleBlur } =
     useFormik({
       initialValues: {
         fullName: "",
-        phoneNumber:"",
-        profession:"",
-        email:"",
-        currentCompany:"",
-        experience:"",
+        phoneNumber: "",
+        profession: "",
+        email: "",
+        currentCompany: "",
+        experience: "",
         adminId: location.pathname.split('/')[1],
         jobPostId: location.pathname.split('/')[2]
       },
       validationSchema: onBoardingSchema,
       onSubmit,
-      validateOnBlur:true,
+      validateOnBlur: true,
     });
-
-    useEffect(()=>{
-      console.log("TOUCHED---->", touched)
-    },[touched])
 
   const menu = [
     { label: "ten", value: 10 },
@@ -162,7 +162,7 @@ const OnBoardingPage = () => {
     // navigate('/interviewDetails')
   }
 
-  const [professions, setProfessions]=useState()
+  const [professions, setProfessions] = useState()
 
   const [data, setData] = useState({
     fullName: "",
@@ -176,33 +176,54 @@ const OnBoardingPage = () => {
   })
   const resume = useSelector((state) => state.rootReducer.interviewee.resume);
 
-  const [newResume, setNewResume]=useState(resume)
-  
+  const [newResume, setNewResume] = useState(resume)
+
   const handleDataChange = (name, val) => {
     const dataObj = JSON.parse(JSON.stringify(data));
     dataObj[name] = val
     setData(dataObj)
   }
 
-
-useEffect(()=>{
-  const fetchAllProfessions= async()=>{
-    const res= await dispatch(fetchProfessions({}))
-    console.log("RESPONSE FECTH==-======", res.payload.data)
-    const allProfessions = res.payload.data
-    .map((categoryData) => categoryData.professions)
-    .reduce((acc, professions) => acc.concat(professions), []);
-    console.log("ALL",allProfessions)
-    setProfessions(allProfessions)
-  }
-  fetchAllProfessions()
-},[])
-
-useEffect(()=>{
-  setNewResume(resume?.file)
-},[resume])
+  useEffect(() => {
+    console.log("TOUCHED---->", touched)
+  }, [touched])
 
 
+  useEffect(() => {
+      console.log("Location---->", location.pathname)
+
+    const getJobDetailsFun = async () => {
+      const res = await dispatch(getJobDetails({ jobPostId: location.pathname.split('/')[2] }))
+      console.log("RES JOB DETAILS", res)
+      // if (res?.payload?.data?.status === "ACTIVE") {
+      //   navigate("/expired");
+      // }
+      if(res?.payload?.status===400){
+        navigate('/not-found')
+      }
+      else if(res?.payload?.data?.status !== "ACTIVE"){
+        navigate("/expired");
+      }
+    }
+    getJobDetailsFun()
+  }, [])
+
+  useEffect(() => {
+    const fetchAllProfessions = async () => {
+      const res = await dispatch(fetchProfessions({}))
+      console.log("RESPONSE FECTH==-======", res.payload.data)
+      const allProfessions = res.payload.data
+        .map((categoryData) => categoryData.professions)
+        .reduce((acc, professions) => acc.concat(professions), []);
+      console.log("ALL", allProfessions)
+      setProfessions(allProfessions)
+    }
+    fetchAllProfessions()
+  }, [])
+
+  useEffect(() => {
+    setNewResume(resume?.file)
+  }, [resume])
 
 
   return (
@@ -211,10 +232,9 @@ useEffect(()=>{
         <div
           style={{
             position: "absolute",
-            width: "100%",
             ...(responsive.isMobile
               ? { display: "flex", justifyContent: "center" }
-              : { left: "2rem", top: "1rem" }),
+              : { paddingBlockStart:'1rem', paddingInlineStart:'1rem'}),
           }}
         >
           <QuickConnectIcon />
@@ -245,7 +265,7 @@ useEffect(()=>{
               name={`Tell us about yourself.`}
               variant={"h3"}
             />
-            
+
             <CustomAllTypography
               name={
                 "Request you to provide us with some necessary information before starting the interview."
@@ -254,14 +274,14 @@ useEffect(()=>{
             />
             <div style={{ width: "100%", height: "2.69rem" }}></div>
             <div className={classes.textfieldContainer}>
-              <CommonCustomizedTextField 
-              value={values.fullName}
-              title="Full Name" 
-              name='fullName'
-              status={errors.fullName && touched.fullName ? "error" : ""}
-              message={errors.fullName && touched.fullName ? errors.fullName : ""}
-              handleChange2={handleChange}
-              handleBlur2={handleBlur}
+              <CommonCustomizedTextField
+                value={values.fullName}
+                title="Full Name"
+                name='fullName'
+                status={errors.fullName && touched.fullName ? "error" : ""}
+                message={errors.fullName && touched.fullName ? errors.fullName : ""}
+                handleChange2={handleChange}
+                handleBlur2={handleBlur}
               />
             </div>
             <div className={classes.textfieldContainer}>
@@ -290,14 +310,14 @@ useEffect(()=>{
               />
             </div>
             <div className={classes.textfieldContainer}>
-              <CommonCustomizedTextField 
-              title={"Current Company name"} 
-              name="currentCompany" 
-              handleChange2={handleChange}
-              value={values.currentCompany} 
-              status={errors.currentCompany && touched.currentCompany ? "error" : ""}
-              message={errors.currentCompany && touched.currentCompany ? errors.currentCompany : ""}
-              handleBlur2={handleBlur}
+              <CommonCustomizedTextField
+                title={"Current Company name"}
+                name="currentCompany"
+                handleChange2={handleChange}
+                value={values.currentCompany}
+                status={errors.currentCompany && touched.currentCompany ? "error" : ""}
+                message={errors.currentCompany && touched.currentCompany ? errors.currentCompany : ""}
+                handleBlur2={handleBlur}
               />
             </div>
             <div className={classes.textfieldContainer}>
@@ -329,14 +349,16 @@ useEffect(()=>{
               />
             </div>
 
-            <ResumeDropzone/>
+            <ResumeDropzone />
             
+
+
             <div style={{ height: "2.69rem", width: "100%" }}></div>
             <CustomInputButton
               responsive={responsive}
               width={"100%"}
               size="small"
-              onClick={()=>handleSubmit(values)}
+              onClick={() => handleSubmit(values)}
             >
               Get Started
             </CustomInputButton>

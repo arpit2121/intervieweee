@@ -156,7 +156,7 @@ const useBlobStore = (saveFile, recordWebcam,intervieweeData) => {
 const Recorder = (props) => {
   const responsive = useResponsiveStyles();
   const recordWebcam = useRecordWebcam({ frameRate: 60 });
-  const { preview, recordState, is360RecordingCompleted,counterVisible} = useSelector((state) => state.rootReducer.interviewPage);
+  const { preview, recordState, isAllQuestionsAttempted} = useSelector((state) => state.rootReducer.interviewPage);
   const intervieweeData = useSelector((state) => state.rootReducer.interviewee.data);
 
   useEffect(() => {
@@ -165,6 +165,12 @@ const Recorder = (props) => {
       recordWebcam.open();
     }
   }, [preview]);
+
+  useEffect(()=>{
+    if(isAllQuestionsAttempted===true){
+      recordWebcam.close()
+    }
+  },[isAllQuestionsAttempted])
 
 
   const saveFile = async () => {

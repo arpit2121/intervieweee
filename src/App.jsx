@@ -8,10 +8,25 @@ import InterviewPage from './pages/InterviewPage'
 import ThankYouPage from './pages/ThankYouPage'
 import GetReadyForExam from './pages/GetReadyForExam'
 import Posenet from './components/webcam/Posenet'
+import Expired from './pages/Expired'
+import Loader from './assets/png/loader.gif'
+import { useSelector } from 'react-redux'
+import Unauthorized from './pages/Unauthorized'
+import NotFound from './pages/NotFound'
 
 function App() {
+
+  const loading= useSelector((state) => state.rootReducer.interviewee.loading)
   return (
-    <Routes>
+    <div>
+{
+  loading &&
+  <div style={{display:'flex', justifyContent:'center', alignItems:'center', position:'absolute', top:'50vh', left:'50vw', zIndex:10}}>
+  <img src={Loader} alt="" srcSet="" style={{ width: '5rem', height: '5rem', }} />
+  </div>
+}
+
+<Routes>
       <Route path='/' element={<Posenet/>}/>
       <Route path='/:adminId/:jobpostId/:expiration' element={<OnBoardingPage/>}/>
       {/* <Route path='/onboard-candidate' element={<OnBoardingPage/>}/> */}
@@ -19,8 +34,13 @@ function App() {
       {/* <Route path='/:adminId/:jobpostId/:expiration/:intervieweeId/practiceMode' element={<PracticeMode/>}/> */}
       <Route path='/:adminId/:jobpostId/:expiration/:intervieweeId/interview-page' element={<InterviewPage/>}/>
       <Route path='/thanks' element={<ThankYouPage/>}/>
+      <Route path='/expired' element={<Expired/>}/>
+      <Route path='/session-expired' element={<Unauthorized/>}/>
+      <Route path='/not-found' element={<NotFound/>}/>
       <Route path='/:adminId/:jobpostId/:expiration/:intervieweeId/get-ready' element={<GetReadyForExam/>}/>
     </Routes>
+    </div>
+    
   )
 }
 

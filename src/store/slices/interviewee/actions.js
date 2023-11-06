@@ -34,10 +34,10 @@ export const getJobDetails = createAsyncThunk('job/getJobDetails', async (params
           }
         }
       )
-      console.log("RESPONSE FROM GET JOB DETAILS")
+      console.log("RESPONSE FROM GET JOB DETAILS", data)
   return data
 } catch (error) {
-  return rejectWithValue(error.response.data)
+  return rejectWithValue(error.response)
 }
 })
 
@@ -105,6 +105,7 @@ export const is360Complete = createAsyncThunk('/is360', async (params, { rejectW
       console.log("GOT RESPONSE FROM 360 Complete ",data)
   return data
 } catch (error) {
-  return rejectWithValue(error.response.data)
+  console.log("Error from Get 360 status", error)
+  return rejectWithValue(error.response)
 }
 })

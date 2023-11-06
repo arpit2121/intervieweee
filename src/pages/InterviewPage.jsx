@@ -70,6 +70,10 @@ const InterviewPage = () => {
   useEffect(()=>{
     const fetch360= async()=>{
       const is360= await dispatch(is360Complete({intervieweeId: location.pathname.split('/')[4]}))
+      console.log("RES  ", is360)
+      if(is360.payload.status===401){
+        navigate('/session-expired')
+      }
     }
     fetch360()
   },[])
@@ -81,6 +85,7 @@ const InterviewPage = () => {
   useEffect(()=>{
     if(isAllQuestionsAttempted===true){
       console.log("ALL ATTEMPTED", isAllQuestionsAttempted)
+      sessionStorage.removeItem('tokenCode')
       navigate("/thanks");
     }
   },[isAllQuestionsAttempted])
