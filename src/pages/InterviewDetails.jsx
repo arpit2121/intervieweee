@@ -65,13 +65,12 @@ const InterviewDetails = () => {
 
   useEffect(()=>{
     const getJobDetailsFun= async()=>{
-      const res= await dispatch(getJobDetails({jobPostId:location.pathname.split('/')[2]}))
-      setData(res.payload.data)
-
+      console.log("Location.state", location.state)
+      //const res= await dispatch(getJobDetails({jobPostId:location.pathname.split('/')[2]}))
+      //setData(res.payload.data)
       const is360= await dispatch(is360Complete({intervieweeId: location.pathname.split('/')[4]}))
     }
     getJobDetailsFun()
-
   },[])
 
   return (

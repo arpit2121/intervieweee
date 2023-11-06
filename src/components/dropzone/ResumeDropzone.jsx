@@ -12,7 +12,7 @@ import { getDroppedOrSelectedFiles } from "html5-file-selector";
 import { CloseOutlined } from "@mui/icons-material";
 import CloseIcon from "../icons/CloseIcon";
 import PdfImage from "../../assets/pdfImage.jpg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setResume } from "../../store/slices/interviewee/intervieweeSlice";
 
 const CustomSoundBar = styled(Slider)(({ theme }) => ({
@@ -233,7 +233,7 @@ const Input = ({ accept, onFiles, files, getFilesFromEvent }) => {
     </label>
   );
 };
-const CustomLayout = () => {
+const CustomLayout = ({status, message}) => {
   const dispatch= useDispatch()
   const getUploadParams = () => ({ url: "https://httpbin.org/post" });
   const getFilesFromEvent = (e) => {
@@ -243,6 +243,8 @@ const CustomLayout = () => {
       });
     });
   };
+
+  const resume = useSelector((state) => state.rootReducer.interviewee.resume);
   const handleSubmit = (files, allFiles) => {
     console.log("AFTER SUBMIT",files.map((f) => f));
     allFiles.forEach((f) => f.remove());
@@ -275,7 +277,8 @@ const CustomLayout = () => {
     }
   };
 
-  return (
+  return (<>
+
     <Dropzone
       getUploadParams={getUploadParams}
       LayoutComponent={Layout}
@@ -294,7 +297,7 @@ const CustomLayout = () => {
       //   accept=".pdf,.doc"
       styles={{
         dropzone: {
-          border: "1px dotted black",
+          border: `1px dotted ${status==="error"?'red': "black"}`,
           minHeight: "10.62rem",
           maxHeight: 100,
         },
@@ -302,12 +305,19 @@ const CustomLayout = () => {
       InputComponent={Input}
       getFilesFromEvent={getFilesFromEvent}
       onChangeStatus={handleChangeStatus}
-      
     />
+      </>
   );
 };
-const ResumeDropzone = ({ multiple = false }) => {
-  return <CustomLayout />;
+const ResumeDropzone = ({ multiple = false , isTouched, status, message}) => {
+  return <>
+  <CustomLayout status={status} message={message}/>
+  {/* {
+    <div style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', 'alignItems':'center'}}>
+      <CustomAllTypography name={"Required Resume"} textcolor={'red'}></CustomAllTypography>
+    </div>
+  } */}
+  </>;
 };
 
 export default ResumeDropzone;

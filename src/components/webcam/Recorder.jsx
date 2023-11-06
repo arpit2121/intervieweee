@@ -93,6 +93,7 @@ const useBlobStore = (saveFile, recordWebcam,intervieweeData) => {
             params: paramsData,
           headers: {
          'Content-Type': 'multipart/form-data',
+         'code': sessionStorage.getItem('tokenCode')
           },
           });
           console.log('File uploaded successfully', response);
@@ -100,6 +101,7 @@ const useBlobStore = (saveFile, recordWebcam,intervieweeData) => {
            console.log("SUCCESSFULLY ANSWERS-------")
            dispatch(complete360Recording())
            dispatch(setGetReadyFlag(true));
+          //  dispatch(setRecordState("OPEN"))
           //  dispatch(setRecordState("OPEN"))
           }
          } catch (error) {
@@ -110,10 +112,7 @@ const useBlobStore = (saveFile, recordWebcam,intervieweeData) => {
     }
 
     if(preview===false && is360RecordingCompleted===true && recordState==="STOPPED"){
-
-
       console.log("Now it is answer video")
-
       saveFile().then(console.log("savingBlob")).then(async blob => {
         console.log("USER DATA", intervieweeData)
         console.log("VIDEO BLOB", blob)
@@ -132,6 +131,7 @@ const useBlobStore = (saveFile, recordWebcam,intervieweeData) => {
           const response = await axios.post(`${config.interviewService}/v1/interviewee/upload-answer`, formdata, {
           headers: {
          'Content-Type': 'multipart/form-data',
+         'code': sessionStorage.getItem('tokenCode')
           },
           });
           console.log('File uploaded successfully', response);
@@ -161,7 +161,6 @@ const Recorder = (props) => {
 
   useEffect(() => {
     console.log("PREVIEW IN RECORDER", preview)
-
     if(preview === null){
       recordWebcam.open();
     }

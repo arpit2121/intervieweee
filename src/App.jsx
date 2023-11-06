@@ -7,13 +7,12 @@ import InterviewDetails from './pages/InterviewDetails';
 import InterviewPage from './pages/InterviewPage'
 import ThankYouPage from './pages/ThankYouPage'
 import GetReadyForExam from './pages/GetReadyForExam'
-import CounterComponent from './components/CounterComponent'
-import AudioFrequency from './components/webcam/AudioFrequency'
+import Posenet from './components/webcam/Posenet'
 
 function App() {
   return (
     <Routes>
-      <Route path='/' element={<AudioFrequency/>}/>
+      <Route path='/' element={<Posenet/>}/>
       <Route path='/:adminId/:jobpostId/:expiration' element={<OnBoardingPage/>}/>
       {/* <Route path='/onboard-candidate' element={<OnBoardingPage/>}/> */}
       <Route path='/:adminId/:jobpostId/:expiration/:intervieweeId/interview-details' element={<InterviewDetails/>}/>

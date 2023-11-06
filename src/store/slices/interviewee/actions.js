@@ -61,7 +61,9 @@ export const fetchQuestionAction = createAsyncThunk('/question', async (params, 
     console.log("HELLO",params)
       const data =
       axios.get(`${config.interviewService}/v1/interviewee/question/interview`,
-        { params: { intervieweeId:params.intervieweeId } }
+        { params: { intervieweeId:params.intervieweeId }, 
+          headers:{ code: sessionStorage.getItem('tokenCode')}
+      }
         // { params: { answer: 42 } }
       )
       // await get(/interviewee/view360/status
@@ -92,10 +94,13 @@ export const answerQuestion = createAsyncThunk('/answer', async (params, { rejec
 
 export const is360Complete = createAsyncThunk('/is360', async (params, { rejectWithValue }) => {
   try {
+    console.log("TOKEN", sessionStorage.getItem('tokenCode'))
       const data =
       await axios.get(
         `${config.interviewService}/v1/interviewee/view360/status`,
-        { params: { intervieweeId:params.intervieweeId } }
+        { params: { intervieweeId:params.intervieweeId }, 
+          headers:{ code: sessionStorage.getItem('tokenCode')}
+      }
       )
       console.log("GOT RESPONSE FROM 360 Complete ",data)
   return data

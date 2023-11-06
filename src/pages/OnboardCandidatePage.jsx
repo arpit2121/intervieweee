@@ -26,6 +26,8 @@ import axios from "axios";
 import config from "../common/config";
 import { setIntervieweeData } from "../store/slices/interviewee/intervieweeSlice";
 import {useLocation,useParams } from 'react-router-dom';
+import { useFormik } from "formik";
+import { onBoardingSchema } from "../common/schema";
 
 
 const useStyle = makeStyles((theme) => ({
@@ -88,6 +90,63 @@ const OnBoardingPage = () => {
   const navigate = useNavigate()
   const responsive = useResponsiveStyles();
   const classes = useStyle();
+
+  const onSubmit= async(data)=>{
+    console.log("Final Submit Clicked", data)
+    dispatch(setIntervieweeData(data))
+    console.log("FINAL DATA", data)
+    const myFile= resume?.file
+    let formData = new FormData();
+    formData.append('json_data', JSON.stringify(data));
+    formData.append('resume',newResume);
+    for (const a of formData.values()) {
+      console.log(a);
+    }
+    for (const a of formData.keys()) {
+      console.log(a);
+    }
+    try {
+     const response = await axios.post(`${config.interviewService}/v1/interviewee`, formData, {
+     headers: {
+    'Content-Type': 'multipart/form-data',
+     },
+     });
+     console.log('File uploaded successfully', response);
+     if(response.status===200){
+      console.log("SUCCESSFULLY USER ONBOARD-------", response.data)
+      sessionStorage.setItem("tokenCode", response.data?.code);
+      const getJobDetailsRes= await dispatch(getJobDetails({jobPostId:data.jobPostId}))
+      console.log("RESPONSE FROM GET JOB DETAILS",getJobDetailsRes.payload.data)
+      navigate(`/${location.pathname.split('/')[1]}/${location.pathname.split('/')[2]}/${location.pathname.split('/')[3]}/${response.data.id}/interview-details`,{
+        state:getJobDetailsRes.payload.data
+      })
+     }
+    } catch (error) {
+     console.error('Error uploading Form', error);
+    }
+  }
+
+  const { values, handleChange, handleSubmit, errors, touched, handleBlur} =
+    useFormik({
+      initialValues: {
+        fullName: "",
+        phoneNumber:"",
+        profession:"",
+        email:"",
+        currentCompany:"",
+        experience:"",
+        adminId: location.pathname.split('/')[1],
+        jobPostId: location.pathname.split('/')[2]
+      },
+      validationSchema: onBoardingSchema,
+      onSubmit,
+      validateOnBlur:true,
+    });
+
+    useEffect(()=>{
+      console.log("TOUCHED---->", touched)
+    },[touched])
+
   const menu = [
     { label: "ten", value: 10 },
     { label: "twenty", value: 20 },
@@ -125,39 +184,6 @@ const OnBoardingPage = () => {
     setData(dataObj)
   }
 
-  const handleSubmit= async()=>{
-    dispatch(setIntervieweeData(data))
-    console.log("FINAL DATA", data)
-    const myFile= resume?.file
-    let formData = new FormData();
-    formData.append('json_data', JSON.stringify(data));
-    formData.append('resume',newResume);
-    for (const a of formData.values()) {
-      console.log(a);
-    }
-    for (const a of formData.keys()) {
-      console.log(a);
-    }
-    try {
-     const response = await axios.post(`${config.interviewService}/v1/interviewee`, formData, {
-     headers: {
-    'Content-Type': 'multipart/form-data',
-     },
-     });
-     console.log('File uploaded successfully', response);
-     if(response.status===200){
-      console.log("SUCCESSFULLY USER ONBOARD-------", response.data)
-      const getJobDetailsRes= await dispatch(getJobDetails({jobPostId:data.jobPostId}))
-      console.log("RESPONSE FROM GET JOB DETAILS",getJobDetailsRes.payload.data)
-      navigate(`/${location.pathname.split('/')[1]}/${location.pathname.split('/')[2]}/${location.pathname.split('/')[3]}/${response.data}/interview-details`,{
-        state:getJobDetailsRes.payload.data
-      })
-     }
-    } catch (error) {
-     console.error('Error uploading Form', error);
-    }
-   
-  }
 
 useEffect(()=>{
   const fetchAllProfessions= async()=>{
@@ -175,6 +201,9 @@ useEffect(()=>{
 useEffect(()=>{
   setNewResume(resume?.file)
 },[resume])
+
+
+
 
   return (
     <CustomContainer>
@@ -225,59 +254,89 @@ useEffect(()=>{
             />
             <div style={{ width: "100%", height: "2.69rem" }}></div>
             <div className={classes.textfieldContainer}>
-              <CommonCustomizedTextField title="Full Name" name='fullName' handleDataChange={handleDataChange} value={data.fullName} />
+              <CommonCustomizedTextField 
+              value={values.fullName}
+              title="Full Name" 
+              name='fullName'
+              status={errors.fullName && touched.fullName ? "error" : ""}
+              message={errors.fullName && touched.fullName ? errors.fullName : ""}
+              handleChange2={handleChange}
+              handleBlur2={handleBlur}
+              />
             </div>
             <div className={classes.textfieldContainer}>
               <CommonCustomizedTextField
-                value={data.phoneNumber}
+                value={values.phoneNumber}
                 startIcon={<PhoneIcon />}
                 extraText={"+91"}
                 placeholder="Mobile no."
                 name="phoneNumber"
-                handleDataChange={handleDataChange}
+                status={errors.phoneNumber && touched.phoneNumber ? "error" : ""}
+                message={errors.phoneNumber && touched.phoneNumber ? errors.phoneNumber : ""}
+                handleChange2={handleChange}
+                handleBlur2={handleBlur}
               />
             </div>
             <div className={classes.textfieldContainer}>
               <CommonCustomizedTextField
                 name="email"
-                handleDataChange={handleDataChange}
                 placeholder={"Email ID"}
                 startIcon={<MailIcon />}
-                value={data.email}
+                value={values.email}
+                status={errors.email && touched.email ? "error" : ""}
+                message={errors.email && touched.email ? errors.email : ""}
+                handleChange2={handleChange}
+                handleBlur2={handleBlur}
               />
             </div>
             <div className={classes.textfieldContainer}>
-              <CommonCustomizedTextField title={"Current Company name"} name="currentCompany" handleDataChange={handleDataChange} value={data.currentCompany} />
+              <CommonCustomizedTextField 
+              title={"Current Company name"} 
+              name="currentCompany" 
+              handleChange2={handleChange}
+              value={values.currentCompany} 
+              status={errors.currentCompany && touched.currentCompany ? "error" : ""}
+              message={errors.currentCompany && touched.currentCompany ? errors.currentCompany : ""}
+              handleBlur2={handleBlur}
+              />
             </div>
             <div className={classes.textfieldContainer}>
               <CommonCustomizedTextField
                 placeholder={"Your Profession"}
                 options={professions}
                 type="dropdown"
-                value={data.profession}
+                value={values.profession}
                 name="profession"
-                handleDataChange={handleDataChange}
-                setValue={setData.profession}
+                handleInputChange={handleChange("profession")}
+                // handleDataChange={handleDataChange}
+                // setValue={setData.profession}
+                status={errors.profession && touched.profession ? "error" : ""}
+                message={errors.profession && touched.profession ? errors.profession : ""}
+                handleBlur2={handleBlur}
               />
             </div>
             <div className={classes.textfieldContainer}>
               <CommonCustomizedTextField
-                selectedOption={data.workExperience}
+                value={values.experience}
                 name="experience"
                 placeholder={"Work Experience"}
                 options={workExperienceList}
                 type="dropdown"
-                handleDataChange={handleDataChange}
-                value={data.experience}
+                handleInputChange={handleChange("experience")}
+                status={errors.experience && touched.experience ? "error" : ""}
+                message={errors.experience && touched.experience ? errors.experience : ""}
+                handleBlur2={handleBlur}
               />
             </div>
-            <ResumeDropzone />
+
+            <ResumeDropzone/>
+            
             <div style={{ height: "2.69rem", width: "100%" }}></div>
             <CustomInputButton
               responsive={responsive}
               width={"100%"}
               size="small"
-              onClick={handleSubmit}
+              onClick={()=>handleSubmit(values)}
             >
               Get Started
             </CustomInputButton>

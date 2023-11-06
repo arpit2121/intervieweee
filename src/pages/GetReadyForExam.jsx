@@ -9,6 +9,7 @@ import Countdown from "../components/webcam/Countdown";
 import { useDispatch } from "react-redux";
 import {
   complete360Recording,
+  setCounterVisible,
   setGetReadyFlag,
   setRecordState,
   togglePreview,
@@ -46,17 +47,20 @@ const GetReadyForExam = () => {
     // dispatch(togglePreview(false));
     // dispatch(setRecordState("OPEN"));
     setTimeout(() => {
+      dispatch(setRecordState("OPEN"))
+      dispatch(setCounterVisible(true))
       dispatch(setGetReadyFlag(false))
     }, 11000);
   }, []);
 
-  useEffect(()=>{
-    const fetchQueFun=async ()=>{
-      const resFetchQuestion= await dispatch(fetchQuestionAction({intervieweeId:location.pathname.split('/')[4]}))
-        // console.log("FETCH RES", resFetchQuestion)
-    }
-    fetchQueFun()
-  },[])
+
+  // useEffect(()=>{
+  //   const fetchQueFun=async ()=>{
+  //     const resFetchQuestion= await dispatch(fetchQuestionAction({intervieweeId:location.pathname.split('/')[4]}))
+  //       // console.log("FETCH RES", resFetchQuestion)
+  //   }
+  //   fetchQueFun()
+  // },[])
   
   return (
     <div style={{ overflow: "hidden" }}>

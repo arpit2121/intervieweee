@@ -1,0 +1,25 @@
+.circle-container {
+  width: 3rem; /* Twice the radius */
+  height: 3rem; /* Twice the radius */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.circle {
+  width: 1.5rem; /* Radius */
+  height: 1.5rem; /* Radius */
+  border: 0.5rem solid transparent;
+  border-top-color: cornflowerblue;
+  border-radius: 50%;
+  animation: spin 10s linear forwards;
+}
+
+@keyframes spin {
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

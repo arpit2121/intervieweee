@@ -52,7 +52,7 @@ const InterviewPage = () => {
   const responsive = useResponsiveStyles();
 
   useEffect(()=>{
-    console.log("360 is?", is360RecordingCompleted)
+    console.log("360 is?", is360RecordingCompleted, recordState)
     const fetchQueFun= async()=>{
       console.log("INSIDE EFFECT OF PAGE",)
       if(is360RecordingCompleted){
@@ -80,7 +80,7 @@ const InterviewPage = () => {
 
   useEffect(()=>{
     if(isAllQuestionsAttempted===true){
-      console.log("ALL ATTENPTED", isAllQuestionsAttempted)
+      console.log("ALL ATTEMPTED", isAllQuestionsAttempted)
       navigate("/thanks");
     }
   },[isAllQuestionsAttempted])

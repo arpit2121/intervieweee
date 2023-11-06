@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import ErrorIcon from "../icons/textfield/ErrorIcon";
 import WarningIcon from "../icons/textfield/WarningIcon";
 import SuccessIcon from "../icons/textfield/SuccessIcon";
@@ -153,7 +153,12 @@ const CommonCustomTextField = ({
   onClick = () => {},
   type1,
   borderStyle = {},
-  name
+  name,
+  handleChange2,
+  message,
+  handleInputChange,
+  handleDropChange,
+  handleBlur2
 }) => {
   let allCountryList = CountryList.getAll();
   const responsive = useResponsiveStyles();
@@ -184,8 +189,10 @@ const CommonCustomTextField = ({
   };
 
   const handleChange = (e) => {
+    console.log("TYPED", e.target.value)
+    handleChange2()
     // setValue(e.target.value);
-    handleDataChange(name,e.target.value)
+    // handleDataChange(name,e.target.value)
   };
   
   const handleChangeSelect = (e) => {
@@ -225,6 +232,10 @@ const CommonCustomTextField = ({
       ),
     [searchText]
   );
+
+  useEffect(()=>{
+    console.log("STATUS CHANGES", status)
+  },[status])
 
   return (
     <div className={classes.mainContainer} style={style}>
@@ -347,7 +358,9 @@ const CommonCustomTextField = ({
 
           {type != "dropdown" ? (
             <input
-              onChange={handleChange}
+              id="input"
+              name={name}
+              onChange={handleChange2}
               type={type1 ? type1 : "text"}
               label={title}
               value={value}
@@ -355,13 +368,14 @@ const CommonCustomTextField = ({
               ref={inputRef}
               className={classes.textBoxStyles}
               onFocus={handleFocus}
-              onBlur={handleBlur}
+              onBlur={handleBlur2}
               autoComplete="new-user-street-address"
             />
           ) : (
             <CustomSelect
               // Disables auto focus on MenuItems and allows TextField to be in focus
               MenuProps={{ autoFocus: false }}
+              id="search-select"
               // labelId="search-select-label"
               name={name}
               placeholder="Type Your Profession"
@@ -371,13 +385,16 @@ const CommonCustomTextField = ({
               // label="Options"
               // onChange={(e) => {setSelectedOption(e.target.value), console.log("selected",e.target.value)}}
               onChange={
-                handleDataChange
+                handleInputChange
                   ? (e) => {
-                      handleDataChange(e.target.name, e.target.value);
+                    // {e.target.value==="Other" ?setIsOther(true):setIsOther(false)}
+                    // {value!="" &&  e.target.value==="Other" ? setIsOther(true):setIsOther(false) }
+                      handleInputChange(e);
                     }
-                  : "setSelectedOption(e.target.value)"
+                  : (e) => {
+                    handleDropChange(nameCom,e.target.value, index)
+                  }
               }
-              
               // onChange={(e) => setValue(e.target.value)}
               onClose={() => setSearchText("")}
               // renderValue={() => selectedOption}
@@ -452,7 +469,7 @@ const CommonCustomTextField = ({
           /> */}
           <span>{statusMap?.[status]?.icon || ""}</span>
           <CustomAllTypography
-            name={_.startCase(_.toLower(status))}
+            name={_.startCase(_.toLower(message))}
             variant="caption"
             color="#AAAAAA"
           />
