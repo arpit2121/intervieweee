@@ -27,7 +27,7 @@ function App() {
 }
 
 <Routes>
-      <Route path='/' element={<Posenet/>}/>
+      <Route path='/' element={<OnBoardingPage/>}/>
       <Route path='/:adminId/:jobpostId/:expiration' element={<OnBoardingPage/>}/>
       {/* <Route path='/onboard-candidate' element={<OnBoardingPage/>}/> */}
       <Route path='/:adminId/:jobpostId/:expiration/:intervieweeId/interview-details' element={<InterviewDetails/>}/>
