@@ -1,7 +1,7 @@
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import CustomButton from "../components/button/CustomButton";
+import CustomButton from "../components/button/CustomButton.jsx";
 import QuickConnectShortIcon from "../components/icons/QuickConnectShortIcon";
 import CustomAllTypography from "../components/typography/CustomTypography";
 import useResponsiveStyles from "../utils/MediaQuery";

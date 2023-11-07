@@ -2,7 +2,7 @@ import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
 import {
   CustomInputButton,
-} from "../components/button/CustomButton";
+} from "../components/button/CustomButton.jsx";
 import CustomContainer from "../components/container/customContainer";
 import ResumeDropzone from "../components/dropzone/ResumeDropzone";
 import MailIcon from "../components/icons/MailIcon";

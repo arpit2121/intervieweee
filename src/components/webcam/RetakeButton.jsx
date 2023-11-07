@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CustomInputButton } from "../button/CustomButton";
-import ReplayArrowIcon from "../icons/recorder/ReplayArrowIcon";
+import { CustomInputButton } from "../button/CustomButton.jsx";
+import ReplayArrowIcon from "../icons/recorder/ReplayArrowIcon.jsx";
 import useResponsiveStyles from "../../utils/MediaQuery";
 import { setRecordState, setRetakeCount, togglePreview } from "../../store/slices/InterviewPageSlice";
 

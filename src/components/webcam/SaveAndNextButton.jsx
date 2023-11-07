@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { CustomInputButton } from "../button/CustomButton";
-import ArrowRightDirection from "../icons/recorder/ArrowRightDirection";
+import { CustomInputButton } from "../button/CustomButton.jsx";
+import ArrowRightDirection from "../icons/recorder/ArrowRightDirection.jsx";
 import useResponsiveStyles from "../../utils/MediaQuery";
 import { useDispatch, useSelector } from "react-redux";
 import {

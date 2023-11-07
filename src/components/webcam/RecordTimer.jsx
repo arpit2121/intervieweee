@@ -2,7 +2,7 @@ import { styled } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CustomAllTypography from "../typography/CustomTypography";
 import useResponsiveStyles from "../../utils/MediaQuery";
-import RecordingDotIcon from "../icons/Recorder/RecordingDotIcon";
+import RecordingDotIcon from "../icons/Recorder/RecordingDotIcon.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { setCounterVisible, setRecordState, togglePreview } from "../../store/slices/InterviewPageSlice";
 
