@@ -40,7 +40,7 @@ function CounterComponent(props) {
     "left": 0,
     "zIndex": 2}}>
     <div style={CounterStyle}>
-      {count}
+      {count-1}
     </div>
     </div>
     

@@ -24,7 +24,7 @@ const CustomRecordingButton = () => {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    bottom: responsive.isMobile ? '9.5rem' : responsive.isTablet ? '2rem' : '2rem',
+    bottom: responsive.isMobile ? '9.5rem' : responsive.isTablet ? '2rem' : '4rem',
     right: responsive.isMobile ? '0.5rem' : '50%',
     transform: responsive.isMobile ? '' : 'translate(50%)',
   };

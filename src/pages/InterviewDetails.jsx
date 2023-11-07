@@ -10,6 +10,7 @@ import {
   moveToNextQuestion,
   setPracticeMode,
   setRecordState,
+  togglePreview,
 } from "../store/slices/InterviewPageSlice";
 import { getJobDetails, is360Complete } from "../store/slices/interviewee/actions";
 const useStyle = makeStyles((theme) => ({
@@ -58,6 +59,7 @@ const InterviewDetails = () => {
   };
   const onPracticeMode = () => {
     // dispatch(moveToNextQuestion());
+    dispatch(togglePreview(false))
     dispatch(setRecordState(""))
     dispatch(setPracticeMode(true));
     navigate(`/${location.pathname.split('/')[1]}/${location.pathname.split('/')[2]}/${location.pathname.split('/')[3]}/${location.pathname.split('/')[4]}/interview-page`);
