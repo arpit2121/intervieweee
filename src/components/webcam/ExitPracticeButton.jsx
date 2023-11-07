@@ -1,7 +1,7 @@
 import React from "react";
 import useResponsiveStyles from "../../utils/MediaQuery";
 import { CustomInputButton } from "../button/CustomButton.jsx";
-import ArrowLeftDirection from "../icons/Recorder/ArrowLeftDirection.jsx";
+import ArrowLeftDirection from "../icons/recorder/ArrowLeftDirection.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { setPracticeMode, togglePreview } from "../../store/slices/InterviewPageSlice";
 import { useLocation, useNavigate } from "react-router-dom";

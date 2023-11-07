@@ -1,7 +1,7 @@
 import React from "react";
 import useResponsiveStyles from "../../utils/MediaQuery";
 import { CustomInputButton } from "../button/CustomButton.jsx";
-import ArrowLeftDirection from "../icons/Recorder/ArrowLeftDirection.jsx";
+import ArrowLeftDirection from "../icons/recorder/ArrowLeftDirection.jsx";
 import { useSelector } from "react-redux";
 
 const CustomExitButton = (props) => {
