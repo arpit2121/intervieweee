@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import PlayButtonIcon from '../icons/recorder/PlayButtonIcon';
-import ReplayArrowIcon from '../icons/recorder/ReplayArrowIcon';
-import StopRecordingIcon from '../icons/recorder/StopRecordingIcon';
+import PlayButtonIcon from '../icons/recorder/PlayButtonIcon.jsx';
+import ReplayArrowIcon from '../icons/recorder/ReplayArrowIcon.jsx';
+import StopRecordingIcon from '../icons/recorder/StopRecordingIcon.jsx';
 import useResponsiveStyles from '../../utils/MediaQuery';
 import CustomAllTypography from '../typography/CustomTypography';
 import { setCounterVisible, setRecordState, setRetakeCount, togglePreview } from '../../store/slices/InterviewPageSlice';
