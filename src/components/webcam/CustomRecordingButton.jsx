@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import PlayButtonIcon from '../icons/Recorder/PlayButtonIcon';
+import PlayButtonIcon from '../icons/recorder/PlayButtonIcon';
 import ReplayArrowIcon from '../icons/recorder/ReplayArrowIcon';
 import StopRecordingIcon from '../icons/recorder/StopRecordingIcon';
 import useResponsiveStyles from '../../utils/MediaQuery';
