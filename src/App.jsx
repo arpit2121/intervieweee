@@ -11,6 +11,7 @@ import Loader from './assets/png/loader.gif'
 import { useSelector } from 'react-redux'
 import Unauthorized from './pages/Unauthorized'
 import NotFound from './pages/NotFound'
+import GetReadyForExam from './pages/GetReadyForExam'
 
 function App() {
 
