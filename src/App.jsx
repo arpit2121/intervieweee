@@ -6,8 +6,6 @@ import OnBoardingPage from './pages/OnboardCandidatePage'
 import InterviewDetails from './pages/InterviewDetails';
 import InterviewPage from './pages/InterviewPage'
 import ThankYouPage from './pages/ThankYouPage'
-import GetReadyForExam from './pages/GetReadyForExam'
-import Posenet from './components/webcam/Posenet'
 import Expired from './pages/Expired'
 import Loader from './assets/png/loader.gif'
 import { useSelector } from 'react-redux'
