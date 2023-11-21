@@ -117,7 +117,7 @@ const OnBoardingPage = () => {
         dispatch(setLoading(false))
         console.log("SUCCESSFULLY USER ONBOARD-------", response.data)
         sessionStorage.setItem("tokenCode", response.data?.code);
-        const getJobDetailsRes = await dispatch(getJobDetails({ jobPostId: data.jobPostId }))
+        const getJobDetailsRes = await dispatch(getJobDetails({ jobPostId: data.jobPostId , adminId: data.adminId}))
         console.log("RESPONSE FROM GET JOB DETAILS", getJobDetailsRes.payload.data)
         console.log("Now naviagte to ",`/${location.pathname.split('/')[1]}/${location.pathname.split('/')[2]}/${location.pathname.split('/')[3]}/${response.data.id}/interview-details` )
         navigate(`/${location.pathname.split('/')[1]}/${location.pathname.split('/')[2]}/${location.pathname.split('/')[3]}/${response.data.id}/interview-details`, {
@@ -193,7 +193,7 @@ const OnBoardingPage = () => {
       console.log("Location---->", location.pathname)
 
     const getJobDetailsFun = async () => {
-      const res = await dispatch(getJobDetails({ jobPostId: location.pathname.split('/')[2] }))
+      const res = await dispatch(getJobDetails({ jobPostId: location.pathname.split('/')[2], adminId: location.pathname.split('/')[1]}))
       console.log("RES JOB DETAILS", res)
       // if (res?.payload?.data?.status === "ACTIVE") {
       //   navigate("/expired");

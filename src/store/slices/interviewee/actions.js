@@ -30,7 +30,8 @@ export const getJobDetails = createAsyncThunk('job/getJobDetails', async (params
       await axios.get(
         `${config.interviewService}/v1/job-post/get-job-detail`,{
           params:{
-            jobPostId: params.jobPostId
+            jobPostId: params.jobPostId,
+            adminId: params.adminId
           }
         }
       )
