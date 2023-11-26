@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux'
 import Unauthorized from './pages/Unauthorized'
 import NotFound from './pages/NotFound'
 import GetReadyForExam from './pages/GetReadyForExam'
+import HomePage from './pages/HomePage'
 
 function App() {
 
@@ -26,8 +27,8 @@ function App() {
 }
 
 <Routes>
-      <Route path='/' element={<OnBoardingPage/>}/>
-      <Route path='/:adminId/:jobpostId/:expiration' element={<OnBoardingPage/>}/>
+      <Route path='/' element={<HomePage/>}/>
+      <Route path='/:adminId/:jobpostId/:expiration' element={<OnBoardingPage/>} />
       {/* <Route path='/onboard-candidate' element={<OnBoardingPage/>}/> */}
       <Route path='/:adminId/:jobpostId/:expiration/:intervieweeId/interview-details' element={<InterviewDetails/>}/>
       {/* <Route path='/:adminId/:jobpostId/:expiration/:intervieweeId/practiceMode' element={<PracticeMode/>}/> */}

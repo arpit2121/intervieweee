@@ -84,6 +84,7 @@ const Preview = ({ meta, files }, ...props) => {
   const responsive = useResponsiveStyles();
   const width = !responsive.isMobile ? "6.87rem" : "5rem";
   const [hovered, setHovered] = useState(false);
+  const dispatch= useDispatch()
 
   useEffect(() => {
     setLoaded(meta?.percent);
@@ -94,6 +95,7 @@ const Preview = ({ meta, files }, ...props) => {
       }, 1000);
     }
   }, [meta]);
+
   const onMouseOver = (e) => {
     e.stopPropagation();
     console.log("hoverr");
@@ -161,11 +163,11 @@ const Preview = ({ meta, files }, ...props) => {
           }}
         >
           <CloseIcon
-            onClick={() =>
-              files.forEach((f) => {
-                console.log(f,meta)
-                if (f?.meta?.id == meta?.id) f.remove();
-              })
+            onClick={() =>{
+              console.log("files in close", files, meta)
+              files.forEach((f) => f.remove());
+              dispatch(setResume(null))
+            }
             }
           />
           <CustomAllTypography
@@ -233,7 +235,7 @@ const Input = ({ accept, onFiles, files, getFilesFromEvent }) => {
     </label>
   );
 };
-const CustomLayout = ({status, message}) => {
+const CustomLayout = () => {
   const dispatch= useDispatch()
   const getUploadParams = () => ({ url: "https://httpbin.org/post" });
   const getFilesFromEvent = (e) => {
@@ -244,7 +246,6 @@ const CustomLayout = ({status, message}) => {
     });
   };
 
-  const resume = useSelector((state) => state.rootReducer.interviewee.resume);
   const handleSubmit = (files, allFiles) => {
     console.log("AFTER SUBMIT",files.map((f) => f));
     allFiles.forEach((f) => f.remove());
@@ -271,7 +272,7 @@ const CustomLayout = ({status, message}) => {
   const handleChangeStatus = async (files, status) => {
     if (status === 'done') {
       console.log("FILE AFTER DONE",files)
-      dispatch(setResume(files))
+      dispatch(setResume(files.file))
       // const base64Data = await fileToBase64(files.file);
       //dispatch(setResume({ id: files.file.id, name: files.file.name, data: base64Data }));
     }
@@ -297,7 +298,7 @@ const CustomLayout = ({status, message}) => {
       //   accept=".pdf,.doc"
       styles={{
         dropzone: {
-          border: `1px dotted ${status==="error"?'red': "black"}`,
+          border: `1px dotted black`,
           minHeight: "10.62rem",
           maxHeight: 100,
         },
@@ -309,9 +310,9 @@ const CustomLayout = ({status, message}) => {
       </>
   );
 };
-const ResumeDropzone = ({ multiple = false , isTouched, status, message}) => {
+const ResumeDropzone = ({ multiple = false , isTouched}) => {
   return <>
-  <CustomLayout status={status} message={message}/>
+  <CustomLayout />
   {/* {
     <div style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', 'alignItems':'center'}}>
       <CustomAllTypography name={"Required Resume"} textcolor={'red'}></CustomAllTypography>

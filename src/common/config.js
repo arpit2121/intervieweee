@@ -1,7 +1,7 @@
 
 
 const config={
-    interviewService: "http://localhost:4546"
+    interviewService: import.meta.env.VITE_API_KEY
 }
 
 export default config
