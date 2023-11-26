@@ -98,7 +98,7 @@ const OnBoardingPage = () => {
     const myFile = resume?.file
     let formData = new FormData();
     formData.append('json_data', JSON.stringify(data));
-    formData.append('resume', newResume);
+    formData.append('resume', resume);
     for (const a of formData.values()) {
       console.log(a);
     }
@@ -128,6 +128,7 @@ const OnBoardingPage = () => {
       setLoading(false)
       console.error('Error uploading Form', error);
     }
+    
   }
 
   const { values, handleChange, handleSubmit, errors, touched, handleBlur } =
@@ -176,7 +177,7 @@ const OnBoardingPage = () => {
   })
   const resume = useSelector((state) => state.rootReducer.interviewee.resume);
 
-  const [newResume, setNewResume] = useState(resume)
+  // const [newResume, setNewResume] = useState(resume)
 
   const handleDataChange = (name, val) => {
     const dataObj = JSON.parse(JSON.stringify(data));
@@ -221,9 +222,9 @@ const OnBoardingPage = () => {
     fetchAllProfessions()
   }, [])
 
-  useEffect(() => {
-    setNewResume(resume?.file)
-  }, [resume])
+  // useEffect(() => {
+  //   setNewResume(resume)
+  // }, [resume])
 
 
   return (
