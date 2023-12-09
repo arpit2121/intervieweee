@@ -19,7 +19,6 @@ import { fetchQuestionAction, is360Complete } from "../store/slices/interviewee/
 import CounterComponent from "../components/CounterComponent";
 import { useLocation, useNavigate } from "react-router-dom";
 import { setRecordState } from "../store/slices/InterviewPageSlice";
-import AudiowaveForm from "../components/webcam/AudiowaveForm";
 
 const InterviewContainer = styled("div")(({ theme, counterVisible }) => ({
   height: "100%",

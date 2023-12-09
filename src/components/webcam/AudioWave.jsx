@@ -1,14 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useState } from 'react'
 import useResponsiveStyles from '../../utils/MediaQuery';
-import { useDispatch, useSelector } from 'react-redux';
-import { AudioRecorder } from 'react-audio-voice-recorder';
+import Waveform from "react-audio-waveform";
 
 
-function AudiowaveForm(props) {
 
+
+function AudioWave() {
     const responsive = useResponsiveStyles();
-
-  
+    
     const audioContainer={
         width: '100%',
         position: 'absolute',
@@ -22,20 +21,12 @@ function AudiowaveForm(props) {
         opacity:'0.5',
         zIndex:10
     }
-
-    return (
+  return (
     <div style={audioContainer}>
-     <AudioRecorder 
-
-      audioTrackConstraints={{
-        noiseSuppression: true,
-        echoCancellation: true,
-      }} 
-      downloadOnSavePress={true}
-      downloadFileExtension="webm"
-    />
+      <p>Hrushi</p>
+      
     </div>
   )
 }
 
-export default AudiowaveForm
+export default AudioWave

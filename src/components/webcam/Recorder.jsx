@@ -10,7 +10,7 @@ import axios from "axios";
 import config from "../../common/config";
 import CounterComponent from "../CounterComponent";
 import { useLocation } from "react-router-dom";
-import AudiowaveForm from "./AudiowaveForm";
+import AudioWave from "./AudioWave";
 
 const useDynamicDimension = () => {
   const dispatch = useDispatch(); 
@@ -206,7 +206,7 @@ const Recorder = (props) => {
       ) : (
         <>
       <RecorderVideo ref={recordWebcam.webcamRef} autoPlay muted />
-      <AudiowaveForm refs={recordWebcam}/>
+      {/* <AudioWave></AudioWave> */}
       </>
       )}
     </RecorderContainer>
