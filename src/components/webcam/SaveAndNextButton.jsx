@@ -36,14 +36,14 @@ const SaveAndNextButton = () => {
   }
 
   const ButtonStyle = {
-    zIndex: 4,
+    zIndex: responsive.isMobile?1:4,
     position: "absolute",
     bottom: responsive.isDesktop
       ? "2.75rem"
       : responsive.isTablet
       ? "2.5rem"
       : responsive.isMobile
-      ? "18rem"
+      ? "15rem"
       : "2.5rem",
     right: responsive.isDesktop
       ? "2.75rem"
@@ -59,6 +59,7 @@ const SaveAndNextButton = () => {
   };
 
   const handleClick = async() => {
+    console.log("Clicked save")
     // if (is360Completeted == null) {
     //   is360Completeted();
     // }
@@ -90,23 +91,39 @@ const SaveAndNextButton = () => {
     }
   };
 
-  return !preview && responsive.isMobile ? (
+  return (
+        !preview && responsive.isMobile ? (
     ""
   ) : (
     <CustomInputButton
-      size="extra-small"
+      size="medium"
       style={{
         ...ButtonStyle,
-        padding:'0.8rem',
         background: preview ? "black" : "#9B9B9D",
         color: "#FFF",
       }}
       endIcon={<ArrowRightDirection />}
-      onClick={preview ? handleClick : null}
+      onClick={preview ? handleClick : console.log("Preview is")}
     >
       Save & Next
     </CustomInputButton>
-  );
+  //   !preview && responsive.isMobile ? (
+  //   ""
+  // ) : (
+  //   <CustomInputButton
+  //     size="medium"
+  //     style={{
+  //       ...ButtonStyle,
+  //       background: preview ? "black" : "#9B9B9D",
+  //       color: "#FFF",
+  //     }}
+  //     endIcon={<ArrowRightDirection />}
+  //     onClick={preview ? handleClick : console.log("Preview is")}
+  //   >
+  //     Save & Next
+  //   </CustomInputButton>
+  )
+  )
 };
 
 export default SaveAndNextButton;

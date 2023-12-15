@@ -15,11 +15,11 @@ import SaveAndNextButton from "../components/webcam/SaveAndNextButton";
 import useResponsiveStyles from "../utils/MediaQuery";
 import { useDispatch, useSelector } from "react-redux";
 import GetReadyForExam from "./GetReadyForExam";
-import { fetchQuestionAction, is360Complete } from "../store/slices/interviewee/actions";
+import { fetchQuestionAction, is360Complete, save360Action } from "../store/slices/interviewee/actions";
 import CounterComponent from "../components/CounterComponent";
 import { useLocation, useNavigate } from "react-router-dom";
-import { setRecordState } from "../store/slices/InterviewPageSlice";
-import AudiowaveForm from "../components/webcam/AudiowaveForm";
+import { setCounterVisible, setRecordState } from "../store/slices/InterviewPageSlice";
+import { convertTimeStringToSeconds } from "../common/convertToSeconds";
 
 const InterviewContainer = styled("div")(({ theme, counterVisible }) => ({
   height: "100%",
@@ -45,9 +45,9 @@ const InterviewPage = () => {
     (state) => state.rootReducer.interviewPage
   );
 
-  console.log("QUES",  parseFloat(question?.nextQuestion?.thinkingTime))
 
-  const thinkTime= practiceMode?10:is360RecordingCompleted? parseFloat(question?.nextQuestion?.thinkingTime): parseFloat(check360?.thinkTime)
+
+  const thinkTime= practiceMode?10:is360RecordingCompleted?convertTimeStringToSeconds(question?.nextQuestion?.thinkingTime): parseFloat(check360?.thinkTime)
   
   // console.log(getReadyFlag);
   const responsive = useResponsiveStyles();
@@ -72,6 +72,7 @@ const InterviewPage = () => {
     const fetch360= async()=>{
       const is360= await dispatch(is360Complete({intervieweeId: location.pathname.split('/')[4]}))
       console.log("RES  ", is360)
+      
       if(is360.payload.status===401){
         navigate('/session-expired')
       }
@@ -79,9 +80,14 @@ const InterviewPage = () => {
     fetch360()
   },[])
 
-  useEffect(()=>{
-    console.log("RECORD STATE------>>>>>", recordState)
-  },[recordState])
+  // useEffect(()=>{
+  //   dispatch(setCounterVisible(true))
+  // },[])
+
+  // useEffect(()=>{
+  //   dispatch(setCounterVisible(true))
+  //   dispatch(setRecordState('OPEN'))
+  // },[question])
 
   useEffect(()=>{
     if(isAllQuestionsAttempted===true){
@@ -96,7 +102,7 @@ const InterviewPage = () => {
       {getReadyFlag ? (
         <GetReadyForExam />
       ) : (
-        <InterviewContainer counterVisible={counterVisible}>
+        <InterviewContainer>
           <CustomLogo />
           <RecordTimer />
           <RecordInfo />
@@ -112,7 +118,7 @@ const InterviewPage = () => {
           <QuestionContainer responsive={responsive}>
             <Record360NoticeTab />
             <QuestionTab />
-            <CustomRecordingButton /> 
+            <CustomRecordingButton CounterEnabled={counterVisible}/> 
             {/* <AudiowaveForm/> */}
           </QuestionContainer>
         </InterviewContainer>

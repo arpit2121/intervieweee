@@ -42,6 +42,23 @@ export const getJobDetails = createAsyncThunk('job/getJobDetails', async (params
 }
 })
 
+export const getJobStatus = createAsyncThunk('job/getJobStatus', async (params, { rejectWithValue }) => {
+  try {
+      const data =
+      await axios.get(
+        `${config.interviewService}/v1/job-post/status`,{
+          params:{
+            jobPostId: params.jobPostId,
+            adminId: params.adminId
+          }
+        }
+      )
+      console.log("RESPONSE FROM GET JOB STATUS", data)
+  return data
+} catch (error) {
+  return rejectWithValue(error.response)
+}
+})
 
 export const save360Action = createAsyncThunk('/360recording', async (params, { rejectWithValue }) => {
   console.log("INSIDE SAVE 360 ACTION", params.blob)

@@ -20,7 +20,7 @@ import useResponsiveStyles from "../utils/MediaQuery";
 import { useNavigate } from "react-router-dom";
 import Timer from "../components/Timer/Timer";
 import { useDispatch, useSelector } from "react-redux";
-import { getJobDetails, onboardAction } from "../store/slices/interviewee/actions";
+import { getJobDetails, getJobStatus, onboardAction } from "../store/slices/interviewee/actions";
 import { fetchProfessions } from "../store/slices/global/actions";
 import axios from "axios";
 import config from "../common/config";
@@ -125,7 +125,7 @@ const OnBoardingPage = () => {
         })
       }
     } catch (error) {
-      setLoading(false)
+      dispatch(setLoading(false))
       console.error('Error uploading Form', error);
     }
     
@@ -191,19 +191,14 @@ const OnBoardingPage = () => {
 
 
   useEffect(() => {
-      console.log("Location---->", location.pathname)
-
     const getJobDetailsFun = async () => {
-      const res = await dispatch(getJobDetails({ jobPostId: location.pathname.split('/')[2], adminId: location.pathname.split('/')[1]}))
+      const res= await dispatch(getJobStatus({ jobPostId: location.pathname.split('/')[2], adminId: location.pathname.split('/')[1]}))
       console.log("RES JOB DETAILS", res)
-      // if (res?.payload?.data?.status === "ACTIVE") {
-      //   navigate("/expired");
-      // }
-      if(res?.payload?.status===400){
-        navigate('/not-found')
-      }
-      else if(res?.payload?.data?.status !== "ACTIVE"){
-        navigate("/expired");
+      console.log("STATUS ---->", res?.payload)
+      if(res?.payload?.data?.status !== "ACTIVE"){
+        navigate("/expired",{state:{message: res?.payload?.data?.status==="INACTIVE"? "Sorry, Job Post you are requesting for is in-active":
+          res?.payload?.data?.status==="EXPIRED" ? "Sorry, Job Post you are requesting for is Expired !!! " :
+          "Please, Check the Link and Try Again"}})
       }
     }
     getJobDetailsFun()
@@ -221,11 +216,6 @@ const OnBoardingPage = () => {
     }
     fetchAllProfessions()
   }, [])
-
-  // useEffect(() => {
-  //   setNewResume(resume)
-  // }, [resume])
-
 
   return (
     <CustomContainer>

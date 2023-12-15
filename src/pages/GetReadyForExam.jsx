@@ -16,6 +16,7 @@ import {
 } from "../store/slices/InterviewPageSlice";
 import { fetchQuestionAction } from "../store/slices/interviewee/actions";
 import { useLocation } from "react-router-dom";
+import CustomLogo from "../components/webcam/CustomLogo";
 
 const LogoContainer = styled("div")(({ responsive }) => ({
   display: "flex",
@@ -64,8 +65,9 @@ const GetReadyForExam = () => {
   
   return (
     <div style={{ overflow: "hidden" }}>
-      <LogoContainer responsive={responsive}></LogoContainer>
-      <QuickConnectIcon />
+      {/* <LogoContainer responsive={responsive}></LogoContainer>
+      <QuickConnectIcon /> */}
+      <CustomLogo />
       <ContentContainer responsive={responsive}>
         <Countdown showRocket />
         <div

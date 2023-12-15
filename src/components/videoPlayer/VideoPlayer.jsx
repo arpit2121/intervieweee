@@ -154,6 +154,15 @@ const VideoPlayer = forwardRef(({ dynamicDimensions }, ref) => {
     videoRef.current.requestFullscreen();
   };
 
+  useEffect(()=>{
+    setTimeout(()=>{
+      // if(document.getElementById("video1")?.duration!='Infinity'){
+        setVideoTime(document.getElementById("video1")?.duration)
+      // }
+    },5000)
+  },[])
+
+
   return (
     <div
       onMouseEnter={onVideoMouseEnter}

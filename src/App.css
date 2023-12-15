@@ -13,3 +13,43 @@
       stroke-dashoffset: 45;
     }
   } */
+
+
+  @keyframes zoomInOut {
+    0% {
+      transform: scale(0.1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  .zoom-in-out {
+    animation: zoomInOut 1s ease infinite;
+  }
+
+  @keyframes circularRing {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .circular-ring {
+    width: 250px;
+    height: 250px;
+    border: 8px solid #b6c4f9; /* You can change the color */
+    border-top: 12px solid transparent;
+    border-radius: 50%;
+    animation: circularRing 1s linear infinite;
+  }
+
+  .gradient-wrapper {
+    background: linear-gradient(to right, #ff7e5f, #feb47b); /* Customize the gradient as needed */
+    display: inline-block; /* Ensure the wrapper only takes the space necessary */
+  }

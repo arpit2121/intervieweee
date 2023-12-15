@@ -10,15 +10,13 @@ function CounterComponent(props) {
     const [zoomedIn, setZoomedIn] = useState(true);
 
     const CounterStyle = {
-        color:'#605DEC',
+        color:'#b6c4f9',
         fontSize: '16rem',
-        transition: 'transform 1s ease-in-out',
-        transform: zoomedIn ? 'scale(1.5)' : 'scale(1)',
+        // transition: 'transform 1s ease-in-out',
+        // transform: zoomedIn ? 'scale(1.5)' : 'scale(1)',
       };
       useEffect(()=>{
-        console.log("COUNTE", count)
         if(count===1){
-          console.log("COUNTER INVOSIBLE NOW.....")
           dispatch(setCounterVisible(false))
         }
       },[count])
@@ -40,7 +38,11 @@ function CounterComponent(props) {
     "left": 0,
     "zIndex": 2}}>
     <div style={CounterStyle}>
+      <div className="zoom-in-out">
       {count-1}
+      </div>
+      {/* <div className="circular-ring" style={{position:'absolute', display:'flex', height:'100vh', alignItems:'center', 'justifyItems':'center'}}>
+      </div> */}
     </div>
     </div>
     

@@ -25,7 +25,7 @@ const ExitPracticeButton = (props) => {
       ? ""
       : "2.5rem",
     right: responsive.isMobile ? "1rem" : "1.69rem",
-    borderRadius: "0.25rem",
+    // borderRadius: "0.25rem",
   };
 
   return RecordState.practiceMode  ? (

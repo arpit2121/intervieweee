@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { styled } from '@mui/system';
 import CustomAllTypography from '../typography/CustomTypography';
 import useResponsiveStyles from '../../utils/MediaQuery';
+import { convertTimeStringToSeconds } from '../../common/convertToSeconds';
 
 const useDynamicDimension = () => {
   const res = useResponsiveStyles();
@@ -30,9 +31,9 @@ const RecordInfo = (props) => {
   const responsive = useResponsiveStyles();
   const [isClicked, setIsClicked] = useState(false);
   const {practiceMode,is360RecordingCompleted,check360,question} = useSelector((state) => state.rootReducer.interviewPage);
-  const timeToAns = practiceMode ? 1.5: is360RecordingCompleted !== true? check360.timeToAnswer: question?.timeToAnswer;
-  const timeToThink = practiceMode ? 0 : is360RecordingCompleted !== true? check360.thinkTime: question?.thinkTime;
-
+  // const timeToAns = practiceMode ? 1.5: is360RecordingCompleted !== true? check360.timeToAnswer: question?.timeToAnswer;
+  // const timeToThink = practiceMode ? 0 : is360RecordingCompleted !== true? check360.thinkTime: question?.thinkTime;
+  const timeToAns= practiceMode? 2: !is360RecordingCompleted? convertTimeStringToSeconds(check360.timeToAnswer): convertTimeStringToSeconds(question?.timeToAnswer)
   const handleClick = () => {
     if (responsive.isMobile) {
       setIsClicked(!isClicked);
@@ -41,10 +42,12 @@ const RecordInfo = (props) => {
 
   return (
     <Container isClicked={isClicked} responsive={responsive} onClick={handleClick}>
-      <DetailBlock name={'Time to Ans:'} value={practiceMode?"10 m":is360RecordingCompleted? (question?.nextQuestion?.timeToAnswer):`${check360.timeToAnswer} m`} marginBottom={responsive.isMobile ? '0.5rem' : '1rem'} />
-      <DetailBlock name={'Thinking Time:'} value={practiceMode ? "10 s" :is360RecordingCompleted?(question?.nextQuestion?.thinkingTime):`${check360.thinkTime} s`} marginBottom={responsive.isMobile ? '0.5rem' : '1rem'} />
-      {/* <DetailBlock name={'Retake:'} value={responsive.isMobile ? 'Ultd' : 'Unlimited'} /> */}
+      <DetailBlock name={'Time to Ans:'} value={practiceMode?"10m":is360RecordingCompleted? (question?.nextQuestion?.timeToAnswer):`${check360.timeToAnswer} `} marginBottom={responsive.isMobile ? '0.5rem' : '1rem'} />
+      <DetailBlock name={'Thinking Time:'} value={practiceMode ? "10s" :is360RecordingCompleted?(question?.nextQuestion?.thinkingTime):`${check360.thinkTime} `} marginBottom={responsive.isMobile ? '0.5rem' : '1rem'} />
       <DetailBlock name={'Retake:'} value={practiceMode?"Unlimited":(question?.nextQuestion?.retakes)?question.nextQuestion?.retakes:'Unlimited'} />
+      {/* <DetailBlock name={'Time to Ans:'} value={`${timeToAns}s`} marginBottom={responsive.isMobile ? '0.5rem' : '1rem'} />
+      <DetailBlock name={'Thinking Time:'} value={} marginBottom={responsive.isMobile ? '0.5rem' : '1rem'} />
+      <DetailBlock name={'Retake:'} value={practiceMode?"Unlimited":(question?.nextQuestion?.retakes)?question.nextQuestion?.retakes:'Unlimited'} /> */}
     </Container>
   );
 };

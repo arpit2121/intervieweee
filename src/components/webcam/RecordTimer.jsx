@@ -5,6 +5,7 @@ import useResponsiveStyles from "../../utils/MediaQuery";
 import RecordingDotIcon from "../icons/recorder/RecordingDotIcon.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { setCounterVisible, setRecordState, togglePreview } from "../../store/slices/InterviewPageSlice";
+import { convertTimeStringToSeconds } from "../../common/convertToSeconds";
 
 const RecordTimer = () => {
   const dispatch = useDispatch();
@@ -20,10 +21,10 @@ const RecordTimer = () => {
   //   return null;
   // }
   const allowedTime = practiceMode
-    ? 10
+    ? convertTimeStringToSeconds("10m")
     : is360RecordingCompleted !== true
-      ? check360.timeToAnswer
-      : parseFloat(question?.nextQuestion?.timeToAnswer)
+      ? convertTimeStringToSeconds(check360.timeToAnswer)
+      : convertTimeStringToSeconds(question?.nextQuestion?.timeToAnswer)
   console.log("ALOOWED TIME HERE----", allowedTime)
 
     const thinkTime= is360RecordingCompleted? parseFloat(question?.nextQuestion?.thinkingTime): parseFloat(check360.thinkTime)
@@ -32,7 +33,7 @@ const RecordTimer = () => {
 
   const responsive = useResponsiveStyles();
 
-  const initialTimeInSeconds = allowedTime * 60;
+  const initialTimeInSeconds = allowedTime ;
   const [startTimer, setStartTimer] = useState(false);
   const [time, setTime] = useState(initialTimeInSeconds);
 
