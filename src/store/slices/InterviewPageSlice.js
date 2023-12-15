@@ -10,8 +10,8 @@ const initialState = {
   isAllQuestionsAttempted: false,
   check360: {
     record360Blob: null,
-    thinkTime: 5,
-    timeToAnswer: 1,
+    thinkTime: '5s',
+    timeToAnswer: '2m',
   },
   currentQuestionIndex: 0,
   questionRecords: [],

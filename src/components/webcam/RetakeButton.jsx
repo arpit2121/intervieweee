@@ -11,12 +11,23 @@ const RetakeButton = () => {
   const dispatch = useDispatch();
 
   const buttonStyle = {
-    zIndex: 3,
+    zIndex: 4,
     position: "absolute",
-    top: responsive.isMobile ? "1.44rem" :  "1.44rem",
-    right:responsive.isMobile ? "1rem" : "1rem",
+    // top: responsive.isMobile && "1.44rem" ,
     background: "#E8E6F8",
     color: "rgba(96, 93, 236, 1)",
+    bottom: responsive.isDesktop
+    && "2.75rem"
+    || responsive.isTablet
+    && "7rem",
+    right: responsive.isDesktop
+      ? "16rem"
+      : responsive.isTablet
+      ? "2.5rem"
+      : responsive.isMobile
+      ? "1rem"
+      : "2.75rem",
+    top: responsive.isMobile && '1.5rem'
   };
 
   const handleClick =()=>{
@@ -37,8 +48,12 @@ const RetakeButton = () => {
   return (
     recordState === 'STOPPED' && (question && retakeCount != question?.nextQuestion?.retakes)?
     <CustomInputButton
-      size="extra-small"
-      style={buttonStyle}
+    variant="outlined"
+      size="medium"
+      style={{...buttonStyle,
+        padding:'0.8rem'
+      }}
+      sx={{width:'10.3rem'}}
       startIcon={<ReplayArrowIcon color="rgba(96, 93, 236, 1)" />}
       onClick={handleClick}
     >

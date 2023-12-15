@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecordWebcam } from "react-record-webcam";
 import { useDispatch, useSelector } from "react-redux";
 import { styled } from "@mui/system";
@@ -11,6 +11,9 @@ import config from "../../common/config";
 import CounterComponent from "../CounterComponent";
 import { useLocation } from "react-router-dom";
 import AudioWave from "./AudioWave";
+import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
+import { LiveAudioVisualizer } from "react-audio-visualize";
+
 
 const useDynamicDimension = () => {
   const dispatch = useDispatch(); 
@@ -51,8 +54,12 @@ const useRecordingEffect = (recordWebcam, recordState) => {
     if(recordState === "OPEN"){ // open
       recordWebcam.open();
     }else if (recordState === "STARTED") { // start
+      console.log("VIDEO STARTED---->",recordWebcam.current)
       recordWebcam.start();
     } else if (recordState === "STOPPED") {  // stop
+      const vid = document.getElementById("video1");
+      console.log("VIDEO RECORDED---->",vid)
+      console.log("VIDEO RECORDED---->",recordState)
       recordWebcam.stop();
     } else if (recordState === "RETAKE") { //retake 
       recordWebcam.retake();
@@ -67,7 +74,7 @@ const useBlobStore = (saveFile, recordWebcam,intervieweeData) => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (preview === false && is360RecordingCompleted ===false && recordState==="STOPPED" && practiceMode===false){
-      console.log("360 file Will be saved Now=====>>>>>",recordState);
+      // console.log("360 file Will be saved Now=====>>>>>",recordState, blob);
 
       //recordWebcam.open();
       saveFile().then(console.log("savingBlob")).then(async blob => {
@@ -139,11 +146,8 @@ const useBlobStore = (saveFile, recordWebcam,intervieweeData) => {
           if(response.status===201){
           console.log("SUCCESSFULLY ANSWERS  ;;;;  NEXT QUESTION  ____ RECORD STATE",recordState)
           const resFetchQuestion= await dispatch(fetchQuestionAction({intervieweeId:location.pathname.split('/')[4]}))
-          // console.log("FETCH RES", resFetchQuestion)
           dispatch(setRecordState("OPEN"))
           dispatch(setCounterVisible(true))
-          //  dispatch(complete360Recording())
-          //  dispatch(setGetReadyFlag(true));
           }
          } catch (error) {
           console.error('Error uploading file', error);
@@ -155,6 +159,8 @@ const useBlobStore = (saveFile, recordWebcam,intervieweeData) => {
 };
 
 const Recorder = (props) => {
+  const [blob, setBlob]= useState()
+  const recorder = useAudioRecorder();
   const responsive = useResponsiveStyles();
   const recordWebcam = useRecordWebcam({ frameRate: 60 });
   const { preview, recordState, isAllQuestionsAttempted} = useSelector((state) => state.rootReducer.interviewPage);
@@ -165,14 +171,18 @@ const Recorder = (props) => {
     if(preview === null){
       recordWebcam.open();
     }
+    if(preview === false){
+      recordWebcam.open();
+    }
   }, [preview]);
 
   useEffect(()=>{
     if(isAllQuestionsAttempted===true){
-      recordWebcam.close()
+      dispatch(setRecordState("STOPPED"))
+      // recordWebcam.stop()
+      // recordWebcam.close()
     }
   },[isAllQuestionsAttempted])
-
 
   const saveFile = async () => {
     const blob = await recordWebcam.getRecording();
@@ -182,7 +192,14 @@ const Recorder = (props) => {
   useRecordingEffect(recordWebcam,recordState);
   useBlobStore(saveFile,recordWebcam,intervieweeData);
 
-  console.log('recordWebcam.previewRef',recordWebcam)
+  useEffect(()=>{
+    if(recordState==="STARTED"){
+      recorder.startRecording()
+    }
+    if(recordState==="STOPPED"){
+      recorder.stopRecording()
+    }
+  },[recordState])
   return (
     <RecorderContainer>
       {preview ? (
@@ -206,7 +223,18 @@ const Recorder = (props) => {
       ) : (
         <>
       <RecorderVideo ref={recordWebcam.webcamRef} autoPlay muted />
-      {/* <AudioWave></AudioWave> */}
+      {
+        <div style={{position:'absolute', bottom:'8rem', display:'flex', width:'100vw', justifyContent:'center',}}>
+        {recorder.mediaRecorder && (
+        <LiveAudioVisualizer
+          mediaRecorder={recorder.mediaRecorder}
+          width={responsive.isDesktop?'500rem':''}
+          height={'100rem'}
+          barColor={"#b6c4f9"}
+        />
+      )}
+        </div>
+      }
       </>
       )}
     </RecorderContainer>

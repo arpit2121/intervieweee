@@ -75,6 +75,8 @@ const InterviewDetails = () => {
     getJobDetailsFun()
   },[])
 
+  
+
   return (
     <div>
       <div className={classes.navbar}>
@@ -169,16 +171,15 @@ const InterviewDetails = () => {
           <CustomButton
             name="Practice Mode"
             variant="outlined"
-            size={"small"}
+            size={"medium"}
             onClick={onPracticeMode}
           />
-
           <CustomButton
             name="Lets Start"
             variant="contained"
-            width={"9.125rem"}
+            // sx={{width:responsive.isMobile?'8rem':'10.3rem'}}
             onClick={onLetsStart}
-            size={"small"}
+            size={"medium"}
           />
         </div>
       </div>

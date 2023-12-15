@@ -6,15 +6,16 @@ import StopRecordingIcon from '../icons/recorder/StopRecordingIcon.jsx';
 import useResponsiveStyles from '../../utils/MediaQuery';
 import CustomAllTypography from '../typography/CustomTypography';
 import { setCounterVisible, setRecordState, setRetakeCount, togglePreview } from '../../store/slices/InterviewPageSlice';
+import { convertTimeStringToSeconds } from '../../common/convertToSeconds.js';
 
-const CustomRecordingButton = () => {
+const CustomRecordingButton = ({CounterEnabled}) => {
   const responsive = useResponsiveStyles();
   const iconComponents = [PlayButtonIcon, PlayButtonIcon, StopRecordingIcon, ReplayArrowIcon];
   const dispatch = useDispatch();
   const recordState = useSelector(state => state.rootReducer.interviewPage.recordState);
   const { is360RecordingCompleted,question, check360, retakeCount, practiceMode} = useSelector(
     (state) => state.rootReducer.interviewPage)
-    const thinkTime= practiceMode?10:is360RecordingCompleted? parseFloat(question?.nextQuestion?.thinkingTime): parseFloat(check360.thinkTime)
+  const thinkTime= practiceMode?10:question?.nextQuestion?convertTimeStringToSeconds(question?.nextQuestion?.thinkingTime): convertTimeStringToSeconds(check360.thinkTime)
   // const RECORDING_DELAY_MS = 11000;
   const labels = ['Start Recording', 'Starting Recording...', 'Stop Recording', 'Retake'];
 
@@ -24,9 +25,10 @@ const CustomRecordingButton = () => {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    bottom: responsive.isMobile ? '9.5rem' : responsive.isTablet ? '2rem' : '4rem',
+    bottom: responsive.isMobile ? '9.5rem' : responsive.isTablet ? '2rem' : '1rem',
     right: responsive.isMobile ? '0.5rem' : '50%',
     transform: responsive.isMobile ? '' : 'translate(50%)',
+    opacity:CounterEnabled?'50%':"100%"
   };
 
   const redCircleStyles = {
@@ -89,10 +91,6 @@ const CustomRecordingButton = () => {
       return () => {
         clearTimeout(recordingTimeout);
       };
-    }
-
-    if(iconIndex===2){
-      
     }
   }, [iconIndex, recordState]);
 
